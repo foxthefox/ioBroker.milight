@@ -1,5 +1,9 @@
 /* jshint -W097 */// jshint strict:false
 /*jslint node: true */
+
+var dgram=require('dgram');
+var net=require('net');
+
 "use strict";
 
 // you have to require the utils module and call adapter function
@@ -63,6 +67,10 @@ function main() {
     adapter.log.info('config test1: ' + adapter.config.test1);
     adapter.log.info('config test1: ' + adapter.config.test2);
 
+    var options = {
+        bridge:     adapter.config.milight-ip       || '192.168.178.33',
+        port:       adapter.config.milight-port     || 8899
+    };
 
     /**
      *
