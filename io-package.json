@@ -17,6 +17,26 @@
     },
     "native": {
         "milight-ip": "192.168.178.",
+        "port": "8899"
+        "groups": {
+            "1": {
+            	"rooms": ["Schlafzimmer"],
+                "funcs": ["Licht"]
+            },
+            "2": {
+                "rooms": ["Schlafzimmer"],
+                "funcs": ["Licht"],
+            },
+            "3": {
+                "rooms": ["Schlafzimmer"],
+                "funcs": ["Licht"],
+            },
+            "4": {
+                "rooms": ["Kreativzimmer"],
+                "funcs": ["Licht"]
+            },
+        },
+
         "test1": true,
         "test2": 42
     },
