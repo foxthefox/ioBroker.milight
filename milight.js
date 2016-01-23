@@ -83,13 +83,25 @@ function main() {
      */
 
 
-    adapter.setObject('testVariable', {
-        type: 'state',
+    adapter.setObject('zone1', {
+        type: 'channel',
         common: {
-            type: 'boolean',
-            role: 'indicator'
+            name
+            role: light.type === 'Dimmable plug-in unit' || light.type === 'Dimmable light' ? 'light.dimmer' : 'light.color'
         },
-        native: {}
+        native: {
+            id:         lid,
+            type:       light.type,
+            name:       light.name,
+            state:      light.state,
+            level:      light.level,
+            hue:        light.hue,
+            speedup:    light.speedup;
+            speeddown:  light.speeddown,
+            disco:      light.disco,
+            colormode:  light.colormode
+            
+        }
     });
 
     // in this template all states changes inside the adapters namespace are subscribed
