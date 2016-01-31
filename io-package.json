@@ -78,9 +78,9 @@
                     "DIMMER.LEVEL":                 "level.dimmer",
                     "HUE.LEVEL":		    "level.hue",
                     "BRIGHTNESS.LEVEL":		    "level.",
-                    "SPEEDUP.LEVEL":			"level"
-                    "SPEEDDOWN.LEVEL":			""
-                    "DISCO.MODE":			""
+                    "SPEEDUP.LEVEL":			"level",
+                    "SPEEDDOWN.LEVEL":			"",
+                    "DISCO.MODE":			"",
                     "COLOR:MODE":			""
                 },
                 "chTYPE_dpNAME": {
