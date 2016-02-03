@@ -9,7 +9,7 @@
         "license": 	   	"MIT",
         "keywords":		["jeelink", "milight", "easybulb", "light"],
         "type":			"hardware",
-        "icon":                 "template.png",
+        "icon":                 "easybulb_logo.png",
 	"extIcon":          	"https://raw.githubusercontent.com/foxthefox/ioBroker.milight/master/admin/easybulb_logo.png",
 	"readme":           	"https://github.com/foxthefox/ioBroker.milight/master/README.md",
 	"loglevel":		"debug"
