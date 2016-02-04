@@ -38,7 +38,7 @@
                 "rooms": ["Kreativzimmer"],
                 "funcs": ["Licht"],
                 "ltype":  ["RGBW"]                
-            },
+            }
         },
 
         "test1": true,
