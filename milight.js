@@ -85,22 +85,11 @@ function main() {
 
     adapter.setObject('zone1', {
         type: 'channel',
-        role: light.type === 'Dimmable plug-in unit' || light.type === 'Dimmable light' ? 'light.dimmer' : 'light.color',
+        role: 'light.color',
         common: {
             name: 'zone1 licht'
         },
         native: {
-            id:         light.id,
-            type:       light.type,
-            name:       light.name,
-            state:      light.state,
-            level:      light.level,
-            hue:        light.hue,
-            speedup:    light.speedup;
-            speeddown:  light.speeddown,
-            disco:      light.disco,
-            colormode:  light.colormode
-            
         }
     });
 
