@@ -85,12 +85,12 @@ function main() {
 
     adapter.setObject('zone1', {
         type: 'channel',
+        role: light.type === 'Dimmable plug-in unit' || light.type === 'Dimmable light' ? 'light.dimmer' : 'light.color',
         common: {
-            name
-            role: light.type === 'Dimmable plug-in unit' || light.type === 'Dimmable light' ? 'light.dimmer' : 'light.color'
+            name: 'zone1 licht'
         },
         native: {
-            id:         lid,
+            id:         light.id,
             type:       light.type,
             name:       light.name,
             state:      light.state,
