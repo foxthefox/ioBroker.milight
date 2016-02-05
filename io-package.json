@@ -78,7 +78,7 @@
             "native": {}
         },
         {
-            "_id": "RGWB.hue",
+            "_id": "RGBW.hue",
             "type": "state",
             "common": {
                 "name":  "Licht Farbe",
