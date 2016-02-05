@@ -12,7 +12,8 @@ var utils =    require(__dirname + '/lib/utils'); // Get common adapter utils
 // you have to call the adapter function and pass a options object
 // name has to be set and has to be equal to adapters folder name and main file name excluding extension
 // adapter will be restarted automatically every time as the configuration changed, e.g system.adapter.template.0
-var adapter = utils.adapter('milight');
+var adapter = utils.adapter({
+    name: 'milight'});
 
 // is called when adapter shuts down - callback has to be called under any circumstances!
 adapter.on('unload', function (callback) {
@@ -53,8 +54,8 @@ function main() {
 
     // The adapters config (in the instance object everything under the attribute "native") is accessible via
     // adapter.config:
-    adapter.log.info('config test1: ' + adapter.config.group.1.room);
-    adapter.log.info('config test2: ' + adapter.config.group.2.ltype);
+    adapter.log.info('config test1: ' + adapter.config.milight-ip);
+    adapter.log.info('config test2: ' + adapter.config.milight-port);
 
 /*
     var options = {
@@ -73,7 +74,7 @@ function main() {
      */
     adapter.setObject('Zone1', {
         type: 'channel',
-        role: 'light.color',
+        role: 'light.color.rgbw',
         common: {
             name: 'Licht milight test '
         },
