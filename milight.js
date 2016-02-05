@@ -68,7 +68,7 @@ function main() {
     adapter.log.info('config test1: ' + adapter.config.test2);
 
     var options = {
-        bridge:     adapter.config.milight-ip       || '192.168.178.33',
+        bridge:     adapter.config.milight-ip       || '192.168.178.48',
         port:       adapter.config.milight-port     || 8899
     };
 
