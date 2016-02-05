@@ -20,105 +20,134 @@
         "port": "8899",
         "groups": {
             "1": {
-            	"rooms": ["Schlafzimmer"],
-                "funcs": ["Licht"],
+            	"room": ["Schlafzimmer"],
                 "ltype":  ["RGBW"]
             },
             "2": {
-                "rooms": ["Schlafzimmer"],
-                "funcs": ["Licht"],
+                "room": ["Schlafzimmer"],
                 "ltype":  ["RGBW"]
             },
             "3": {
-                "rooms": ["Schlafzimmer"],
-                "funcs": ["Licht"],
+                "room": ["Schlafzimmer"],
                 "ltype":  ["RGBW"]
             },
             "4": {
-                "rooms": ["Kreativzimmer"],
-                "funcs": ["Licht"],
+                "room": ["Kreativzimmer"],
                 "ltype":  ["RGBW"]                
             }
         },
-
-        "test1": true,
-        "test2": 42
     },
     
     "objects": [
-        {
-            "_id": "_design/milight",
-            "language": "javascript",
-            "views": {
-                "listDevices": {
-                    "map": "function(doc) {\n  if (doc._id.match(/^milight\\.[0-9]+\\.\\*?[A-Za-z0-9_-]+(\\.[0-9]+)?$/)) {\n   emit(doc._id, {ADDRESS:(doc.native?doc.native.ADDRESS:''),VERSION:(doc.native?doc.native.VERSION:'')});\n  }\n}"
-                },
-                "paramsetDescription": {
-                    "map": "function(doc) {\n  if (doc._id.match(/^milight\\.meta/) && doc.meta.type === 'paramsetDescription') {\n   emit(doc._id, doc);\n  }\n}"
-                }
-            }
-
-        },
-        {
-            "_id": "milight.meta.roles",
-            "parent": "milight",
-            "type": "meta",
-            "meta": {
-                "type": "roles",
-                "adapter": "milight"
-            },
-            "common": {
-
-            },
-            "native": {
-                "chTYPE": {
-                    "DIMMER":                       "light.dimmer"
-                },
-                "dpCONTROL": {
-                    "DIMMER.LEVEL":                 "level.dimmer",
-                    "HUE.LEVEL":		    "level.hue",
-                    "BRIGHTNESS.LEVEL":		    "level.",
-                    "SPEEDUP.LEVEL":			"level",
-                    "SPEEDDOWN.LEVEL":			"",
-                    "DISCO.MODE":			"",
-                    "COLOR:MODE":			""
-                },
-                "chTYPE_dpNAME": {
-                    "DIMMER.LEVEL":                 "level.dimmer",
-                    "DIMMER.OLD_LEVEL":             "value.dimmer",
-                    "DIMMER.LEVEL_REAL":            "value.dimmer"
-                },
-                "dpNAME": {
-                    "CONTROL_MODE":                 "indicator",
-                    "STATE":                        "state",
-                    "LEVEL":                        "level",
-                    "BRIGHTNESS":                   "value.brightness"
-                }
-            }
-        },
-        
-        {
-            "_id": "milight.meta.RGBW.DIMMER.1",
-            "type": "meta",
-            "meta": {
-                "adapter": "milight",
-                "type": "paramsetDescription"
-            },
-            "common": {},
-            "native": {
-                "LEVEL": {
-                    "CONTROL": "DIMMER.LEVEL",
-                    "DEFAULT": 0,
-                    "FLAGS": 1,
-                    "ID": "LEVEL",
-                    "MAX": 255,
-                    "MIN": 0,
-                    "OPERATIONS": 7,
-                    "TYPE": "INT",
-                    "UNIT": "100%"
-                }
-            }
-        }       
+      
     	],
-    "instanceObjects": []
+    "instanceObjects": [
+    	        {
+            "_id": "RGBW",
+            "type": "channel",
+            "common": {
+                "name":  "RGBW Licht",
+                "role":  "light.color.rgbw"
+            },
+            "native": {}
+        },
+        {
+            "_id": "RGBW.state",
+            "type": "state",
+            "common": {
+                "name":  "Licht ",
+                "type":  "boolean",
+                "role":  "switch",
+                "read":  true,
+                "write": true,
+                "desc":  "Licht schalten"
+            },
+            "native": {}
+        },
+        {
+            "_id": "RGBW.bright",
+            "type": "state",
+            "common": {
+                "name":  "Licht Helligkeit",
+                "type":  "string",
+                "role":  "level.dimmer",
+                "read":  true,
+                "write": true,
+                "desc":  "Licht Helligkeit"
+            },
+            "native": {}
+        },
+        {
+            "_id": "RGWB.hue",
+            "type": "state",
+            "common": {
+                "name":  "Licht Farbe",
+                "type":  "number",
+                "role":  "level.color.hue",
+                "read":  true,
+                "write": true,
+                "desc":  "Licht Farbe"
+                "min":   "0",
+                "max":   "255",
+                "unit":  "hex",
+            },
+            "native": {}
+        },
+        {
+            "_id": "RGBW.speedup",
+            "type": "state",
+            "common": {
+                "name":  "Speed Up",
+                "type":  "boolean",
+                "role":  "button",
+                "read":  true,
+                "write": true,
+                "desc":  "Speed Up"
+            },
+            "native": {}
+        }
+        {
+            "_id": "RGBW.speeddown",
+            "type": "state",
+            "common": {
+                "name":  "Speed Down",
+                "type":  "boolean",
+                "role":  "button",
+                "read":  true,
+                "write": true,
+                "desc":  "Speed Down"
+            },
+            "native": {}
+        }
+        {
+            "_id": "RGBW.disco",
+            "type": "state",
+            "common": {
+                "name":  "Disco Mode",
+                "type":  "boolean",
+                "role":  "button",
+                "read":  true,
+                "write": true,
+                "desc":  "Disco Mode"
+            },
+            "native": {}
+        }    	    	
+        {
+            "_id": "RGBW.colormode",
+            "type": "state",
+            "common": {
+                "name":  "Colormode",
+                "type":  "number",
+                "role":  "level.saturation",
+                "read":  true,
+                "write": true,
+                "min":   "0",
+                "max":   "255",
+                "unit":  "hex",
+                "desc":  "Colormode"
+            },
+            "native": {}
+        }   	
+    	
+    	]
 }
