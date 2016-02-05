@@ -16,7 +16,7 @@
 
     },
     "native": {
-        "milight-ip": "192.168.178.",
+        "milight-ip": "192.168.178.48",
         "milight-port": "8899",
         "groups": {
             "1": {
