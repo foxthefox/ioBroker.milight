@@ -17,7 +17,7 @@
     },
     "native": {
         "milight-ip": "192.168.178.",
-        "port": "8899",
+        "milight-port": "8899",
         "groups": {
             "1": {
             	"room": ["Schlafzimmer"],
