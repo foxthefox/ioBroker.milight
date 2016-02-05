@@ -41,22 +41,11 @@ adapter.on('stateChange', function (id, state) {
     }
 });
 
-// Some message was sent to adapter instance over message box. Used by email, pushover, text2speech, ...
-adapter.on('message', function (obj) {
-    if (typeof obj == 'object' && obj.message) {
-        if (obj.command == 'send') {
-            // e.g. send email or pushover or whatever
-            console.log('send command');
-
-            // Send response in callback if required
-            if (obj.callback) adapter.sendTo(obj.from, obj.command, 'Message received', obj.callback);
-        }
-    }
-});
 
 // is called when databases are connected and adapter received configuration.
 // start here!
 adapter.on('ready', function () {
+            adapter.log.debug('entered ready');
     main();
 });
 
@@ -67,11 +56,12 @@ function main() {
     adapter.log.info('config test1: ' + adapter.config.group.1.room);
     adapter.log.info('config test2: ' + adapter.config.group.2.ltype);
 
+/*
     var options = {
         bridge:     adapter.config.milight-ip       || '192.168.178.48',
         port:       adapter.config.milight-port     || 8899
     };
-
+*/
     /**
      *
      *      For every state in the system there has to be also an object of type state
@@ -81,11 +71,11 @@ function main() {
      *      Because every adapter instance uses its own unique namespace variable names can't collide with other adapters variables
      *
      */
-    adapter.setObject('RGBW', {
+    adapter.setObject('Zone1', {
         type: 'channel',
         role: 'light.color',
         common: {
-            name: 'Licht milight test ' + '1'
+            name: 'Licht milight test '
         },
         native: {
         }
