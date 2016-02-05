@@ -35,7 +35,7 @@
                 "room": ["Kreativzimmer"],
                 "ltype":  ["RGBW"]                
             }
-        },
+        }
     },
     
     "objects": [
@@ -86,7 +86,7 @@
                 "role":  "level.color.hue",
                 "read":  true,
                 "write": true,
-                "desc":  "Licht Farbe"
+                "desc":  "Licht Farbe",
                 "min":   "0",
                 "max":   "255",
                 "unit":  "hex",
@@ -105,7 +105,7 @@
                 "desc":  "Speed Up"
             },
             "native": {}
-        }
+        },
         {
             "_id": "RGBW.speeddown",
             "type": "state",
@@ -118,7 +118,7 @@
                 "desc":  "Speed Down"
             },
             "native": {}
-        }
+        },
         {
             "_id": "RGBW.disco",
             "type": "state",
@@ -131,7 +131,7 @@
                 "desc":  "Disco Mode"
             },
             "native": {}
-        }    	    	
+        },   	    	
         {
             "_id": "RGBW.colormode",
             "type": "state",
