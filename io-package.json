@@ -89,7 +89,7 @@
                 "desc":  "Licht Farbe",
                 "min":   "0",
                 "max":   "255",
-                "unit":  "hex",
+                "unit":  "hex"
             },
             "native": {}
         },
