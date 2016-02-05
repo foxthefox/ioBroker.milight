@@ -81,13 +81,11 @@ function main() {
      *      Because every adapter instance uses its own unique namespace variable names can't collide with other adapters variables
      *
      */
-
-
-    adapter.setObject('zone1', {
+    adapter.setObject('RGBW', {
         type: 'channel',
         role: 'light.color',
         common: {
-            name: 'zone1 licht'
+            name: 'Licht milight test ' + '1'
         },
         native: {
         }
@@ -110,20 +108,6 @@ function main() {
     // same thing, but the value is flagged "ack"
     // ack should be always set to true if the value is received from or acknowledged from the target system
     adapter.setState('testVariable', {val: true, ack: true});
-
-    // same thing, but the state is deleted after 30s (getState will return null afterwards)
-    adapter.setState('testVariable', {val: true, ack: true, expire: 30});
-
-
-
-    // examples for the checkPassword/checkGroup functions
-    adapter.checkPassword('admin', 'iobroker', function (res) {
-        console.log('check user admin pw ioboker: ' + res);
-    });
-
-    adapter.checkGroup('admin', 'admin', function (res) {
-        console.log('check group user admin group admin: ' + res);
-    });
 
 
 
