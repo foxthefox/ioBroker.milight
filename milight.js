@@ -54,8 +54,8 @@ function main() {
 
     // The adapters config (in the instance object everything under the attribute "native") is accessible via
     // adapter.config:
-    adapter.log.info('config test1: ' + adapter.config.milight-ip);
-    adapter.log.info('config test2: ' + adapter.config.milight-port);
+    adapter.log.info('config test1: ' + adapter.config.milight_ip);
+    adapter.log.info('config test2: ' + adapter.config.milight_port);
 
 /*
     var options = {
