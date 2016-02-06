@@ -66,6 +66,21 @@ function main() {
         }
     });
 
+    adapter.setState(
+        {
+        "_id": "Zone1.on", // e.g. "hm-rpc.0.JEQ0205614:1"
+           "type": "state",
+           "parent": "Zone1",       // e.g. "hm-rpc.0.JEQ0205614:1"
+       "common": {
+       "name":  "Name of state",        // mandatory, default _id ??
+       "def":   false,                  // optional,  default false
+       "type":  "boolean",              // optional,  default "boolean"
+       "read":  true,                   // mandatory, default true
+       "write": true,                   // mandatory, default true
+       "role":  "switch"                // mandatory
+               }
+        });
+        
     // in this template all states changes inside the adapters namespace are subscribed
     adapter.subscribeStates('*');
 
