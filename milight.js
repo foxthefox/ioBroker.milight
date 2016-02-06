@@ -62,6 +62,7 @@ function main() {
             name: 'Licht milight test '
         },
         native: {
+            "ip": adapter.config.milight_ip 
         }
     });
 
