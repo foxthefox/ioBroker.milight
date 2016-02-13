@@ -1,8 +1,8 @@
 /* jshint -W097 */// jshint strict:false
 /*jslint node: true */
 
-// var dgram=require('dgram');
-// var net=require('net');
+var dgram=require('dgram');
+var net=require('net');
 
 "use strict";
 
