@@ -55,32 +55,137 @@ function main() {
      *      Because every adapter instance uses its own unique namespace variable names can't collide with other adapters variables
      *
      */
-    adapter.setObject('Zone1', {
-        type: 'channel',
-        role: 'light.color.rgbw',
-        common: {
-            name: 'Licht milight test '
-        },
-        native: {
-            "ip": adapter.config.milight_ip 
-        }
-    });
-
-    adapter.setState(
-        {
-        "_id": "Zone1.on", // e.g. "hm-rpc.0.JEQ0205614:1"
-           "type": "state",
-           "parent": "Zone1",       // e.g. "hm-rpc.0.JEQ0205614:1"
-       "common": {
-       "name":  "Name of state",        // mandatory, default _id ??
-       "def":   false,                  // optional,  default false
-       "type":  "boolean",              // optional,  default "boolean"
-       "read":  true,                   // mandatory, default true
-       "write": true,                   // mandatory, default true
-       "role":  "switch"                // mandatory
-               }
+    var obj = adapter.config.groups;
+    for (var anz in obj){
+        adapter.setObject('Zone' + anz, {
+            type: 'channel',
+            common: {
+                name: 'Licht ' + obj[anz].room,
+                role: 'light.color.rgbw'
+            },
+            native: {
+                "ip": adapter.config.milight_ip
+            }
         });
-        
+
+        adapter.setObject('Zone' + anz + '.on',
+            {
+                type: "state",
+                common: {
+                    name:  "Lampe ein aus",        // mandatory, default _id ??
+                    def:   false,                  // optional,  default false
+                    type:  "boolean",              // optional,  default "boolean"
+                    read:  false,                   // mandatory, default true
+                    write: true,                   // mandatory, default true
+                    role:  "switch"                // mandatory
+                },
+                native:{
+
+                }
+            });
+
+        adapter.setObject('Zone' + anz + '.state',
+            {
+            "type": "state",
+            "common": {
+            "name":  "Licht schalten",
+                "type":  "boolean",
+                "role":  "switch",
+                "read":  true,
+                "write": true,
+                "desc":  "Licht schalten"
+        },
+            "native": {}
+        });
+
+        adapter.setObject('Zone' + anz + '.bright',
+        {
+            "type": "state",
+            "common": {
+            "name":  "Licht Helligkeit",
+                "type":  "string",
+                "role":  "level.dimmer",
+                "read":  true,
+                "write": true,
+                "desc":  "Licht Helligkeit"
+        },
+            "native": {}
+        });
+        adapter.setObject('Zone' + anz + '.hue',
+        {
+            "type": "state",
+            "common": {
+            "name":  "Licht Farbe",
+                "type":  "number",
+                "role":  "level.color.hue",
+                "read":  true,
+                "write": true,
+                "desc":  "Licht Farbe",
+                "min":   "0",
+                "max":   "255",
+                "unit":  "hex"
+        },
+            "native": {}
+        });
+        adapter.setObject('Zone' + anz + '.speedup',
+        {
+            "type": "state",
+            "common": {
+            "name":  "Speed Up",
+                "type":  "boolean",
+                "role":  "button",
+                "read":  true,
+                "write": true,
+                "desc":  "Speed Up"
+        },
+            "native": {}
+        });
+        adapter.setObject('Zone' + anz + '.speeddown',
+        {
+            "type": "state",
+            "common": {
+            "name":  "Speed Down",
+                "type":  "boolean",
+                "role":  "button",
+                "read":  true,
+                "write": true,
+                "desc":  "Speed Down"
+        },
+            "native": {}
+        });
+        adapter.setObject('Zone' + anz + '.disco',
+        {
+            "type": "state",
+            "common": {
+            "name":  "Disco Mode",
+                "type":  "boolean",
+                "role":  "button",
+                "read":  true,
+                "write": true,
+                "desc":  "Disco Mode"
+        },
+            "native": {}
+        });
+        adapter.setObject('Zone' + anz + '.colormode',
+        {
+            "type": "state",
+            "common": {
+            "name":  "Colormode",
+                "type":  "number",
+                "role":  "level.saturation",
+                "read":  true,
+                "write": true,
+                "min":   "0",
+                "max":   "255",
+                "unit":  "hex",
+                "desc":  "Colormode"
+        },
+            "native": {}
+        });
+
+        adapter.log.info('Objekt  ' + adapter.namespace + '.Zone'+anz + ' created');
+   }
+
     // in this template all states changes inside the adapters namespace are subscribed
     adapter.subscribeStates('*');
 
