@@ -38,12 +38,12 @@
         }
     },
     
-    "objects": [
+   "objects": [
       
     	],
     "instanceObjects": [
     	        {
-            "_id": "RGBW",
+            "_id": "AllZone",
             "type": "channel",
             "common": {
                 "name":  "RGBW Licht",
@@ -52,7 +52,7 @@
             "native": {}
         },
         {
-            "_id": "RGBW.state",
+            "_id": "AllZone.state",
             "type": "state",
             "common": {
                 "name":  "Licht ",
@@ -65,7 +65,7 @@
             "native": {}
         },
         {
-            "_id": "RGBW.bright",
+            "_id": "AllZone.bright",
             "type": "state",
             "common": {
                 "name":  "Licht Helligkeit",
@@ -78,7 +78,7 @@
             "native": {}
         },
         {
-            "_id": "RGBW.hue",
+            "_id": "AllZone.hue",
             "type": "state",
             "common": {
                 "name":  "Licht Farbe",
@@ -94,7 +94,7 @@
             "native": {}
         },
         {
-            "_id": "RGBW.speedup",
+            "_id": "AllZone.speedup",
             "type": "state",
             "common": {
                 "name":  "Speed Up",
@@ -107,7 +107,7 @@
             "native": {}
         },
         {
-            "_id": "RGBW.speeddown",
+            "_id": "AllZone.speeddown",
             "type": "state",
             "common": {
                 "name":  "Speed Down",
@@ -120,7 +120,7 @@
             "native": {}
         },
         {
-            "_id": "RGBW.disco",
+            "_id": "AllZone.disco",
             "type": "state",
             "common": {
                 "name":  "Disco Mode",
@@ -133,7 +133,7 @@
             "native": {}
         },   	    	
         {
-            "_id": "RGBW.colormode",
+            "_id": "AllZone.colormode",
             "type": "state",
             "common": {
                 "name":  "Colormode",
