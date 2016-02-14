@@ -1,8 +1,8 @@
 /* jshint -W097 */// jshint strict:false
 /*jslint node: true */
 
-var dgram=require('dgram');
-var net=require('net');
+var Milight = require('node-milight-promise').MilightController;
+var commands = require('node-milight-promise').commands;
 
 "use strict";
 
@@ -25,6 +25,79 @@ adapter.on('unload', function (callback) {
     }
 });
 
+adapter.on('stateChange', function (id, state) {
+    // Warning, state can be null if it was deleted
+    adapter.log.info('stateChange ' + id + ' ' + JSON.stringify(state));
+
+    // you can use the ack flag to detect if it is status (true) or command (false)
+    if (state && !state.ack) {
+        adapter.log.info('ack is not set!->command');
+        var light = new Milight({
+            ip: adapter.config.milight_ip,
+            delayBetweenCommands: 50,
+            commandRepeat: 2
+        });
+        var tmp = id.split('.');
+        var dp = tmp.pop();
+        id = tmp.slice(2).join('.'); //ZoneX
+        adapter.log.info('id=' + id);
+        switch(id){
+            case 'AllZones':
+                zone = 0;
+                break;
+            case 'Zone1':
+                zone = 1;
+                break;
+            case 'Zone2':
+                zone = 2;
+                break;
+            case 'Zone3':
+                zone = 3;
+                break;
+            case 'Zone4':
+                zone = 4;
+                break;
+            default:
+                zone = 0;
+                break;
+        }
+
+        if (dp == 'state'){
+            if (state.val == 0) {
+                light.sendCommands(commands.rgbw.off(zone));
+                adapter.log.info(" es wird off gesendet ");
+            }
+            else if (state.val == 1) {
+                light.sendCommands(commands.rgbw.on(zone), commands.rgbw.brightness(100), commands.rgbw.whiteMode(zone));
+               adapter.log.info(" es wird on gesendet ");
+            }
+        }
+        if (dp == 'colormode') {
+            if (state.val == 0) {
+                light.sendCommands(commands.rgbw.on(zone), commands.rgbw.whiteMode(zone));
+                adapter.log.info(" es wird weiss gesendet ");
+            }
+            else if (state.val == 1) {
+                light.sendCommands(commands.rgbw.on(zone), commands.rgbw.rgbwMode(zone));
+                adapter.log.info(" es wird farbe gesendet ");
+            }
+        } // von colormode
+
+        if (dp == 'bright') {
+            light.sendCommands(commands.rgbw.on(zone), commands.rgbw.brightness(state.val));
+            adapter.log.info(" es wurde helligkeit gesendet ");
+
+        } // von bri
+
+        if (dp == 'hue') {
+            light.sendCommands(commands.rgbw.on(zone), commands.rgbw.hue(state.val));
+            adapter.log.info(" es wird farbwert gesendet ");
+        } // von hue
+
+        light.close();
+    }
+});
+
 
 // is called when databases are connected and adapter received configuration.
 // start here!
@@ -40,21 +113,7 @@ function main() {
     adapter.log.info('config test1: ' + adapter.config.milight_ip);
     adapter.log.info('config test2: ' + adapter.config.milight_port);
 
-/*
-    var options = {
-        bridge:     adapter.config.milight-ip       || '192.168.178.48',
-        port:       adapter.config.milight-port     || 8899
-    };
-*/
-    /**
-     *
-     *      For every state in the system there has to be also an object of type state
-     *
-     *      Here a simple template for a boolean variable named "testVariable"
-     *
-     *      Because every adapter instance uses its own unique namespace variable names can't collide with other adapters variables
-     *
-     */
+
     var obj = adapter.config.groups;
     for (var anz in obj){
         adapter.setObject('Zone' + anz, {
@@ -107,7 +166,10 @@ function main() {
                 "role":  "level.dimmer",
                 "read":  true,
                 "write": true,
-                "desc":  "Licht Helligkeit"
+                "desc":  "Licht Helligkeit",
+                "min":   "2",
+                "max":   "100",
+                "unit":  "%"
         },
             "native": {}
         });
@@ -123,7 +185,7 @@ function main() {
                 "desc":  "Licht Farbe",
                 "min":   "0",
                 "max":   "255",
-                "unit":  "hex"
+                "unit":  "hsl"
         },
             "native": {}
         });
@@ -171,13 +233,10 @@ function main() {
             "type": "state",
             "common": {
             "name":  "Colormode",
-                "type":  "number",
-                "role":  "level.saturation",
+                "type":  "boolean",
+                "role":  "boolean",
                 "read":  true,
                 "write": true,
-                "min":   "0",
-                "max":   "255",
-                "unit":  "hex",
                 "desc":  "Colormode"
         },
             "native": {}
@@ -188,22 +247,5 @@ function main() {
 
     // in this template all states changes inside the adapters namespace are subscribed
     adapter.subscribeStates('*');
-
-
-    /**
-     *   setState examples
-     *
-     *   you will notice that each setState will cause the stateChange event to fire (because of above subscribeStates cmd)
-     *
-     */
-
-    // the variable testVariable is set to true as command (ack=false)
-    adapter.setState('testVariable', true);
-
-    // same thing, but the value is flagged "ack"
-    // ack should be always set to true if the value is received from or acknowledged from the target system
-    adapter.setState('testVariable', {val: true, ack: true});
-
-
 
 }
