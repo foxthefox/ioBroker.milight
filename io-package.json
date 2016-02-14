@@ -89,7 +89,7 @@
                 "desc":  "Licht Farbe",
                 "min":   "0",
                 "max":   "255",
-                "unit":  "hex"
+                "unit":  "hsl"
             },
             "native": {}
         },
@@ -137,13 +137,10 @@
             "type": "state",
             "common": {
                 "name":  "Colormode",
-                "type":  "number",
-                "role":  "level.saturation",
+                "type":  "boolean",
+                "role":  "boolean",
                 "read":  true,
                 "write": true,
-                "min":   "0",
-                "max":   "255",
-                "unit":  "hex",
                 "desc":  "Colormode"
             },
             "native": {}
