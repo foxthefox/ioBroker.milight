@@ -1,7 +1,7 @@
 ![Logo](admin/easybulb_logo.png)
 # ioBroker.milight
 =================
-milight adapter for ioBroker
+adapter for ioBroker for LED-lamps like milight, easybulb, limitless
 
 ALPHA 
 
