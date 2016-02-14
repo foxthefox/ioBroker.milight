@@ -7,7 +7,7 @@
         "platform":             "Javascript/Node.js",
         "mode":                 "daemon",
         "license": 	   	"MIT",
-        "keywords":		["jeelink", "milight", "easybulb", "light"],
+        "keywords":		["milight", "easybulb", "light"],
         "type":			"hardware",
         "icon":                 "easybulb_logo.png",
 	"extIcon":          	"https://raw.githubusercontent.com/foxthefox/ioBroker.milight/master/admin/easybulb_logo.png",
