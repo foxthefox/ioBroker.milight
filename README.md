@@ -3,33 +3,33 @@
 =================
 adapter for ioBroker for LED-lamps like milight, easybulb, limitless
 
-ALPHA 
+#ALPHA 
 
-Installation:
+##Installation:
 
 npm install https://github.com/foxthefox/ioBroker.milight/tarball/master --production
 
-Settings:
+##Settings:
 
-IP-Adress-> IP of bridge
-Port -> port of brifge
-delaybetweenPackages -> ms delay between UDP packages
-repeatPackage -> number of repetitions
+* IP-Adress-> IP of bridge
+* Port -> port of brifge
+* delaybetweenPackages -> ms delay between UDP packages
+* repeatPackage -> number of repetitions
 
-Configuration:
+##Configuration:
 in io-package.json
-groups-> 4 possible zones of lights
-ltype -> type of lamp -> only RGBW supported
-rooms -> name of room or lamp
+* groups-> 4 possible zones of lights
+* ltype -> type of lamp -> only RGBW supported
+* rooms -> name of room or lamp
 
-TODO:
-support other type of lamp
-widget matching the adapter objects
+##TODO:
+* support other type of lamp
+* widget matching the adapter objects
 
-known issues:
+##known issues:
 lamp switches of after ca. 30s, maybe udp packages not sent correctly (version 3 of bridge used)
 
 
-Changelog:
-0.0.1
+##Changelog:
+###0.0.1
 initial setup with
