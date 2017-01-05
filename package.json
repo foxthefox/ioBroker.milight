@@ -20,7 +20,7 @@
     "url": "https://github.com/foxthefox/ioBroker.milight"
   },
   "dependencies": {
-    "node-milight-promise": "^0.0.4"
+    "node-milight-promise": "^0.0.9"
   },
   "devDependencies": {
       "grunt": "^0.4.5",
