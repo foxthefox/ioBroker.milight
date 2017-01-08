@@ -21,7 +21,7 @@ if (vis.editMode) {
         "oid-disco":        {"en": "disco mode",      "de": "Disco"},
         "oid-speedup":      {"en": "speed up",      "de": "speed up"},
         "oid-speeddown":    {"en": "speed down",      "de": "speed down"}        
-    })
+    });
 };
 
 vis.binds.milightui = {
