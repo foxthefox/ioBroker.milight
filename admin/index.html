@@ -26,21 +26,38 @@
     };
     // the function loadSettings has to exist ...
     function load(settings, onChange) {
+        if (!settings.version) settings.version = 6;
+        if (settings.milight_ip) {
+            settings.ip = settings.milight_ip;
+            delete settings.milight_ip;
+        }
+        if (settings.milight_port) {
+            settings.port = settings.milight_port;
+            delete settings.milight_port;
+        }
         // example: select elements with id=key and class=value and insert value
         for (var key in settings) {
-            // example: select elements with id=key and class=value and insert value
-            if ($('#' + key + '.value').attr('type') == 'checkbox') {
-                $('#' + key + '.value').prop('checked', settings[key]).change(function () {
+            var $value = $('#' + key + '.value');
+            if ($value.attr('type') === 'checkbox') {
+                $value.prop('checked', settings[key]).change(function () {
 					onChange();
 				});
             } else {
-                $('#' + key + '.value').val(settings[key]).change(function () {
+                $value.val(settings[key]).change(function () {
 					onChange();
 				}).keyup(function () {
 					$(this).trigger('change');
 				});
             }
         }
+        $('#version').change(function () {
+            if ($(this).val() === 5) {
+                $('#port').val(8899);
+            } else {
+                $('#port').val(5987);
+            }
+        });
+
         // Signal to admin, that no changes yet
         onChange(false);
     }
@@ -67,21 +84,54 @@
     
     <table>
         <tr>
-            <td class="translate">Milight IP</td>
-            <td><input type="text" id="milight_ip" class="value"/></td>
+            <td><label class="translate" for="ip">MiLight IP</label></td>
+            <td><input type="text" id="ip" class="value"/></td>
         </tr>
         <tr>
-            <td class="translate">Milight Port</td>
-            <td><input type="text" id="milight_port" class="value"/></td>
+            <td><label class="translate" for="version">Version</label></td>
+            <td><select id="version" class="value">
+                <option value="5">5</option>
+                <option value="6">6</option>
+            </select>
+            </td>
+        </tr>
+        <tr>
+            <td><label class="translate" for="port">MiLight Port</label></td>
+            <td><input type="text" id="port" class="value"/></td>
+        </tr>
+        <tr>
+            <td><label class="translate" for="zone1">Zone 1</label></td>
+            <td><select id="zone1" class="value">
+                <option value="" class="translate">none</option>
+                <option value="RGBW" class="translate">RGBW</option>
+                <option value="RGBWW" class="translate">RGBWW</option>
+            </select></td>
+        </tr>
+        <tr>
+            <td><label class="translate" for="zone2">Zone 2</label></td>
+            <td><select id="zone2" class="value">
+                <option value="" class="translate">none</option>
+                <option value="RGBW" class="translate">RGBW</option>
+                <option value="RGBWW" class="translate">RGBWW</option>
+            </select></td>
+        </tr>
+        <tr>
+            <td><label class="translate" for="zone3">Zone 3</label></td>
+            <td><select id="zone3" class="value">
+                <option value="" class="translate">none</option>
+                <option value="RGBW" class="translate">RGBW</option>
+                <option value="RGBWW" class="translate">RGBWW</option>
+            </select></td>
+        </tr>
+        <tr>
+            <td><label class="translate" for="zone4">Zone 4</label></td>
+            <td><select id="zone4" class="value">
+                <option value="" class="translate">none</option>
+                <option value="RGBW" class="translate">RGBW</option>
+                <option value="RGBWW" class="translate">RGBWW</option>
+            </select></td>
         </tr>
     </table>
-    
-    <p>
-        <span class="translate">test1</span> <input class="value" id="test1"/><br>
-        <span class="translate">test2</span> <input class="value" id="test2"/><br>
-    </p>
-
-    <p class="translate">on save adapter restarts with new config immediately</p>
 
 </div>
 

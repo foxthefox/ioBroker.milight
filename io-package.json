@@ -6,146 +6,50 @@
         "desc":                 "ioBroker milight Adapter",
         "platform":             "Javascript/Node.js",
         "mode":                 "daemon",
-        "license": 	   	"MIT",
-        "keywords":		["milight", "easybulb", "light"],
-        "type":			"hardware",
+        "license": 	   	        "MIT",
+        "keywords":		        ["milight", "easybulb", "light"],
+        "type":			        "hardware",
         "icon":                 "easybulb_logo.png",
-	"extIcon":          	"https://raw.githubusercontent.com/foxthefox/ioBroker.milight/master/admin/easybulb_logo.png",
-	"readme":           	"https://github.com/foxthefox/ioBroker.milight/master/README.md",
-	"loglevel":		"debug",
-	"restartAdapters":          ["vis"]
+        "extIcon":          	"https://raw.githubusercontent.com/foxthefox/ioBroker.milight/master/admin/easybulb_logo.png",
+        "readme":           	"https://github.com/foxthefox/ioBroker.milight/master/README.md",
+        "loglevel":		        "info",
+        "restartAdapters":      ["vis"]
 
     },
     "native": {
-        "milight_ip": "192.168.178.48",
-        "milight_port": "8899",
-        "groups": {
-            "1": {
-            	"room": ["Schlafzimmer"],
-                "ltype":  ["RGBW"]
-            },
-            "2": {
-                "room": ["Schlafzimmer"],
-                "ltype":  ["RGBW"]
-            },
-            "3": {
-                "room": ["Schlafzimmer"],
-                "ltype":  ["RGBW"]
-            },
-            "4": {
-                "room": ["Kreativzimmer"],
-                "ltype":  ["RGBW"]                
-            }
-        }
+        "version":  "6",
+        "ip":       "192.168.1.255",
+        "port":     5987,
+        "zone1":   "RGBW",
+        "zone2":   "RGBW",
+        "zone3":   "RGBW",
+        "zone4":   "RGBW"
     },
     
-   "objects": [
+    "objects": [
       
-    	],
+    ],
     "instanceObjects": [
-    	        {
-            "_id": "AllZone",
+        {
+            "_id":  "info",
             "type": "channel",
             "common": {
-                "name":  "RGBW Licht",
-                "role":  "light.color.rgbw"
+                "name": "Information"
             },
             "native": {}
         },
         {
-            "_id": "AllZone.state",
+            "_id":  "info.connection",
             "type": "state",
             "common": {
-                "name":  "Licht ",
+                "role":  "indicator.connected",
+                "name":  "If connected to CUL",
                 "type":  "boolean",
-                "role":  "switch",
                 "read":  true,
-                "write": true,
-                "desc":  "Licht schalten"
+                "write": false,
+                "def":   false
             },
             "native": {}
-        },
-        {
-            "_id": "AllZone.bright",
-            "type": "state",
-            "common": {
-                "name":  "Licht Helligkeit",
-                "type":  "string",
-                "role":  "level.dimmer",
-                "read":  true,
-                "write": true,
-                "desc":  "Licht Helligkeit"
-            },
-            "native": {}
-        },
-        {
-            "_id": "AllZone.hue",
-            "type": "state",
-            "common": {
-                "name":  "Licht Farbe",
-                "type":  "number",
-                "role":  "level.color.hue",
-                "read":  true,
-                "write": true,
-                "desc":  "Licht Farbe",
-                "min":   "0",
-                "max":   "255",
-                "unit":  "hsl"
-            },
-            "native": {}
-        },
-        {
-            "_id": "AllZone.speedup",
-            "type": "state",
-            "common": {
-                "name":  "Speed Up",
-                "type":  "boolean",
-                "role":  "button",
-                "read":  true,
-                "write": true,
-                "desc":  "Speed Up"
-            },
-            "native": {}
-        },
-        {
-            "_id": "AllZone.speeddown",
-            "type": "state",
-            "common": {
-                "name":  "Speed Down",
-                "type":  "boolean",
-                "role":  "button",
-                "read":  true,
-                "write": true,
-                "desc":  "Speed Down"
-            },
-            "native": {}
-        },
-        {
-            "_id": "AllZone.disco",
-            "type": "state",
-            "common": {
-                "name":  "Disco Mode",
-                "type":  "boolean",
-                "role":  "button",
-                "read":  true,
-                "write": true,
-                "desc":  "Disco Mode"
-            },
-            "native": {}
-        },   	    	
-        {
-            "_id": "AllZone.colormode",
-            "type": "state",
-            "common": {
-                "name":  "Colormode",
-                "type":  "boolean",
-                "role":  "boolean",
-                "read":  true,
-                "write": true,
-                "desc":  "Colormode"
-            },
-            "native": {}
-        }   	
-    	
-    	]
+        }
+    ]
 }
