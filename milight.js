@@ -90,6 +90,7 @@ adapter.on('stateChange', function (id, state) {
             if (zones[zone]) {
                 if (dp === 'brightness') dp = 'brightnessSet';
                 if (dp === 'rgb')        dp = 'colorRGB';
+                if (dp === 'color')      dp = 'colorSet';
 
                 if (dp === 'state') {
                     if (state.val === 'true' || state.val === true || state.val === 1 || state.val === 'on' || state.val === 'ON') {

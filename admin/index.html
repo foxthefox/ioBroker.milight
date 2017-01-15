@@ -56,8 +56,8 @@
                         var text = '<option value="">' + _('Select one') + '</option>';
                         devices = {};
                         for (var j = 0; j < list.length; j++) {
-                            devices[list[j].ip] = list[j].version;
-                            text += '<option value="' + list[j].ip + '">' + list[j].ip + (list[j].version ? '(v' + list[j].version + ')': '') + '</option>';
+                            devices[list[j].ip] = list[j].type[1];
+                            text += '<option value="' + list[j].ip + '">' + list[j].ip + (list[j].version ? '(' + list[j].type + ')': '') + '</option>';
                         }
                     });
                 }).button('enable');
