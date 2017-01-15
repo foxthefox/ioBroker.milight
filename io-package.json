@@ -22,11 +22,11 @@
         "version":  "6",
         "commandRepeat":  "2",
         "ip":       "",
-        "port":     5987,
-        "zone1":   "basic",
-        "zone2":   "RGBW",
-        "zone3":   "RGBW",
-        "zone4":   "RGBW"
+        "port":     "5987",
+        "zone1":    "basic",
+        "zone2":    "RGBW",
+        "zone3":    "RGBW",
+        "zone4":    "RGBW"
     },
     
     "objects": [

@@ -34,13 +34,13 @@
     var devices = {};
     // the function loadSettings has to exist ...
     function load(settings, onChange) {
-        if (!settings.version) settings.version = 6;
+        if (!settings.version) settings.version = '6';
         if (settings.milight_ip) {
-            settings.ip = settings.milight_ip;
+            settings.ip = settings.ip || settings.milight_ip;
             delete settings.milight_ip;
         }
         if (settings.milight_port) {
-            settings.port = settings.milight_port;
+            settings.port = settings.port || settings.milight_port;
             delete settings.milight_port;
         }
         // example: select elements with id=key and class=value and insert value
@@ -65,14 +65,13 @@
             if (isAlive || common.enabled) {
                 $('#discover').click(function () {
                     sendTo(null, 'browse', null, function (list) {
-                        $('#found').show();
                         var text = list && list.length ? '<option value="">' + _('Select one') + '</option>' : '<option value="">' + _('Nothing found') + '</option>';
                         devices = {};
                         for (var j = 0; j < list.length; j++) {
                             devices[list[j].ip] = list[j].type[1];
                             text += '<option value="' + list[j].ip + '">' + list[j].ip + (list[j].version ? '(' + list[j].type + ')': '') + '</option>';
                         }
-                        $('#found').html(text);
+                        $('#found').html(text).show();
                     });
                 }).button('enable');
             }
