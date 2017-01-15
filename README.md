@@ -27,7 +27,7 @@ in io-package.json
 * widget matching the adapter objects
 
 ##known issues:
-lamp switches of after ca. 30s, maybe udp packages not sent correctly (version 3 of bridge used)
+??
 
 
 ##Changelog:
