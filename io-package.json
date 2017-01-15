@@ -20,6 +20,7 @@
     },
     "native": {
         "version":  "6",
+        "commandRepeat":  "2",
         "ip":       "",
         "port":     5987,
         "zone1":   "RGBW",

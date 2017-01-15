@@ -24,9 +24,11 @@ adapter.on('message', function (obj) {
         switch (obj.command) {
             case 'browse':
                 var discoverBridges = require('node-milight-promise').discoverBridges;
+                adapter.log.info('Discover bridges...');
                 discoverBridges({
                     type: 'all'
                 }).then(function (results) {
+                    adapter.log.info('Discover bridges: ' + JSON.stringify(results));
                     if (obj.callback) adapter.sendTo(obj.from, obj.command, results, obj.callback);
                 });
                 wait = true;
@@ -388,6 +390,8 @@ var nameStates = {
 };
 
 function main() {
+    adapter.config.commandRepeat = parseInt(adapter.config.commandRepeat, 10) || 2;
+
     if (!adapter.config.ip) {
         adapter.log.warn('No IP address defined');
         return;
@@ -401,7 +405,7 @@ function main() {
             disconnectTimeout:      10000,
             keepAliveTimeout:       10000,
             delayBetweenCommands:   50,
-            commandRepeat:          2,
+            commandRepeat:          adapter.config.commandRepeat,
             debug:                  true,
             log:                    {
                 log:   function (text) {
@@ -426,7 +430,7 @@ function main() {
         light = new Milight({
             ip:                     adapter.config.ip,
             delayBetweenCommands:   50,
-            commandRepeat:          2
+            commandRepeat:          adapter.config.commandRepeat
         });
     }
     var objs = [];
@@ -449,7 +453,9 @@ function main() {
         var names = nameStates[type];
         if (names) {
             if (adapter.config.version === '6') {
-                zones[z] = light.zoneCtlRGBWFactory(z);
+                if (type === 'base')  zones[z] = light.baseCtlFactory(z);
+                if (type === 'RGBW')  zones[z] = light.zoneCtlRGBWFactory(z);
+                if (type === 'RGBWW') zones[z] = light.zoneCtlRGBWWFactory(z);
             }
             for (var s = 0; s < names.length; s++) {
                 var obj = JSON.parse(JSON.stringify(stateCommands[names[s]]));
