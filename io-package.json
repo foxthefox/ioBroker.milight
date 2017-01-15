@@ -19,6 +19,8 @@
     "native": {
         "milight_ip": "192.168.178.48",
         "milight_port": "8899",
+	    "test1": "test",
+	    "test2": "43",
         "groups": {
             "1": {
             	"room": ["Schlafzimmer"],
