@@ -86,10 +86,11 @@ adapter.on('stateChange', function (id, state) {
                     var val;
                     if (dp === 'colorRGB') {
                         val = splitColor(state.val);
+                        adapter.log.debug('Send to zone ' + zone + ' "' + dp + '": ' + JSON.stringify(val));
                     } else {
                         val = parseInt(state.val, 10);
+                        adapter.log.debug('Send to zone ' + zone + ' "' + dp + '": ' + val);
                     }
-                    adapter.log.debug('Send to zone ' + zone + ' "' + dp + '": ' + JSON.stringify(val));
                     zones[zone].command(dp, val, function (err) {
                         if (!err) {
                             adapter.setForeignState(id, state.val, true);
