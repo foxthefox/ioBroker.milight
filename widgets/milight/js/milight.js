@@ -38,14 +38,14 @@ vis.binds.milightui = {
 
     milightColormode: function (el, oid) {
             var $hue = $(el).parent().find('.hue-mode-hue');
-            if (vis.states.attr(oid + '.val') == 'color') {
+            if (vis.states.attr(oid + '.val') == 'hs') {
                 $hue.hide();
             } else {
                 $hue.show();
             }
 
             vis.states.bind(oid + '.val', function (e, newVal, oldVal) {
-                if (newVal == 'color') {
+                if (newVal == 'hs') {
                     $hue.hide();
                 } else {
                     $hue.show();
