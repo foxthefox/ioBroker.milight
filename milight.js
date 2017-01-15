@@ -2,7 +2,7 @@
 /*jslint node: true */
 
 var Milight = require('node-milight-promise').MilightController;
-var commands = require('node-milight-promise').commands;
+var commands = require('node-milight-promise').commands2;
 
 "use strict";
 
@@ -34,8 +34,8 @@ adapter.on('stateChange', function (id, state) {
         adapter.log.info('ack is not set!->command');
         var light = new Milight({
             ip: adapter.config.milight_ip,
-            delayBetweenCommands: 50,
-            commandRepeat: 2
+            delayBetweenCommands: 100,
+            commandRepeat: 1
         });
         var tmp = id.split('.');
         var dp = tmp.pop();
@@ -78,7 +78,7 @@ adapter.on('stateChange', function (id, state) {
                 adapter.log.info(" es wird weiss gesendet ");
             }
             else if (state.val == 1) {
-                light.sendCommands(commands.rgbw.on(zone), commands.rgbw.rgbwMode(zone));
+                light.sendCommands(commands.rgbw.on(zone), commands.rgbw.hue(55));
                 adapter.log.info(" es wird farbe gesendet ");
             }
         } // von colormode
