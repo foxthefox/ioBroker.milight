@@ -18,6 +18,33 @@ var adapter  = utils.adapter({
     }
 });
 
+adapter.on('message', function (obj) {
+    var wait = false;
+    if (obj) {
+        switch (obj.command) {
+            case 'browse':
+                var discoverBridges = require('node-milight-promise').discoverBridges;
+                discoverBridges({
+                    type: 'all'
+                }).then(function (results) {
+                    if (obj.callback) adapter.sendTo(obj.from, obj.command, results, obj.callback);
+                });
+                wait = true;
+                break;
+
+            default:
+                adapter.log.warn('Unknown command: ' + obj.command);
+                break;
+        }
+    }
+
+    if (!wait && obj.callback) {
+        adapter.sendTo(obj.from, obj.command, obj.message, obj.callback);
+    }
+
+    return true;
+});
+
 function splitColor(rgb) {
     if (!rgb) rgb = '#000000';
     rgb = rgb.toString().toUpperCase();
@@ -86,8 +113,10 @@ adapter.on('stateChange', function (id, state) {
                     var val;
                     if (dp === 'rgb') {
                         val = splitColor(state.val);
+                        dp = 'colorRGB';
                         adapter.log.debug('Send to zone ' + zone + ' "' + dp + '": ' + JSON.stringify(val));
                     } else if (dp === 'brightness') {
+                        dp = 'brightnessSet';
                         val = Math.round(parseFloat(state.val) / 100) * 255;
                         if (val < 0)   val = 0;
                         if (val > 255) val = 255;
@@ -110,6 +139,7 @@ adapter.on('stateChange', function (id, state) {
                 adapter.log.error('Zone is disabled');
             }
         } else {
+            // version 5
             if (dp === 'state'){
                 if (state.val == 0) {
                     light.sendCommands(commands.rgbw.off(zone));
@@ -356,6 +386,10 @@ var nameStates = {
 };
 
 function main() {
+    if (!adapter.config.ip) {
+        adapter.log.warn('No IP address defined');
+        return;
+    }
     if (adapter.config.version === '6') {
         adapter.setState('info.connection', false, true);
         light = new require(__dirname + '/lib/bridge.js')({
@@ -366,6 +400,7 @@ function main() {
             keepAliveTimeout:       10000,
             delayBetweenCommands:   50,
             commandRepeat:          2,
+            debug:                  true,
             log:                    {
                 log:   function (text) {
                     adapter.log.debug(text);

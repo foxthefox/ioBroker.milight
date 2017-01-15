@@ -9,6 +9,8 @@
         "license": 	   	        "MIT",
         "keywords":		        ["milight", "easybulb", "light"],
         "type":			        "hardware",
+        "enabled":              true,
+        "messagebox":           true,
         "icon":                 "easybulb_logo.png",
         "extIcon":          	"https://raw.githubusercontent.com/foxthefox/ioBroker.milight/master/admin/easybulb_logo.png",
         "readme":           	"https://github.com/foxthefox/ioBroker.milight/master/README.md",
@@ -18,7 +20,7 @@
     },
     "native": {
         "version":  "6",
-        "ip":       "192.168.1.255",
+        "ip":       "",
         "port":     5987,
         "zone1":   "RGBW",
         "zone2":   "RGBW",

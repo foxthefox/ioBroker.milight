@@ -16,14 +16,9 @@
 <script type="text/javascript">
     // Dictionary (systemDictionary is global variable from adapter-settings.js)
     systemDictionary = {
-        "milight adapter settings": {"de": "milight Adapter Einstellung", "ru": "Настройки milight Драйвера"},
-        "test1":                    {"en": "Test 1", "de": "Test 1", "ru": "Тест 1"},
-        "test2":                    {"en": "Test 2", "de": "Test 2", "ru": "Тест 2"},
-        "on save adapter restarts with new config immediately": {
-            "de": "Beim Speichern von Einstellungen der Adapter wird sofort neu gestartet.",
-            "ru": "Сразу после сохранения настроек драйвер перезапуститься с новыми значениями"
-        }
+        "MiLight adapter settings": {"de": "MiLight Adapter Einstellung", "ru": "Настройки MiLight Драйвера"}
     };
+    var devices = {};
     // the function loadSettings has to exist ...
     function load(settings, onChange) {
         if (!settings.version) settings.version = 6;
@@ -37,6 +32,8 @@
         }
         // example: select elements with id=key and class=value and insert value
         for (var key in settings) {
+            if (!settings.hasOwnProperty(key)) continue;
+
             var $value = $('#' + key + '.value');
             if ($value.attr('type') === 'checkbox') {
                 $value.prop('checked', settings[key]).change(function () {
@@ -50,6 +47,32 @@
 				});
             }
         }
+
+        getIsAdapterAlive(function (isAlive) {
+            if (isAlive || common.enabled) {
+                $('#discover').click(function () {
+                    sendTo(null, 'browse', null, function (list) {
+                        $('#found').show();
+                        var text = '<option value="">' + _('Select one') + '</option>';
+                        devices = {};
+                        for (var j = 0; j < list.length; j++) {
+                            devices[list[j].ip] = list[j].version;
+                            text += '<option value="' + list[j].ip + '">' + list[j].ip + (list[j].version ? '(v' + list[j].version + ')': '') + '</option>';
+                        }
+                    });
+                }).button('enable');
+            }
+        });
+        $('#discover').button().button('disable');
+
+        $('#found').change(function () {
+            var val = $(this).val();
+            if (val) {
+                $('#ip').val(val);
+                if (devices[val]) $('#version').val(devices[val]).trigger('change');
+            }
+        });
+
         $('#version').change(function () {
             if ($(this).val() === '5') {
                 $('#port').val(8899);
@@ -79,13 +102,15 @@
 
     <table><tr>
         <td><img src="easybulb_logo.png"/></td>
-        <td><h3 class="translate">milight adapter settings</h3></td>
+        <td><h3 class="translate">MiLight adapter settings</h3></td>
     </tr></table>
     
     <table>
         <tr>
             <td><label class="translate" for="ip">MiLight IP</label></td>
             <td><input type="text" id="ip" class="value"/></td>
+            <td><button id="discover"></button> <select style="display: none" id="found">
+            </select></td>
         </tr>
         <tr>
             <td><label class="translate" for="version">Version</label></td>
