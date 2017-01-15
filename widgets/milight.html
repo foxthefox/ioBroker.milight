@@ -94,7 +94,7 @@
 
     </div>
     <div class="pupup-helper" <%= (el) -> vis.binds.milightui.milightColormode(el, this.data.attr('oid-colormode')) %> />
-    <div class="popup-helper" <%= (el) -> vis.binds.jqueryui.dialog(el,{width:440,height:320,modal:data.attr('modal')},true) %> />
+    <div class="popup-helper" <%= (el) -> vis.binds.jqueryui.dialog(el,{width:440,height:220,modal:data.attr('modal')},true) %> />
     <div class="popup-helper" <%= (el) -> if (data.attr("autoclose") === 'true' || data.attr("autoclose") === true) { vis.binds.jqueryui.dialogAutoClose(el) }  %> />
     </div>
 </script>
