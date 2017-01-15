@@ -23,7 +23,7 @@
         "commandRepeat":  "2",
         "ip":       "",
         "port":     5987,
-        "zone1":   "RGBW",
+        "zone1":   "basic",
         "zone2":   "RGBW",
         "zone3":   "RGBW",
         "zone4":   "RGBW"

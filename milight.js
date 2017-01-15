@@ -453,9 +453,15 @@ function main() {
         var names = nameStates[type];
         if (names) {
             if (adapter.config.version === '6') {
-                if (type === 'base')  zones[z] = light.baseCtlFactory(z);
-                if (type === 'RGBW')  zones[z] = light.zoneCtlRGBWFactory(z);
-                if (type === 'RGBWW') zones[z] = light.zoneCtlRGBWWFactory(z);
+                if (type === 'basic') {
+                    zones[z] = light.baseCtlFactory();
+                } else
+                if (type === 'RGBW')  {
+                    zones[z] = light.zoneCtlRGBWFactory(z);
+                } else
+                if (type === 'RGBWW') {
+                    zones[z] = light.zoneCtlRGBWWFactory(z);
+                }
             }
             for (var s = 0; s < names.length; s++) {
                 var obj = JSON.parse(JSON.stringify(stateCommands[names[s]]));
