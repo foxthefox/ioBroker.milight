@@ -12,7 +12,7 @@ npm install https://github.com/foxthefox/ioBroker.milight/tarball/master --produ
 ##Settings:
 
 * IP-Adress-> IP of bridge
-* Port -> port of brifge
+* Port -> port of bridge
 * delaybetweenPackages -> ms delay between UDP packages
 * repeatPackage -> number of repetitions
 
