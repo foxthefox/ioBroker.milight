@@ -344,9 +344,9 @@ var stateCommands = {
 };
 
 var nameStates = {
-    basic: ['state', 'on', 'off', 'whiteMode', 'brightnessUp', 'brightnessDown', 'brightnessSet', 'colorUp', 'colorDown', 'colorSet', 'colorRGB', 'mode'],
-    RGBW:  ['state', 'on', 'off', 'whiteMode', 'brightnessUp', 'brightnessDown', 'brightnessSet', 'colorUp', 'colorDown', 'colorSet', 'colorRGB', 'mode'],
-    RGBWW: ['state', 'on', 'off', 'whiteMode', 'brightnessUp', 'brightnessDown', 'brightnessSet', 'colorUp', 'colorDown', 'colorSet', 'colorRGB', 'mode']
+    basic: ['state', 'on', 'off', 'whiteMode', 'brightnessUp', 'brightnessDown', 'brightness', 'colorUp', 'colorDown', 'colorSet', 'rgb', 'mode'],
+    RGBW:  ['state', 'on', 'off', 'whiteMode', 'brightnessUp', 'brightnessDown', 'brightness', 'colorUp', 'colorDown', 'colorSet', 'rgb', 'mode'],
+    RGBWW: ['state', 'on', 'off', 'whiteMode', 'brightnessUp', 'brightnessDown', 'brightness', 'colorUp', 'colorDown', 'colorSet', 'rgb', 'mode']
 };
 
 function main() {
