@@ -84,7 +84,7 @@ adapter.on('stateChange', function (id, state) {
                 } else
                 if (typeof zones[zone][dp] === 'function') {
                     var val;
-                    if (dp === 'colorRGB') {
+                    if (dp === 'rgb') {
                         val = splitColor(state.val);
                         adapter.log.debug('Send to zone ' + zone + ' "' + dp + '": ' + JSON.stringify(val));
                     } else {
@@ -265,7 +265,7 @@ var stateCommands = {
         },
         type: 'state'
     },
-    brightnessSet: {
+    brightness: {
         common: {
             type: 'number',
             role: 'level.dimmer',
@@ -303,7 +303,7 @@ var stateCommands = {
         },
         type: 'state'
     },
-    colorSet: {
+    color: {
         common: {
             type: 'number',
             role: 'level.color',
@@ -317,7 +317,7 @@ var stateCommands = {
         },
         type: 'state'
     },
-    colorRGB: {
+    rgb: {
         common: {
             type: 'string',
             role: 'level.rgb',
