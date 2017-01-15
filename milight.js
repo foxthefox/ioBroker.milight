@@ -89,7 +89,7 @@ adapter.on('stateChange', function (id, state) {
                     } else {
                         val = parseInt(state.val, 10);
                     }
-                    adapter.log.debug('Send to zone ' + zone + ' "' + dp + ': ' + JSON.stringify(val));
+                    adapter.log.debug('Send to zone ' + zone + ' "' + dp + '": ' + JSON.stringify(val));
                     zones[zone].command(dp, val, function (err) {
                         if (!err) {
                             adapter.setForeignState(id, state.val, true);
