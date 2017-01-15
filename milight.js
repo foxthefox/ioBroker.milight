@@ -358,7 +358,15 @@ function main() {
             disconnectTimeout:      10000,
             keepAliveTimeout:       10000,
             delayBetweenCommands:   50,
-            commandRepeat:          2
+            commandRepeat:          2,
+            log:                    {
+                log:   function (text) {
+                    adapter.log.debug(text);
+                },
+                error: function (text) {
+                    adapter.log.error(text);
+                }
+            }
         });
         light.on('connected', function () {
             adapter.setState('info.connection', true, true);
