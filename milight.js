@@ -344,9 +344,9 @@ var stateCommands = {
 };
 
 var nameStates = {
-    basic: ['state', 'on', 'off', 'whiteMode', 'brightnessUp', 'brightnessDown', 'brightness', 'colorUp', 'colorDown', 'colorSet', 'rgb', 'mode'],
-    RGBW:  ['state', 'on', 'off', 'whiteMode', 'brightnessUp', 'brightnessDown', 'brightness', 'colorUp', 'colorDown', 'colorSet', 'rgb', 'mode'],
-    RGBWW: ['state', 'on', 'off', 'whiteMode', 'brightnessUp', 'brightnessDown', 'brightness', 'colorUp', 'colorDown', 'colorSet', 'rgb', 'mode']
+    basic: ['state', 'on', 'off', 'whiteMode', 'brightnessUp', 'brightnessDown', 'brightness', 'colorUp', 'colorDown', 'color', 'rgb', 'mode'],
+    RGBW:  ['state', 'on', 'off', 'whiteMode', 'brightnessUp', 'brightnessDown', 'brightness', 'colorUp', 'colorDown', 'color', 'rgb', 'mode'],
+    RGBWW: ['state', 'on', 'off', 'whiteMode', 'brightnessUp', 'brightnessDown', 'brightness', 'colorUp', 'colorDown', 'color', 'rgb', 'mode']
 };
 
 function main() {
@@ -388,6 +388,10 @@ function main() {
     }
     var objs = [];
     for (var n = 0; n < nameStates.basic.length; n++) {
+        if (!stateCommands[nameStates.basic[n]]) {
+            adapter.log.error('Unknown command: ' + nameStates.basic[n]);
+            continue;
+        }
         var _obj = JSON.parse(JSON.stringify(stateCommands[nameStates.basic[n]]));
         if (!_obj) {
             adapter.log.error('Unknown state: ' + nameStates.basic[n]);
