@@ -88,6 +88,9 @@ adapter.on('stateChange', function (id, state) {
 
         if (adapter.config.version === '6') {
             if (zones[zone]) {
+                if (dp === 'brightness') dp = 'brightnessSet';
+                if (dp === 'rgb')        dp = 'colorRGB';
+
                 if (dp === 'state') {
                     if (state.val === 'true' || state.val === true || state.val === 1 || state.val === 'on' || state.val === 'ON') {
                         adapter.log.debug('Send to zone ' + zone + ' ON');
@@ -111,12 +114,10 @@ adapter.on('stateChange', function (id, state) {
                 } else
                 if (typeof zones[zone][dp] === 'function') {
                     var val;
-                    if (dp === 'rgb') {
+                    if (dp === 'colorRGB') {
                         val = splitColor(state.val);
-                        dp = 'colorRGB';
                         adapter.log.debug('Send to zone ' + zone + ' "' + dp + '": ' + JSON.stringify(val));
-                    } else if (dp === 'brightness') {
-                        dp = 'brightnessSet';
+                    } else if (dp === 'brightnessSet') {
                         val = Math.round(parseFloat(state.val) / 100) * 255;
                         if (val < 0)   val = 0;
                         if (val > 255) val = 255;
