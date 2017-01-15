@@ -34,5 +34,6 @@ lamp switches of after ca. 30s, maybe udp packages not sent correctly (version 3
 ### intermediate
 * node-milight-promise 0.0.9
 * jqui widget
+
 ###0.0.1
 * initial setup
