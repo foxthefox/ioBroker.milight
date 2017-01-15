@@ -78,7 +78,7 @@ adapter.on('stateChange', function (id, state) {
                 adapter.log.info(" es wird weiss gesendet ");
             }
             else if (state.val == 'hs') {
-                light.sendCommands(commands.rgbw.on(zone), commands.rgbw.hue(55));
+                light.sendCommands(commands.rgbw.on(zone), commands.rgbw.hue(81));
                 adapter.log.info(" es wird farbe gesendet ");
             }
         } // von colormode
