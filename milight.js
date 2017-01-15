@@ -87,6 +87,11 @@ adapter.on('stateChange', function (id, state) {
                     if (dp === 'rgb') {
                         val = splitColor(state.val);
                         adapter.log.debug('Send to zone ' + zone + ' "' + dp + '": ' + JSON.stringify(val));
+                    } else if (dp === 'brightness') {
+                        val = Math.round(parseFloat(state.val) / 100) * 255;
+                        if (val < 0)   val = 0;
+                        if (val > 255) val = 255;
+                        adapter.log.debug('Send to zone ' + zone + ' "' + dp + '": ' + val);
                     } else {
                         val = parseInt(state.val, 10);
                         adapter.log.debug('Send to zone ' + zone + ' "' + dp + '": ' + val);
@@ -271,7 +276,8 @@ var stateCommands = {
             role: 'level.dimmer',
             name: 'Brightness',
             min: 0,
-            max: 255,
+            max: 100,
+            unit: '%',
             write: true,
             read: false
         },
