@@ -73,11 +73,11 @@ adapter.on('stateChange', function (id, state) {
             }
         }
         if (dp == 'colormode') {
-            if (state.val == 0) {
+            if (state.val == 'ct') {
                 light.sendCommands(commands.rgbw.on(zone), commands.rgbw.whiteMode(zone));
                 adapter.log.info(" es wird weiss gesendet ");
             }
-            else if (state.val == 1) {
+            else if (state.val == 'hs') {
                 light.sendCommands(commands.rgbw.on(zone), commands.rgbw.hue(55));
                 adapter.log.info(" es wird farbe gesendet ");
             }
