@@ -13,16 +13,15 @@
 // add translations for edit mode
 
 if (vis.editMode) {
-
     $.extend(systemDictionary, {
-        "oid-level":       {"en": "brightness", "de": "Helligkeit"},
-        "oid-colormode":    {"en": "mode",  "de": "Modus"},
-        "oid-color":        {"en": "color",      "de": "Farbe"},
-        "oid-disco":        {"en": "disco mode",      "de": "Disco"},
+        "oid-level":        {"en": "brightness",    "de": "Helligkeit"},
+        "oid-colormode":    {"en": "mode",          "de": "Modus"},
+        "oid-color":        {"en": "color",         "de": "Farbe"},
+        "oid-disco":        {"en": "disco mode",    "de": "Disco"},
         "oid-speedup":      {"en": "speed up",      "de": "speed up"},
-        "oid-speeddown":    {"en": "speed down",      "de": "speed down"}        
+        "oid-speeddown":    {"en": "speed down",    "de": "speed down"}
     });
-};
+}
 
 vis.binds.milightui = {
 

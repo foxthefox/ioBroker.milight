@@ -1,13 +1,20 @@
 {
     "common": {
         "name":                 "milight",
-        "version":              "0.0.1",
+        "version":              "0.1.0",
+        "news": {
+            "0.1.0": {
+                "en": 				"Inital version",
+                "de": 				"Erste Version",
+                "ru": 				"Первая версия"
+            }
+        },
         "title":                "milight adapter",
         "desc":                 "ioBroker milight Adapter",
         "platform":             "Javascript/Node.js",
         "mode":                 "daemon",
         "license": 	   	        "MIT",
-        "keywords":		        ["milight", "easybulb", "light"],
+        "keywords":		        ["milight", "easybulb", "rgb", "limitlessLED"],
         "type":			        "hardware",
         "enabled":              true,
         "messagebox":           true,
@@ -46,7 +53,7 @@
             "type": "state",
             "common": {
                 "role":  "indicator.connected",
-                "name":  "If connected to CUL",
+                "name":  "If connected to MiLight gateway",
                 "type":  "boolean",
                 "read":  true,
                 "write": false,

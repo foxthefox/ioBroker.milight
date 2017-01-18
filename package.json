@@ -1,6 +1,6 @@
 {
   "name": "iobroker.milight",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "ioBroker milight Adapter",
   "author": {
     "name": "foxthefox",
@@ -8,8 +8,7 @@
   },
   "contributors": [
     {
-      "name": "foxthefox",
-      "email": "@@email@@"
+      "name": "foxthefox"
     },
     {
       "name": "bluefox",
@@ -18,7 +17,7 @@
   ],
   "homepage": "https://github.com/foxthefox/ioBroker.milight",
   "license": "MIT",
-  "keywords": ["ioBroker", "light", "easybulb", "milight" ],
+  "keywords": ["ioBroker", "light", "easybulb", "milight", "limitlessLED"],
   "repository": {
     "type": "git",
     "url": "https://github.com/foxthefox/ioBroker.milight"
