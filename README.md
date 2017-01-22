@@ -1,6 +1,8 @@
 ![Logo](admin/easybulb_logo.png)
 # ioBroker.milight
 =================
+[![Build Status](https://travis-ci.org/foxthefox/ioBroker.milight.svg?branch=master)](https://travis-ci.org/foxthefox/ioBroker.milight)
+
 adapter for ioBroker for LED-lamps like milight, easybulb, limitless
 
 ##Installation:
