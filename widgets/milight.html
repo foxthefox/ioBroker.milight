@@ -39,7 +39,7 @@
     }
 
     var str = vis.states.attr(this.data.attr('oid-level') + '.val');
-    var val = (parseFloat(str)/27);
+    var val = (parseFloat(str)/100);
     var image = '';
     if (val == 1) {
     %>
@@ -84,17 +84,17 @@
 
         <br/><br/>
         Helligkeit
-        <div class="sliderJQUI" style="width:90%" id="<%= this.data.attr('wid') %>_slider" data-oid="<%= this.data.attr('oid-level') %>"  <%= (el) -> vis.binds.jqueryui.slider(el, {min:2,max:27,step:1}) %> />
+        <div class="sliderJQUI" style="width:90%" id="<%= this.data.attr('wid') %>_slider" data-oid="<%= this.data.attr('oid-level') %>"  <%= (el) -> vis.binds.jqueryui.slider(el, {min:1,max:100,step:1}) %> />
         <br/>
         <br/>
-        </div>
+
         <div class="hue-mode-hue">
             <div class="sliderJQUI hue-slider-hue" style="width:90%" id="<%= this.data.attr('wid') %>_hue_hue_slider" data-oid="<%= this.data.attr('oid-color') %>"  <%= (el) -> vis.binds.jqueryui.slider(el, {min:0,max:255,step:1}) %> />
         </div>
 
     </div>
     <div class="pupup-helper" <%= (el) -> vis.binds.milightui.milightColormode(el, this.data.attr('oid-colormode')) %> />
-    <div class="popup-helper" <%= (el) -> vis.binds.jqueryui.dialog(el,{width:440,height:320,modal:data.attr('modal')},true) %> />
+    <div class="popup-helper" <%= (el) -> vis.binds.jqueryui.dialog(el,{width:440,height:220,modal:data.attr('modal')},true) %> />
     <div class="popup-helper" <%= (el) -> if (data.attr("autoclose") === 'true' || data.attr("autoclose") === true) { vis.binds.jqueryui.dialogAutoClose(el) }  %> />
     </div>
 </script>

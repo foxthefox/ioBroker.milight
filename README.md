@@ -1,9 +1,9 @@
 ![Logo](admin/easybulb_logo.png)
 # ioBroker.milight
 =================
-adapter for ioBroker for LED-lamps like milight, easybulb, limitless
+[![Build Status](https://travis-ci.org/foxthefox/ioBroker.milight.svg?branch=master)](https://travis-ci.org/foxthefox/ioBroker.milight)
 
-#ALPHA 
+adapter for ioBroker for LED-lamps like milight, easybulb, limitless
 
 ##Installation:
 
@@ -12,7 +12,7 @@ npm install https://github.com/foxthefox/ioBroker.milight/tarball/master --produ
 ##Settings:
 
 * IP-Adress-> IP of bridge
-* Port -> port of brifge
+* Port -> port of bridge
 * delaybetweenPackages -> ms delay between UDP packages
 * repeatPackage -> number of repetitions
 
@@ -27,9 +27,13 @@ in io-package.json
 * widget matching the adapter objects
 
 ##known issues:
-lamp switches of after ca. 30s, maybe udp packages not sent correctly (version 3 of bridge used)
+??
 
 
 ##Changelog:
+### intermediate
+* node-milight-promise 0.0.9
+* jqui widget
+
 ###0.0.1
-initial setup with
+* initial setup
