@@ -6,7 +6,7 @@
             "0.1.0": {
                 "en": 				"Inital version",
                 "de": 				"Erste Version",
-                "ru": 				"Первая версия"
+                "ru": 				"ГЏГҐГ°ГўГ Гї ГўГҐГ°Г±ГЁГї"
             }
         },
         "title":                "milight adapter",
@@ -27,6 +27,7 @@
     },
     "native": {
         "version":  "6",
+        "delayBetweenCommands": "100"
         "commandRepeat":  "2",
         "ip":       "",
         "port":     "5987",
