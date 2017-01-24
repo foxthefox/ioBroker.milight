@@ -13,16 +13,15 @@
 // add translations for edit mode
 
 if (vis.editMode) {
-
     $.extend(systemDictionary, {
-        "oid-level":       {"en": "brightness", "de": "Helligkeit"},
-        "oid-colormode":    {"en": "mode",  "de": "Modus"},
-        "oid-color":        {"en": "color",      "de": "Farbe"},
-        "oid-disco":        {"en": "disco mode",      "de": "Disco"},
+        "oid-level":        {"en": "brightness",    "de": "Helligkeit"},
+        "oid-colormode":    {"en": "mode",          "de": "Modus"},
+        "oid-color":        {"en": "color",         "de": "Farbe"},
+        "oid-disco":        {"en": "disco mode",    "de": "Disco"},
         "oid-speedup":      {"en": "speed up",      "de": "speed up"},
-        "oid-speeddown":    {"en": "speed down",      "de": "speed down"}        
+        "oid-speeddown":    {"en": "speed down",    "de": "speed down"}
     });
-};
+}
 
 vis.binds.milightui = {
 
@@ -38,14 +37,14 @@ vis.binds.milightui = {
 
     milightColormode: function (el, oid) {
             var $hue = $(el).parent().find('.hue-mode-hue');
-            if (vis.states.attr(oid + '.val') == 'ct') {
+            if (vis.states.attr(oid + '.val') === 'ct') {
                 $hue.hide();
             } else {
                 $hue.show();
             }
 
             vis.states.bind(oid + '.val', function (e, newVal, oldVal) {
-                if (newVal == 'ct') {
+                if (newVal === 'ct') {
                     $hue.hide();
                 } else {
                     $hue.show();

@@ -1,251 +1,407 @@
 /* jshint -W097 */// jshint strict:false
 /*jslint node: true */
+'use strict';
 
-var Milight = require('node-milight-promise').MilightController;
-var commands = require('node-milight-promise').commands2;
+var utils         = require(__dirname + '/lib/utils'); // Get common adapter utils
+var stateCommands = require(__dirname + '/lib/commands');
+var light         = null;
+var zones         = [];
+var commands;
 
-"use strict";
+var nameStates = {
+    v6 :{
+        basic: ['state', 'on', 'off', 'whiteMode', 'brightnessUp', 'brightnessDown', 'brightness', 'colorUp', 'colorDown', 'color', 'rgb', 'mode'],
+        RGBWW: ['state', 'on', 'off', 'colorMode', 'whiteMode', 'nightMode', 'brightnessUp', 'brightnessDown', 'brightness', 'colorUp', 'colorDown', 'color', 'rgb', 'mode', 'modeSpeedUp', 'modeSpeedDown', 'link', 'unlink'],
+        RGBW:  ['state', 'on', 'off', 'colorMode', 'whiteMode', 'nightMode', 'brightnessUp', 'brightnessDown', 'brightness', 'colorUp', 'colorDown', 'color', 'rgb', 'mode', 'modeSpeedUp', 'modeSpeedDown', 'link', 'unlink', 'saturationUp', 'saturationDown', 'saturation', 'colorTempUp', 'colorTempDown', 'colorTemp']
+    },
+    v5 :{
+        basic: ['state', 'on', 'off', 'brightnessUp', 'brightnessDown', 'speedUp', 'speedDown', 'effectSpeedUp', 'effectSpeedDown'],
+        RGBWW: ['state', 'on', 'off', 'allOn', 'allOff', 'maxBright', 'brightnessUp', 'brightnessDown', 'warmer', 'cooler'],
+        RGBW:  ['state', 'on', 'off', 'colorMode', 'allOn', 'allOff', 'hue', 'rgb', 'whiteMode', 'nightMode', 'brightness', 'brightness2', 'effectModeNext', 'effectSpeedUp', 'effectSpeedDown']
+    }
 
-// you have to require the utils module and call adapter function
-var utils =    require(__dirname + '/lib/utils'); // Get common adapter utils
+};
 
-// you have to call the adapter function and pass a options object
-// name has to be set and has to be equal to adapters folder name and main file name excluding extension
-// adapter will be restarted automatically every time as the configuration changed, e.g system.adapter.template.0
-var adapter = utils.adapter({
-    name: 'milight'});
-
-// is called when adapter shuts down - callback has to be called under any circumstances!
-adapter.on('unload', function (callback) {
-    try {
-        adapter.log.info('cleaned everything up...');
-        callback();
-    } catch (e) {
-        callback();
+var adapter       = utils.adapter({
+    name: 'milight',
+    unload: function (cb) {
+        if (light) {
+            light.close();
+            light = null;
+        }
+        if (typeof cb === 'function') cb();
     }
 });
 
-adapter.on('stateChange', function (id, state) {
-    // Warning, state can be null if it was deleted
-    adapter.log.info('stateChange ' + id + ' ' + JSON.stringify(state));
+adapter.on('message', function (obj) {
+    var wait = false;
+    if (obj) {
+        switch (obj.command) {
+            case 'browse':
+                var discoverBridges = require('node-milight-promise').discoverBridges;
+                adapter.log.info('Discover bridges...');
+                discoverBridges({
+                    type: 'all'
+                }).then(function (results) {
+                    adapter.log.info('Discover bridges: ' + JSON.stringify(results));
+                    if (obj.callback) adapter.sendTo(obj.from, obj.command, results, obj.callback);
+                });
+                wait = true;
+                break;
 
-    // you can use the ack flag to detect if it is status (true) or command (false)
-    if (state && !state.ack) {
-        adapter.log.info('ack is not set!->command');
-        var light = new Milight({
-            ip: adapter.config.milight_ip,
-            delayBetweenCommands: 100,
-            commandRepeat: 1
-        });
+            default:
+                adapter.log.warn('Unknown command: ' + obj.command);
+                break;
+        }
+    }
+
+    if (!wait && obj.callback) {
+        adapter.sendTo(obj.from, obj.command, obj.message, obj.callback);
+    }
+
+    return true;
+});
+
+function splitColor(rgb) {
+    if (!rgb) rgb = '#000000';
+    rgb = rgb.toString().toUpperCase();
+    if (rgb[0] === '#') rgb = rgb.substring(1);
+    if (rgb.length < 6) rgb = rgb[0] + rgb[0] + rgb[1] + rgb[1] + rgb[2] + rgb[2];
+    var r = parseInt(rgb[0] + rgb[1], 16);
+    var g = parseInt(rgb[2] + rgb[3], 16);
+    var b = parseInt(rgb[4] + rgb[5], 16);
+
+    if (rgb.length >= 8) {
+        return [r, g, b, parseInt(rgb[6] + rgb[7], 16)];
+    } else {
+        return [r, g, b];
+    }
+}
+
+adapter.on('stateChange', function (id, state) {
+    if (state && !state.ack && light) {
         var tmp = id.split('.');
         var dp = tmp.pop();
-        id = tmp.slice(2).join('.'); //ZoneX
-        adapter.log.info('id=' + id);
-        switch(id){
-            case 'AllZones':
-                zone = 0;
-                break;
-            case 'Zone1':
+        var strZone = tmp.slice(2).join('.'); //ZoneX
+        var zone;
+        switch (strZone) {
+            case 'zone1':
                 zone = 1;
                 break;
-            case 'Zone2':
+            case 'zone2':
                 zone = 2;
                 break;
-            case 'Zone3':
+            case 'zone3':
                 zone = 3;
                 break;
-            case 'Zone4':
+            case 'zone4':
                 zone = 4;
                 break;
+            case 'zoneAll':
             default:
                 zone = 0;
                 break;
         }
 
-        if (dp == 'state'){
-            if (state.val == 0) {
-                light.sendCommands(commands.rgbw.off(zone));
-                adapter.log.info(" es wird off gesendet ");
+        if (dp === 'rgb')        dp = 'colorRGB';
+        if (dp === 'color')      dp = 'colorSet';
+        if (dp === 'saturation') dp = 'saturationSet';
+        if (dp === 'colorTemp')  dp = 'colorTempSet';
+
+        if (adapter.config.version === '6') {
+            if (dp === 'brightness') dp = 'brightnessSet';
+            if (zones[zone]) {
+
+                if (dp === 'colorMode') {
+                    if (state.val === 'true' || state.val === true || state.val === 1 || state.val === 'on' || state.val === 'ON') {
+                        adapter.log.debug('Send to zone ' + zone + ' whiteMode');
+                        zones[zone].command('whiteMode', function (err) {
+                            if (!err) {
+                                adapter.setForeignState(id, true, true);
+                            } else {
+                                adapter.log.error('Cannot control: ' + err);
+                            }
+                        });
+                    } else {
+                        adapter.log.debug('Send to zone ' + zone + ' nightMode');
+                        zones[zone].command('nightMode', function (err) {
+                            if (!err) {
+                                adapter.setForeignState(id, false, true);
+                            } else {
+                                adapter.log.error('Cannot control: ' + err);
+                            }
+                        });
+                    }
+                } else
+                if (dp === 'state') {
+                    if (state.val === 'true' || state.val === true || state.val === 1 || state.val === 'on' || state.val === 'ON') {
+                        adapter.log.debug('Send to zone ' + zone + ' ON');
+                        zones[zone].command('on', function (err) {
+                            if (!err) {
+                                adapter.setForeignState(id, true, true);
+                            } else {
+                                adapter.log.error('Cannot control: ' + err);
+                            }
+                        });
+                    } else {
+                        adapter.log.debug('Send to zone ' + zone + ' OFF');
+                        zones[zone].command('off', function (err) {
+                            if (!err) {
+                                adapter.setForeignState(id, false, true);
+                            } else {
+                                adapter.log.error('Cannot control: ' + err);
+                            }
+                        });
+                    }
+                } else
+                if (typeof zones[zone][dp] === 'function') {
+                    var val;
+                    if (dp === 'colorRGB') {
+                        val = splitColor(state.val);
+                        adapter.log.debug('Send to zone ' + zone + ' "' + dp + '": ' + JSON.stringify(val));
+                    } else if (dp === 'brightnessSet') {
+                        val = Math.round(parseFloat(state.val) / 100) * 255;
+                        if (val < 0)   val = 0;
+                        if (val > 255) val = 255;
+                        adapter.log.debug('Send to zone ' + zone + ' "' + dp + '": ' + val);
+                    } else {
+                        val = parseInt(state.val, 10);
+                        adapter.log.debug('Send to zone ' + zone + ' "' + dp + '": ' + val);
+                    }
+                    zones[zone].command(dp, val, function (err) {
+                        if (!err) {
+                            adapter.setForeignState(id, state.val, true);
+                        } else {
+                            adapter.log.error('Cannot control: ' + err);
+                        }
+                    });
+                } else {
+                    adapter.log.error('Unknown command: ' + dp);
+                }
+            } else {
+                adapter.log.error('Zone is disabled');
             }
-            else if (state.val == 1) {
-                light.sendCommands(commands.rgbw.on(zone), commands.rgbw.brightness(100), commands.rgbw.whiteMode(zone));
-               adapter.log.info(" es wird on gesendet ");
+        } else {
+            // version 5
+            if (dp === 'colorMode') {
+                if (state.val === 'true' || state.val === true || state.val === 1 || state.val === 'on' || state.val === 'ON') {
+                    light.sendCommands(zones[zone].on(zone), zones[zone].rgbwMode(zone)).then(function () {
+                        adapter.setForeignState(id, true, true);
+                    }, function (err) {
+                        adapter.log.error('Cannot control: ' + err);
+                    });
+                } else {
+                    light.sendCommands(zones[zone].on(zone), zones[zone].whiteMode(zone)).then(function () {
+                        adapter.setForeignState(id, true, true);
+                    }, function (err) {
+                        adapter.log.error('Cannot control: ' + err);
+                    });
+                }
+            } else
+            if (dp === 'state') {
+                if (state.val === 'true' || state.val === true || state.val === 1 || state.val === 'on' || state.val === 'ON') {
+                    adapter.log.debug('Send to zone ' + zone + ' ON');
+                    light.sendCommands(zones[zone].on(zone), zones[zone].brightness(100), zones[zone].whiteMode(zone)).then(function () {
+                        adapter.setForeignState(id, true, true);
+                    }, function (err) {
+                        adapter.log.error('Cannot control: ' + err);
+                    });
+                } else {
+                    adapter.log.debug('Send to zone ' + zone + ' OFF');
+                    light.sendCommands(zones[zone].off(zone)).then(function () {
+                        adapter.setForeignState(id, false, true);
+                    }, function (err) {
+                        adapter.log.error('Cannot control: ' + err);
+                    });
+                }
+            } else
+            if (typeof zones[zone][dp] === 'function') {
+                var val;
+                if (dp === 'colorRGB') {
+                    dp = 'rgb255';
+                    val = splitColor(state.val);
+                    adapter.log.debug('Send to zone ' + zone + ' "' + dp + '": ' + JSON.stringify(val));
+                } else if (dp === 'brightness') {
+                    if (val < 0)   val = 0;
+                    if (val > 100) val = 100;
+                    adapter.log.debug('Send to zone ' + zone + ' "' + dp + '": ' + val);
+                } else {
+                    val = parseInt(state.val, 10);
+                    adapter.log.debug('Send to zone ' + zone + ' "' + dp + '": ' + val);
+                }
+                light.sendCommands(zones[zone][dp](val)).then(function () {
+                    adapter.setForeignState(id, state.val, true);
+                }, function (err) {
+                    adapter.log.error('Cannot control: ' + err);
+                });
+            } else {
+                adapter.log.error('Unknown command: ' + dp);
             }
         }
-        if (dp == 'colormode') {
-            if (state.val == 'ct') {
-                light.sendCommands(commands.rgbw.on(zone), commands.rgbw.whiteMode(zone));
-                adapter.log.info(" es wird weiss gesendet ");
-            }
-            else if (state.val == 'hs') {
-                light.sendCommands(commands.rgbw.on(zone), commands.rgbw.hue(81));
-                adapter.log.info(" es wird farbe gesendet ");
-            }
-        } // von colormode
-
-        if (dp == 'bright') {
-            light.sendCommands(commands.rgbw.on(zone), commands.rgbw.brightness(state.val));
-            adapter.log.info(" es wurde helligkeit gesendet ");
-
-        } // von bri
-
-        if (dp == 'hue') {
-            light.sendCommands(commands.rgbw.on(zone), commands.rgbw.hue(state.val));
-            adapter.log.info(" es wird farbwert gesendet ");
-        } // von hue
-
-        light.close();
     }
 });
 
+adapter.on('ready', main);
 
-// is called when databases are connected and adapter received configuration.
-// start here!
-adapter.on('ready', function () {
-            adapter.log.debug('entered ready');
-    main();
-});
+function mergeObject(obj, cb) {
+    adapter.getForeignObject(obj._id, function (err, _obj) {
+        if (_obj) {
+            var changed = false;
+            for (var attr in obj) {
+                if (!obj.hasOwnProperty(attr)) continue;
+
+                if (typeof obj[attr] === 'object') {
+                    for (var _attr in obj[attr]) {
+                        if (obj[attr].hasOwnProperty(_attr) && (!_obj[attr] || _obj[attr][_attr] !== obj[attr][_attr])) {
+                            _obj[attr] = _obj[attr] || {};
+                            _obj[attr][_attr] = obj[attr][_attr];
+                            changed = true;
+                        }
+                    }
+                } else {
+                    if (obj[attr] !== _obj[attr]) {
+                        _obj[attr] = _obj[attr];
+                        changed = true;
+                    }
+                }
+            }
+            if (changed) {
+                adapter.setForeignObject(obj._id, _obj, function () {
+                    cb && cb();
+                });
+            } else {
+                cb && cb();
+            }
+        } else {
+            adapter.setForeignObject(obj._id, obj, function () {
+                cb && cb();
+            });
+        }
+    });
+}
+
+function mergeObjects(objs, cb) {
+    if (!objs || !objs.length) {
+        if (typeof cb === 'function') {
+            cb();
+        }
+        return;
+    }
+    mergeObject(objs.shift(), function () {
+        setTimeout(mergeObjects, 0, objs, cb);
+    });
+}
+
+
 
 function main() {
+    adapter.config.commandRepeat = parseInt(adapter.config.commandRepeat, 10) || 2;
 
-    // The adapters config (in the instance object everything under the attribute "native") is accessible via
-    // adapter.config:
-    adapter.log.info('config test1: ' + adapter.config.milight_ip);
-    adapter.log.info('config test2: ' + adapter.config.milight_port);
-
-
-    var obj = adapter.config.groups;
-    for (var anz in obj){
-        adapter.setObject('Zone' + anz, {
-            type: 'channel',
-            common: {
-                name: 'Licht ' + obj[anz].room,
-                role: 'light.color.rgbw'
-            },
-            native: {
-                "ip": adapter.config.milight_ip
+    if (!adapter.config.ip) {
+        adapter.log.warn('No IP address defined');
+        return;
+    }
+    if (adapter.config.version === '6') {
+        adapter.setState('info.connection', false, true);
+        light = new require(__dirname + '/lib/bridge.js')({
+            ip:                     adapter.config.ip,
+            port:                   parseInt(adapter.config.port, 10) || 5987,
+            reconnectTimeout:       10000,
+            disconnectTimeout:      10000,
+            keepAliveTimeout:       10000,
+            delayBetweenCommands:   50,
+            commandRepeat:          adapter.config.commandRepeat,
+            debug:                  true,
+            log:                    {
+                log:   function (text) {
+                    adapter.log.debug(text);
+                },
+                error: function (text) {
+                    adapter.log.error(text);
+                }
             }
         });
-
-        adapter.setObject('Zone' + anz + '.on',
-            {
-                type: "state",
-                common: {
-                    name:  "Lampe ein aus",        // mandatory, default _id ??
-                    def:   false,                  // optional,  default false
-                    type:  "boolean",              // optional,  default "boolean"
-                    read:  false,                   // mandatory, default true
-                    write: true,                   // mandatory, default true
-                    role:  "switch"                // mandatory
-                },
-                native:{
-
+        light.on('connected', function () {
+            adapter.setState('info.connection', true, true);
+        });
+        light.on('disconnected', function () {
+            adapter.setState('info.connection', false, true);
+        });
+        zones[0] = light.baseCtlFactory();
+    } else {
+        adapter.setState('info.connection', true, true);
+        var Milight = require('node-milight-promise').MilightController;
+        commands    = require('node-milight-promise').commands;
+        light = new Milight({
+            ip:                     adapter.config.ip,
+            delayBetweenCommands:   50,
+            commandRepeat:          adapter.config.commandRepeat
+        });
+    }
+    var objs = [];
+    var nameStatesV = nameStates['v' + adapter.config.version];
+    for (var n = 0; n < nameStatesV.basic.length; n++) {
+        if (!stateCommands[nameStatesV.basic[n]]) {
+            adapter.log.error('Unknown command: ' + nameStatesV.basic[n]);
+            continue;
+        }
+        var _obj = JSON.parse(JSON.stringify(stateCommands[nameStatesV.basic[n]]));
+        if (!_obj) {
+            adapter.log.error('Unknown state: ' + nameStatesV.basic[n]);
+            continue;
+        }
+        _obj.common.name = 'All Zones ' + _obj.common.name;
+        _obj._id = adapter.namespace + '.zoneAll.' + nameStatesV.basic[n];
+        objs.push(_obj);
+    }
+    if (adapter.config.version === '6') {
+        zones[0] = light.baseCtlFactory();
+    } else {
+        zones[0] = commands.rgb;
+    }
+    for (var z = 1; z <= 4; z++) {
+        var type = adapter.config['zone' + z];
+        var names = nameStatesV[type];
+        if (names) {
+            if (adapter.config.version === '6') {
+                if (type === 'basic') {
+                    zones[z] = light.baseCtlFactory();
+                } else
+                if (type === 'RGBW')  {
+                    zones[z] = light.zoneCtlRGBWFactory(z);
+                } else
+                if (type === 'RGBWW') {
+                    zones[z] = light.zoneCtlRGBWWFactory(z);
                 }
-            });
+            } else {
+                if (type === 'basic') {
+                    zones[z] = commands.rgb;
+                } else
+                if (type === 'RGBW')  {
+                    zones[z] = commands.rgbw;
+                } else
+                if (type === 'RGBWW') {
+                    zones[z] = commands.white;
+                }
+            }
+            for (var s = 0; s < names.length; s++) {
+                if (!stateCommands[names[s]]) {
+                    adapter.log.error('State ' + names[s] + ' unknown');
+                    continue;
+                }
+                var obj = JSON.parse(JSON.stringify(stateCommands[names[s]]));
+                if (!obj) {
+                    adapter.log.error('Unknown state: ' + names[s]);
+                    continue;
+                }
+                obj.common.name = 'Zone ' + z + ' ' + obj.common.name;
+                obj._id = adapter.namespace + '.zone' + z + '.' + names[s];
+                objs.push(obj);
+            }
+        }
+    }
 
-        adapter.setObject('Zone' + anz + '.state',
-            {
-            "type": "state",
-            "common": {
-            "name":  "Licht schalten",
-                "type":  "boolean",
-                "role":  "switch",
-                "read":  true,
-                "write": true,
-                "desc":  "Licht schalten"
-        },
-            "native": {}
-        });
-
-        adapter.setObject('Zone' + anz + '.bright',
-        {
-            "type": "state",
-            "common": {
-            "name":  "Licht Helligkeit",
-                "type":  "string",
-                "role":  "level.dimmer",
-                "read":  true,
-                "write": true,
-                "desc":  "Licht Helligkeit",
-                "min":   "2",
-                "max":   "100",
-                "unit":  "%"
-        },
-            "native": {}
-        });
-        adapter.setObject('Zone' + anz + '.hue',
-        {
-            "type": "state",
-            "common": {
-            "name":  "Licht Farbe",
-                "type":  "number",
-                "role":  "level.color.hue",
-                "read":  true,
-                "write": true,
-                "desc":  "Licht Farbe",
-                "min":   "0",
-                "max":   "255",
-                "unit":  "hsl"
-        },
-            "native": {}
-        });
-        adapter.setObject('Zone' + anz + '.speedup',
-        {
-            "type": "state",
-            "common": {
-            "name":  "Speed Up",
-                "type":  "boolean",
-                "role":  "button",
-                "read":  true,
-                "write": true,
-                "desc":  "Speed Up"
-        },
-            "native": {}
-        });
-        adapter.setObject('Zone' + anz + '.speeddown',
-        {
-            "type": "state",
-            "common": {
-            "name":  "Speed Down",
-                "type":  "boolean",
-                "role":  "button",
-                "read":  true,
-                "write": true,
-                "desc":  "Speed Down"
-        },
-            "native": {}
-        });
-        adapter.setObject('Zone' + anz + '.disco',
-        {
-            "type": "state",
-            "common": {
-            "name":  "Disco Mode",
-                "type":  "boolean",
-                "role":  "button",
-                "read":  true,
-                "write": true,
-                "desc":  "Disco Mode"
-        },
-            "native": {}
-        });
-        adapter.setObject('Zone' + anz + '.colormode',
-        {
-            "type": "state",
-            "common": {
-            "name":  "Colormode",
-                "type":  "boolean",
-                "role":  "boolean",
-                "read":  true,
-                "write": true,
-                "desc":  "Colormode"
-        },
-            "native": {}
-        });
-
-        adapter.log.info('Objekt  ' + adapter.namespace + '.Zone'+anz + ' created');
-   }
-
-    // in this template all states changes inside the adapters namespace are subscribed
-    adapter.subscribeStates('*');
-
+    mergeObjects(objs, function () {
+        adapter.subscribeStates('*');
+    });
 }

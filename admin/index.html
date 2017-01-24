@@ -16,31 +16,89 @@
 <script type="text/javascript">
     // Dictionary (systemDictionary is global variable from adapter-settings.js)
     systemDictionary = {
-        "milight adapter settings": {"de": "milight Adapter Einstellung", "ru": "Настройки milight Драйвера"},
-        "test1":                    {"en": "Test 1", "de": "Test 1", "ru": "Тест 1"},
-        "test2":                    {"en": "Test 2", "de": "Test 2", "ru": "Тест 2"},
-        "on save adapter restarts with new config immediately": {
-            "de": "Beim Speichern von Einstellungen der Adapter wird sofort neu gestartet.",
-            "ru": "Сразу после сохранения настроек драйвер перезапуститься с новыми значениями"
-        }
+        "MiLight adapter settings": {"de": "MiLight Adapter Einstellung",       "ru": "Настройки MiLight Драйвера"},
+        "Select one":       {"en": "Select one",    "de": "eins auswählen",     "ru": "выберите"},
+        "MiLight IP":       {"en": "MiLight IP",    "de": "MiLight IP",         "ru": "MiLight IP"},
+        "Version":          {"en": "Version",       "de": "Version",            "ru": "Версия"},
+        "MiLight Port":     {"en": "MiLight Port",  "de": "MiLight Port",       "ru": "MiLight порт"},
+        "Command repeat":   {"en": "Command repeat", "de": "Wiederholen (mal)", "ru": "Повтор команды (раз)"},
+        "Zone 1":           {"en": "Zone 1",        "de": "Zone 1",             "ru": "Зона 1"},
+        "base":             {"en": "base",          "de": "basis",              "ru": "базовая"},
+        "RGBW":             {"en": "RGBW",          "de": "RGBW",               "ru": "RGBW"},
+        "RGBWW/Dimmer":     {"en": "RGBWW/Dimmer",  "de": "RGBWW/Dimmer",       "ru": "RGBWW/диммер"},
+        "Zone 2":           {"en": "Zone 2",        "de": "Zone 2",             "ru": "Зона 2"},
+        "Zone 3":           {"en": "Zone 3",        "de": "Zone 3",             "ru": "Зона 3"},
+        "Zone 4":           {"en": "Zone 4",        "de": "Zone 4",             "ru": "Зона 4"},
+        "Nothing found":    {"en": "Nothing found", "de": "Nichts gefunden",    "ru": "Ничего не найдено"}
     };
+    var devices = {};
     // the function loadSettings has to exist ...
     function load(settings, onChange) {
+        if (!settings.version) settings.version = '6';
+        if (settings.milight_ip) {
+            settings.ip = settings.ip || settings.milight_ip;
+            delete settings.milight_ip;
+        }
+        if (settings.milight_port) {
+            settings.port = settings.port || settings.milight_port;
+            delete settings.milight_port;
+        }
         // example: select elements with id=key and class=value and insert value
         for (var key in settings) {
-            // example: select elements with id=key and class=value and insert value
-            if ($('#' + key + '.value').attr('type') == 'checkbox') {
-                $('#' + key + '.value').prop('checked', settings[key]).change(function () {
+            if (!settings.hasOwnProperty(key)) continue;
+
+            var $value = $('#' + key + '.value');
+            if ($value.attr('type') === 'checkbox') {
+                $value.prop('checked', settings[key]).change(function () {
 					onChange();
 				});
             } else {
-                $('#' + key + '.value').val(settings[key]).change(function () {
+                $value.val(settings[key]).change(function () {
 					onChange();
 				}).keyup(function () {
 					$(this).trigger('change');
 				});
             }
         }
+
+        getIsAdapterAlive(function (isAlive) {
+            if (isAlive || common.enabled) {
+                $('#discover').click(function () {
+                    sendTo(null, 'browse', null, function (list) {
+                        var text = list && list.length ? '<option value="">' + _('Select one') + '</option>' : '<option value="">' + _('Nothing found') + '</option>';
+                        devices = {};
+                        for (var j = 0; j < list.length; j++) {
+                            devices[list[j].ip] = list[j].type[1];
+                            text += '<option value="' + list[j].ip + '">' + list[j].ip + (list[j].version ? '(' + list[j].type + ')': '') + '</option>';
+                        }
+                        $('#found').html(text).show();
+                    });
+                }).button('enable');
+            }
+        });
+        $('#discover').button({
+            text: false,
+            icons: {
+                primary: 'ui-icon-refresh'
+            }
+        }).css({width: 22, height: 18}).button('disable');
+
+        $('#found').change(function () {
+            var val = $(this).val();
+            if (val) {
+                $('#ip').val(val);
+                if (devices[val]) $('#version').val(devices[val]).trigger('change');
+            }
+        });
+
+        $('#version').change(function () {
+            if ($(this).val() === '5') {
+                $('#port').val(8899);
+            } else {
+                $('#port').val(5987);
+            }
+        });
+
         // Signal to admin, that no changes yet
         onChange(false);
     }
@@ -62,26 +120,66 @@
 
     <table><tr>
         <td><img src="easybulb_logo.png"/></td>
-        <td><h3 class="translate">milight adapter settings</h3></td>
+        <td><h3 class="translate">MiLight adapter settings</h3></td>
     </tr></table>
     
     <table>
         <tr>
-            <td class="translate">Milight IP</td>
-            <td><input type="text" id="milight_ip" class="value"/></td>
+            <td><label class="translate" for="ip">MiLight IP</label></td>
+            <td><input type="text" id="ip" class="value"/></td>
+            <td><button id="discover"></button> <select style="display: none" id="found">
+            </select></td>
         </tr>
         <tr>
-            <td class="translate">Milight Port</td>
-            <td><input type="text" id="milight_port" class="value"/></td>
+            <td><label class="translate" for="version">Version</label></td>
+            <td colspan="2"><select id="version" class="value">
+                <option value="5">5</option>
+                <option value="6">6</option>
+            </select>
+            </td>
+        </tr>
+        <tr>
+            <td><label class="translate" for="port">MiLight Port</label></td>
+            <td colspan="2"><input type="text" id="port" class="value"/></td>
+        </tr>
+        <tr>
+            <td><label class="translate" for="commandRepeat">Command repeat</label></td>
+            <td colspan="2"><input type="text" id="commandRepeat" class="value"/></td>
+        </tr>
+        <tr>
+            <td><label class="translate" for="zone1">Zone 1</label></td>
+            <td colspan="2"><select id="zone1" class="value">
+                <option value="" class="translate">none</option>
+                <option value="basic" class="translate">base</option>
+                <option value="RGBWW" class="translate">RGBWW/Dimmer</option>
+                <option value="RGBW" class="translate">RGBW</option>
+            </select></td>
+        </tr>
+        <tr>
+            <td><label class="translate" for="zone2">Zone 2</label></td>
+            <td colspan="2"><select id="zone2" class="value">
+                <option value="" class="translate">none</option>
+                <option value="RGBWW" class="translate">RGBWW/Dimmer</option>
+                <option value="RGBW" class="translate">RGBW</option>
+            </select></td>
+        </tr>
+        <tr>
+            <td><label class="translate" for="zone3">Zone 3</label></td>
+            <td colspan="2"><select id="zone3" class="value">
+                <option value="" class="translate">none</option>
+                <option value="RGBWW" class="translate">RGBWW/Dimmer</option>
+                <option value="RGBW" class="translate">RGBW</option>
+            </select></td>
+        </tr>
+        <tr>
+            <td><label class="translate" for="zone4">Zone 4</label></td>
+            <td colspan="2"><select id="zone4" class="value">
+                <option value="" class="translate">none</option>
+                <option value="RGBWW" class="translate">RGBWW/Dimmer</option>
+                <option value="RGBW" class="translate">RGBW</option>
+            </select></td>
         </tr>
     </table>
-    
-    <p>
-        <span class="translate">test1</span> <input class="value" id="test1"/><br>
-        <span class="translate">test2</span> <input class="value" id="test2"/><br>
-    </p>
-
-    <p class="translate">on save adapter restarts with new config immediately</p>
 
 </div>
 

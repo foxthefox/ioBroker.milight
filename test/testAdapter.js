@@ -83,24 +83,26 @@ describe('Test ' + adapterShortName + ' adapter', function() {
             config.common.enabled  = true;
             config.common.loglevel = 'debug';
 
-            //config.native.dbtype   = 'sqlite';
+            config.native.apikey   = 'test';
 
             setup.setAdapterConfig(config.common, config.native);
 
-            setup.startController(true, function(id, obj) {}, function (id, state) {
-                    if (onStateChanged) onStateChanged(id, state);
-                },
-                function (_objects, _states) {
-                    objects = _objects;
-                    states  = _states;
-                    _done();
-                });
+            setup.installAdapter('web', function () {
+                setup.startController(true, function(id, obj) {}, function (id, state) {
+                        if (onStateChanged) onStateChanged(id, state);
+                    },
+                    function (_objects, _states) {
+                        objects = _objects;
+                        states  = _states;
+                        _done();
+                    });
+            });
         });
     });
 
-/*
-    ENABLE THIS WHEN ADAPTER RUNS IN DEAMON MODE TO CHECK THAT IT HAS STARTED SUCCESSFULLY
-*/
+    /*
+     ENABLE THIS WHEN ADAPTER RUNS IN DEAMON MODE TO CHECK THAT IT HAS STARTED SUCCESSFULLY
+     */
     it('Test ' + adapterShortName + ' adapter: Check if adapter started', function (done) {
         this.timeout(60000);
         checkConnectionOfAdapter(function (res) {
@@ -118,15 +120,16 @@ describe('Test ' + adapterShortName + ' adapter', function() {
                 });
         });
     });
-/**/
+    /**/
 
-/*
-    PUT YOUR OWN TESTS HERE USING
-    it('Testname', function ( done) {
-        ...
-    });
-    You can also use "sendTo" method to send messages to the started adapter
-*/
+    /*
+     PUT YOUR OWN TESTS HERE USING
+     it('Testname', function ( done) {
+     ...
+     });
+
+     You can also use "sendTo" method to send messages to the started adapter
+     */
 
     after('Test ' + adapterShortName + ' adapter: Stop js-controller', function (done) {
         this.timeout(10000);
