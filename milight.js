@@ -334,7 +334,7 @@ function main() {
         commands    = require('node-milight-promise').commands;
         light = new Milight({
             ip:                     adapter.config.ip,
-            delayBetweenCommands:   50,
+            delayBetweenCommands:   adapter.delayBetweenCommands,
             commandRepeat:          adapter.config.commandRepeat
         });
     }
