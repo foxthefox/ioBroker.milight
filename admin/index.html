@@ -29,6 +29,7 @@
         "Zone 2":           {"en": "Zone 2",        "de": "Zone 2",             "ru": "Зона 2"},
         "Zone 3":           {"en": "Zone 3",        "de": "Zone 3",             "ru": "Зона 3"},
         "Zone 4":           {"en": "Zone 4",        "de": "Zone 4",             "ru": "Зона 4"},
+	"delayBetweenCommands": {"en":" delayBetweenCommands", "de":"", "ru":""},   
         "Nothing found":    {"en": "Nothing found", "de": "Nichts gefunden",    "ru": "Ничего не найдено"}
     };
     var devices = {};
@@ -141,6 +142,10 @@
         <tr>
             <td><label class="translate" for="port">MiLight Port</label></td>
             <td colspan="2"><input type="text" id="port" class="value"/></td>
+	</tr>
+	<tr>
+            <td><label class="translate" for="delayBetweenCommands">delay between commands</label></td>
+            <td colspan="2"><input type="text" id="delayBetweenCommands" class="value"/></td>
         </tr>
         <tr>
             <td><label class="translate" for="commandRepeat">Command repeat</label></td>
