@@ -185,7 +185,7 @@ adapter.on('stateChange', function (id, state) {
             // version 5
             if (dp === 'colorMode') {
                 if (state.val === 'true' || state.val === true || state.val === 1 || state.val === 'on' || state.val === 'ON') {
-                    light.sendCommands(zones[zone].on(zone), zones[zone].rgbwMode(zone)).then(function () {
+                    light.sendCommands(zones[zone].on(zone), zones[zone].hue(55)).then(function () {
                         adapter.setForeignState(id, true, true);
                     }, function (err) {
                         adapter.log.error('Cannot control: ' + err);
