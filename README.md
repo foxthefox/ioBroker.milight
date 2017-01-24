@@ -17,14 +17,12 @@ npm install https://github.com/foxthefox/ioBroker.milight/tarball/master --produ
 * repeatPackage -> number of repetitions
 
 ##Configuration:
-in io-package.json
-* groups-> 4 possible zones of lights
-* ltype -> type of lamp -> only RGBW supported
-* rooms -> name of room or lamp
+in admin page of adapter
+version 5 also to be used for v4 lamps
 
 ##TODO:
 * support other type of lamp
-* widget matching the adapter objects
+* widget matching the further adapter objects
 
 ##known issues:
 ??
@@ -34,7 +32,7 @@ in io-package.json
 ### 0.1.0 ongoing
 * v6 implementation
 * node-milight-promise 0.0.9
-* jqui widget
+* jqui widget RGBW lamp
 
 ###0.0.1
 * initial setup
