@@ -31,7 +31,8 @@ in io-package.json
 
 
 ##Changelog:
-### intermediate
+### 0.1.0 ongoing
+* v6 implementation
 * node-milight-promise 0.0.9
 * jqui widget
 
