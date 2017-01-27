@@ -27,8 +27,8 @@
     },
     "native": {
         "version":  "6",
-        "delayBetweenCommands": "100"
-        "commandRepeat":  "2",
+        "delayBetweenCommands": "100",
+        "commandRepeat":  "1",
         "ip":       "",
         "port":     "5987",
         "zone1":    "basic",
