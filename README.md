@@ -10,11 +10,11 @@ adapter for ioBroker for LED-lamps like milight, easybulb, limitless
 npm install https://github.com/foxthefox/ioBroker.milight/tarball/master --production
 
 ##Settings:
-
+in admin page
 * IP-Adress-> IP of bridge
 * Port -> port of bridge
-* delaybetweenPackages -> ms delay between UDP packages
-* repeatPackage -> number of repetitions
+* delaybetweenPackages -> ms delay between UDP packages (100ms for v5)
+* repeatPackage -> number of repetitions (1 or 2 for v5)
 
 ##Configuration:
 in admin page of adapter
@@ -25,7 +25,7 @@ version 5 also to be used for v4 lamps
 * widget matching the further adapter objects
 
 ##known issues:
-??
+* color bar in widget to be corrected
 
 
 ##Changelog:
