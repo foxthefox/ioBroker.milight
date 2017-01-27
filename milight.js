@@ -201,7 +201,7 @@ adapter.on('stateChange', function (id, state) {
             if (dp === 'state') {
                 if (state.val === 'true' || state.val === true || state.val === 1 || state.val === 'on' || state.val === 'ON') {
                     adapter.log.debug('Send to zone ' + zone + ' ON');
-                    light.sendCommands(zones[zone].on(zone)).then(function () {
+                    light.sendCommands(zones[zone].on(zone), zones[zone].brightness(100), zones[zone].whiteMode(zone)).then(function () {
                         adapter.setForeignState(id, true, true);
                     }, function (err) {
                         adapter.log.error('Cannot control: ' + err);
