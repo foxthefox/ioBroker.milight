@@ -1,7 +1,12 @@
 ![Logo](admin/easybulb_logo.png)
 # ioBroker.milight
 =================
+[![NPM version](http://img.shields.io/npm/v/iobroker.milightsvg)](https://www.npmjs.com/package/iobroker.milight)
+[![Downloads](https://img.shields.io/npm/dm/iobroker.milight.svg)](https://www.npmjs.com/package/iobroker.milight)
 [![Build Status](https://travis-ci.org/foxthefox/ioBroker.milight.svg?branch=master)](https://travis-ci.org/foxthefox/ioBroker.milight)
+
+
+[![NPM](https://nodei.co/npm/iobroker.lifx.png?downloads=true)](https://nodei.co/npm/iobroker.lifx/)
 
 adapter for ioBroker for LED-lamps like milight, easybulb, limitless
 
