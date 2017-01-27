@@ -331,7 +331,7 @@ function main() {
     } else {
         adapter.setState('info.connection', true, true);
         var Milight = require('node-milight-promise').MilightController;
-        commands    = require('node-milight-promise').commands;
+        commands    = require('node-milight-promise').commands2;
         light = new Milight({
             ip:                     adapter.config.ip,
             delayBetweenCommands:   adapter.delayBetweenCommands,
