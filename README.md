@@ -30,6 +30,7 @@ version 5 also to be used for v4 lamps
 
 ##Changelog:
 ### 0.1.0 ongoing
+* tested with bridge version 4 and protocol version v5
 * v6 implementation
 * node-milight-promise 0.0.9
 * jqui widget RGBW lamp
