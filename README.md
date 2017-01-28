@@ -11,8 +11,11 @@
 adapter for ioBroker for LED-lamps like milight, easybulb, limitless
 
 ##Installation:
+from npm
+* npm install iobroker.milight
 
-npm install https://github.com/foxthefox/ioBroker.milight/tarball/master --production
+actual version from github
+* npm install https://github.com/foxthefox/ioBroker.milight/tarball/master --production
 
 ##Settings:
 in admin page
