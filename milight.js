@@ -221,7 +221,7 @@ adapter.on('stateChange', function (id, state) {
                     dp = 'rgb255';
                     val = splitColor(state.val);
                     adapter.log.debug('Send to zone ' + zone + ' "' + dp + '": ' + JSON.stringify(val));
-                } else if (dp === 'brightness2') {
+                } else if (dp === 'brightness2' || dp === 'brightness') {
                     if (val < 0)   val = 0;
                     if (val > 100) val = 100;
                     adapter.log.debug('Send to zone ' + zone + ' "' + dp + '": ' + val);
