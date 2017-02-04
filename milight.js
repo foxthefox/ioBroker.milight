@@ -240,7 +240,18 @@ adapter.on('stateChange', function (id, state) {
                 }, function (err) {
                     adapter.log.error('Cannot control: ' + err);
                 });
-            } else {
+            } else
+            if (dp === 'colorRGB'){ //wenn colorRGB doch keine Funktion ist ?!
+                    dp = 'rgb255';
+                    val = splitColor(state.val);
+                    adapter.log.debug('Send to zone ' + zone + ' "' + dp + '": ' + state.val);
+                    light.sendCommands(zones[zone].on(zone), zones[zone][dp](state.val)).then(function () {
+                    adapter.setForeignState(id, state.val, true);
+                        }, function (err) {
+                    adapter.log.error('Cannot control: ' + err);
+                });                   
+            }
+            else {    
                 adapter.log.error('Unknown command: ' + dp);
             }
         }
