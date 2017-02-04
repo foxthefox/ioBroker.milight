@@ -1,8 +1,13 @@
 {
     "common": {
         "name":                 "milight",
-        "version":              "0.1.0",
+        "version":              "0.1.1",
         "news": {
+            "0.1.1": {
+                "en": 				"updated version for v5 testing",
+                "de": 				"neue Version für v5 Tests",
+                "ru": 				""
+            },
             "0.1.0": {
                 "en": 				"Inital version",
                 "de": 				"Erste Version",
@@ -34,7 +39,8 @@
         "zone1":    "basic",
         "zone2":    "RGBW",
         "zone3":    "RGBW",
-        "zone4":    "RGBW"
+        "zone4":    "RGBW",
+        "v5onFullBright": "0"
     },
     
     "objects": [
