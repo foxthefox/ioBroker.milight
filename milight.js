@@ -230,10 +230,10 @@ adapter.on('stateChange', function (id, state) {
                 } else if (dp === 'brightness2' || dp === 'brightness') {       //now 2 variants of brightness can be used in v5
                     if (val < 0)   val = 0;
                     if (val > 100) val = 100;
-                    adapter.log.debug('Send to zone ' + zone + ' "' + dp + '": ' + val);
+                    adapter.log.debug('Send to zone ' + zone + ' "' + dp + '": ' + state.val);
                 } else {
                     val = parseInt(state.val, 10);
-                    adapter.log.debug('Send to zone ' + zone + ' "' + dp + '": ' + val);
+                    adapter.log.debug('Send to zone ' + zone + ' "' + dp + '": ' + state.val);
                 }
                 light.sendCommands(zones[zone].on(zone), zones[zone][dp](state.val)).then(function () {
                     adapter.setForeignState(id, state.val, true);
