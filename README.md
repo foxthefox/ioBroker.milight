@@ -37,7 +37,6 @@ in admin page of adapter
 version 5 also to be used for v4 lamps
 
 ##TODO:
-* support other type of lamp
 * widget matching the further adapter objects
 
 ##known issues:
