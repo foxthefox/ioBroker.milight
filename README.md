@@ -22,7 +22,15 @@ in admin page
 * IP-Adress-> IP of bridge
 * Port -> port of bridge
 * delaybetweenPackages -> ms delay between UDP packages (100ms for v5)
-* repeatPackage -> number of repetitions (1 or 2 for v5)
+* repeatPackage -> number of repetitions (1 for v5)
+* version of the milight protocol v5 or v6 -> sets automatically the corresponding port
+* the type of bulbs in the zones
+
+##Variables v5
+* hue -> the color value of lamp 0...255
+* brightness(2) -> 0...100%
+* rgb -> 000000...FFFFFF
+
 
 ##Configuration:
 in admin page of adapter
