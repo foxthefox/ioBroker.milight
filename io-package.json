@@ -25,7 +25,7 @@
         "messagebox":           true,
         "icon":                 "easybulb_logo.png",
         "extIcon":          	"https://raw.githubusercontent.com/foxthefox/ioBroker.milight/master/admin/easybulb_logo.png",
-        "readme":           	"https://github.com/foxthefox/ioBroker.milight/master/README.md",
+        "readme":           	"https://github.com/foxthefox/ioBroker.milight/blob/master/README.md",
         "loglevel":		        "info",
         "restartAdapters":      ["vis"]
 
