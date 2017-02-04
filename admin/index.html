@@ -30,7 +30,8 @@
         "Zone 3":           {"en": "Zone 3",        "de": "Zone 3",             "ru": "Зона 3"},
         "Zone 4":           {"en": "Zone 4",        "de": "Zone 4",             "ru": "Зона 4"},
 	"delayBetweenCommands": {"en":" delayBetweenCommands", "de":"Zeit zwischen Kommandos", "ru":""},   
-        "Nothing found":    {"en": "Nothing found", "de": "Nichts gefunden",    "ru": "Ничего не найдено"}
+        "Nothing found":    {"en": "Nothing found", "de": "Nichts gefunden",    "ru": "Ничего не найдено"},
+	 "v5 On Full Brightness and white": {"en": "when sitched on set full brightness and white?", "de": "beim Einschalten volle Helligkeit und weiß setzen?", "ru": "white full brightness"}
     };
     var devices = {};
     // the function loadSettings has to exist ...
@@ -186,6 +187,9 @@
                 <option value="RGBWW" class="translate">RGBWW/Dimmer</option>
                 <option value="RGBW" class="translate">RGBW</option>
             </select></td>
+        </tr>
+	<tr><td><label class="translate" for="v5onFullBright">v5 On Full Brightness and white</label></td>
+            <td><input class="value" id="v5onFullBright" type="checkbox"/></td>
         </tr>
     </table>
 
