@@ -40,7 +40,7 @@
         "zone2":    "RGBW",
         "zone3":    "RGBW",
         "zone4":    "RGBW",
-        "v5onFullBright": "0"
+        "v5onFullBright": false
     },
     
     "objects": [
