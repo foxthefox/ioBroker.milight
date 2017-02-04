@@ -201,11 +201,17 @@ adapter.on('stateChange', function (id, state) {
             if (dp === 'state') {
                 if (state.val === 'true' || state.val === true || state.val === 1 || state.val === 'on' || state.val === 'ON') {
                     adapter.log.debug('Send to zone ' + zone + ' ON');
-                    light.sendCommands(zones[zone].on(zone), zones[zone].brightness(100), zones[zone].whiteMode(zone)).then(function () {
-                        adapter.setForeignState(id, true, true);
-                    }, function (err) {
-                        adapter.log.error('Cannot control: ' + err);
-                    });
+                    if (adapter.config.v5onFullBright === 1){
+                        light.sendCommands(zones[zone].on(zone), zones[zone].brightness(100), zones[zone].whiteMode(zone)).then(function () {
+                            adapter.setForeignState(id, true, true);
+                        }, function (err) {
+                            adapter.log.error('Cannot control: ' + err);
+                        });
+                    }
+                    else {
+                        light.sendCommands(zones[zone].on(zone));
+                    }
+
                 } else {
                     adapter.log.debug('Send to zone ' + zone + ' OFF');
                     light.sendCommands(zones[zone].off(zone)).then(function () {
@@ -221,7 +227,7 @@ adapter.on('stateChange', function (id, state) {
                     dp = 'rgb255';
                     val = splitColor(state.val);
                     adapter.log.debug('Send to zone ' + zone + ' "' + dp + '": ' + JSON.stringify(val));
-                } else if (dp === 'brightness2' || dp === 'brightness') {
+                } else if (dp === 'brightness2' || dp === 'brightness') {       //now 2 variants of brightness can be used in v5
                     if (val < 0)   val = 0;
                     if (val > 100) val = 100;
                     adapter.log.debug('Send to zone ' + zone + ' "' + dp + '": ' + val);
