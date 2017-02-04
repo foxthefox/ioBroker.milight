@@ -45,6 +45,8 @@
             settings.port = settings.port || settings.milight_port;
             delete settings.milight_port;
         }
+	if (settings.v5onFullBright === undefined) settings.v5onFullBright = false;
+	    
         // example: select elements with id=key and class=value and insert value
         for (var key in settings) {
             if (!settings.hasOwnProperty(key)) continue;
