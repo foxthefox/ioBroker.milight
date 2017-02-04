@@ -201,7 +201,7 @@ adapter.on('stateChange', function (id, state) {
             if (dp === 'state') {
                 if (state.val === 'true' || state.val === true || state.val === 1 || state.val === 'on' || state.val === 'ON') {
                     adapter.log.debug('Send to zone ' + zone + ' ON');
-                    if (adapter.config.v5onFullBright==='true' || adapter.config.v5FullBright === true || adapter.config.v5FullBright === 1){
+                    if (adapter.config.v5onFullBright==='true' || adapter.config.v5FullBright === true || adapter.config.v5FullBright === 'on' || adapter.config.v5FullBright === 'ON' || adapter.config.v5FullBright === 1){
                         light.sendCommands(zones[zone].on(zone), zones[zone].brightness(100), zones[zone].whiteMode(zone)).then(function () {
                             adapter.setForeignState(id, true, true);
                         }, function (err) {
