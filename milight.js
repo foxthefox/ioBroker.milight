@@ -228,18 +228,20 @@ adapter.on('stateChange', function (id, state) {
                     val = splitColor(state.val);
                     adapter.log.debug('Send to zone ' + zone + ' "' + dp + '": ' + JSON.stringify(val));
                 } else if (dp === 'brightness2' || dp === 'brightness') {       //now 2 variants of brightness can be used in v5
-                    if (val < 0)   val = 0;
-                    if (val > 100) val = 100;
+                    if (state.val < 0)   val = 0;
+                    if (state.val > 100) val = 100;
                     adapter.log.debug('Send to zone ' + zone + ' "' + dp + '": ' + state.val);
                 } else {
                     val = parseInt(state.val, 10);
                     adapter.log.debug('Send to zone ' + zone + ' "' + dp + '": ' + state.val);
                 }
-                light.sendCommands(zones[zone].on(zone), zones[zone][dp](state.val)).then(function () {
-                    adapter.setForeignState(id, state.val, true);
-                }, function (err) {
-                    adapter.log.error('Cannot control: ' + err);
-                });
+                if (state.val !== 0) { //if dim to 0% was chosen turn light off - error handling for iobroker.cloud combo with amazon alexa
+					light.sendCommands(zones[zone].on(zone), zones[zone][dp](state.val)).then(function () {
+						adapter.setForeignState(id, state.val, true);
+					}, function (err) {
+						adapter.log.error('Cannot control: ' + err);
+					});
+				}	
             } else
             if (dp === 'colorRGB'){ //wenn colorRGB doch keine Funktion ist ?!
                     dp = 'rgb255';
