@@ -1,17 +1,22 @@
 {
     "common": {
         "name":                 "milight",
-        "version":              "0.1.1",
+        "version":              "0.2.0",
         "news": {
+            "0.2.0": {
+                "en": 				"discovery for v6",
+                "de": 				"Autoerkennung für v6",
+                "ru": 				"Автопоиск устройств для v6"
+            },
             "0.1.1": {
                 "en": 				"updated version for v5 testing",
                 "de": 				"neue Version für v5 Tests",
-                "ru": 				""
+                "ru": 				"новая версия для v5 тестов"
             },
             "0.1.0": {
                 "en": 				"Inital version",
                 "de": 				"Erste Version",
-                "ru": 				"Ïåðâàÿ âåðñèÿ"
+                "ru": 				"Первая версия"
             }
         },
         "title":                "milight adapter",
