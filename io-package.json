@@ -1,8 +1,12 @@
 {
     "common": {
         "name":                 "milight",
-        "version":              "0.2.0",
+        "version":              "0.2.1",
         "news": {
+            "0.2.0": {
+                "en": 				"debug messages",
+                "de": 				"debug Meldungen",
+            },
             "0.2.0": {
                 "en": 				"discovery for v6",
                 "de": 				"Autoerkennung für v6",
