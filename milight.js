@@ -104,7 +104,7 @@ adapter.on('stateChange', function (id, state) {
         }
 
         if (dp === 'rgb')        dp = 'colorRGB';
-        if (dp === 'color')      dp = 'colorSet';
+        if (dp === 'color')      dp = 'colorMode'; //colorSet nowhere else used
         if (dp === 'saturation') dp = 'saturationSet';
         if (dp === 'colorTemp')  dp = 'colorTempSet';
 
@@ -119,7 +119,7 @@ adapter.on('stateChange', function (id, state) {
                             if (!err) {
                                 adapter.setForeignState(id, true, true);
                             } else {
-                                adapter.log.error('Cannot control: ' + err);
+                                adapter.log.error('V6 Cannot control: ' + err);
                             }
                         });
                     } else {
@@ -128,7 +128,7 @@ adapter.on('stateChange', function (id, state) {
                             if (!err) {
                                 adapter.setForeignState(id, false, true);
                             } else {
-                                adapter.log.error('Cannot control: ' + err);
+                                adapter.log.error('V6 Cannot control: ' + err);
                             }
                         });
                     }
@@ -140,7 +140,7 @@ adapter.on('stateChange', function (id, state) {
                             if (!err) {
                                 adapter.setForeignState(id, true, true);
                             } else {
-                                adapter.log.error('Cannot control: ' + err);
+                                adapter.log.error('V6 Cannot control: ' + err);
                             }
                         });
                     } else {
@@ -149,7 +149,7 @@ adapter.on('stateChange', function (id, state) {
                             if (!err) {
                                 adapter.setForeignState(id, false, true);
                             } else {
-                                adapter.log.error('Cannot control: ' + err);
+                                adapter.log.error('V6 Cannot control: ' + err);
                             }
                         });
                     }
@@ -163,23 +163,23 @@ adapter.on('stateChange', function (id, state) {
                         val = Math.round(parseFloat(state.val) / 100) * 255;
                         if (val < 0)   val = 0;
                         if (val > 255) val = 255;
-                        adapter.log.debug('Send to zone ' + zone + ' "' + dp + '": ' + val);
+                        adapter.log.debug('V6 Send to zone ' + zone + ' "' + dp + '": ' + val);
                     } else {
                         val = parseInt(state.val, 10);
-                        adapter.log.debug('Send to zone ' + zone + ' "' + dp + '": ' + val);
+                        adapter.log.debug('V6 Send to zone ' + zone + ' "' + dp + '": ' + val);
                     }
                     zones[zone].command(dp, val, function (err) {
                         if (!err) {
                             adapter.setForeignState(id, state.val, true);
                         } else {
-                            adapter.log.error('Cannot control: ' + err);
+                            adapter.log.error('V6 Cannot control: ' + err);
                         }
                     });
                 } else {
-                    adapter.log.error('Unknown command: ' + dp);
+                    adapter.log.error('V6 Unknown command: ' + dp);
                 }
             } else {
-                adapter.log.error('Zone is disabled');
+                adapter.log.error('V6 Zone is disabled');
             }
         } else {
             // version 5
@@ -188,13 +188,13 @@ adapter.on('stateChange', function (id, state) {
                     light.sendCommands(zones[zone].on(zone), zones[zone].hue(55)).then(function () {
                         adapter.setForeignState(id, state.val, true);
                     }, function (err) {
-                        adapter.log.error('Cannot control: ' + err);
+                        adapter.log.error('V5 Cannot control: ' + err);
                     });
                 } else {
                     light.sendCommands(zones[zone].on(zone), zones[zone].whiteMode(zone)).then(function () {
                         adapter.setForeignState(id, state.val, true);
                     }, function (err) {
-                        adapter.log.error('Cannot control: ' + err);
+                        adapter.log.error('V5 Cannot control: ' + err);
                     });
                 }
             } else
@@ -205,7 +205,7 @@ adapter.on('stateChange', function (id, state) {
                         light.sendCommands(zones[zone].on(zone), zones[zone].brightness(100), zones[zone].whiteMode(zone)).then(function () {
                             adapter.setForeignState(id, true, true);
                         }, function (err) {
-                            adapter.log.error('Cannot control: ' + err);
+                            adapter.log.error('V5 Cannot control: ' + err);
                         });
                     }
                     else {
@@ -217,7 +217,7 @@ adapter.on('stateChange', function (id, state) {
                     light.sendCommands(zones[zone].off(zone)).then(function () {
                         adapter.setForeignState(id, false, true);
                     }, function (err) {
-                        adapter.log.error('Cannot control: ' + err);
+                        adapter.log.error('V5 Cannot control: ' + err);
                     });
                 }
             } else
@@ -226,20 +226,20 @@ adapter.on('stateChange', function (id, state) {
                 if (dp === 'colorRGB') {
                     dp = 'rgb255';
                     val = splitColor(state.val);
-                    adapter.log.debug('Send to zone ' + zone + ' "' + dp + '": ' + JSON.stringify(val));
+                    adapter.log.debug('V5 Send to zone ' + zone + ' "' + dp + '": ' + JSON.stringify(val));
                 } else if (dp === 'brightness2' || dp === 'brightness') {       //now 2 variants of brightness can be used in v5
                     if (state.val < 0)   val = 0;
                     if (state.val > 100) val = 100;
                     adapter.log.debug('Send to zone ' + zone + ' "' + dp + '": ' + state.val);
                 } else {
                     val = parseInt(state.val, 10);
-                    adapter.log.debug('Send to zone ' + zone + ' "' + dp + '": ' + state.val);
+                    adapter.log.debug('V5 Send to zone ' + zone + ' "' + dp + '": ' + state.val);
                 }
                 if (state.val !== 0) { //if dim to 0% was chosen turn light off - error handling for iobroker.cloud combo with amazon alexa
 					light.sendCommands(zones[zone].on(zone), zones[zone][dp](state.val)).then(function () {
 						adapter.setForeignState(id, state.val, true);
 					}, function (err) {
-						adapter.log.error('Cannot control: ' + err);
+						adapter.log.error('V5 Cannot control: ' + err);
 					});
 				}	
             } else
@@ -250,11 +250,11 @@ adapter.on('stateChange', function (id, state) {
                     light.sendCommands(zones[zone].on(zone), zones[zone][dp](state.val)).then(function () {
                     adapter.setForeignState(id, state.val, true);
                         }, function (err) {
-                    adapter.log.error('Cannot control: ' + err);
+                    adapter.log.error('V5 Cannot control: ' + err);
                 });                   
             }
             else {    
-                adapter.log.error('Unknown command: ' + dp);
+                adapter.log.error('V5 Unknown command: ' + dp);
             }
         }
     }
