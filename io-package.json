@@ -1,11 +1,15 @@
 {
     "common": {
         "name":                 "milight",
-        "version":              "0.2.1",
+        "version":              "0.2.2",
         "news": {
-            "0.2.0": {
+            "0.2.2": {
                 "en": 				"debug messages",
-                "de": 				"debug Meldungen",
+                "de": 				"debug Meldungen"
+            },
+            "0.2.1": {
+                "en": 				"debug messages",
+                "de": 				"debug Meldungen"
             },
             "0.2.0": {
                 "en": 				"discovery for v6",
