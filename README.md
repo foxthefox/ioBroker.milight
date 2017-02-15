@@ -44,7 +44,7 @@ version 5 also to be used for v4 lamps
 
 
 ##Changelog:
-### 0.2.1
+### 0.2.2/0.2.1
 * (foxthefox) debug messages with v5/v6 prefix; v6 colorset->colormode
 
 ### 0.2.0 
