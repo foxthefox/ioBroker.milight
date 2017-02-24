@@ -37,7 +37,7 @@ in admin page of adapter
 version 5 also to be used for v4 lamps
 
 ##TODO:
-* widget matching the further adapter objects
+* widget matching the further adapter objects(e.g. v6)
 
 ##known issues:
 * color bar in widget to be corrected
