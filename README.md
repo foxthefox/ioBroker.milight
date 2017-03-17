@@ -10,14 +10,14 @@
 
 adapter for ioBroker for LED-lamps like milight, easybulb, limitless
 
-##Installation:
+## Installation:
 from npm
 * npm install iobroker.milight
 
 actual version from github
 * npm install https://github.com/foxthefox/ioBroker.milight/tarball/master --production
 
-##Settings:
+## Settings:
 in admin page
 * IP-Adress-> IP of bridge
 * Port -> port of bridge
@@ -26,24 +26,24 @@ in admin page
 * version of the milight protocol v5 or v6 -> sets automatically the corresponding port
 * the type of bulbs in the zones
 
-##Variables v5
+## Variables v5
 * hue -> the color value of lamp 0...255
 * brightness(2) -> 0...100%
 * rgb -> 000000...FFFFFF
 
 
-##Configuration:
+## Configuration:
 in admin page of adapter
 version 5 also to be used for v4 lamps
 
-##TODO:
+## TODO:
 * widget matching the further adapter objects(e.g. v6)
 
-##known issues:
+## known issues:
 * color bar in widget to be corrected
 
 
-##Changelog:
+## Changelog:
 ### 0.2.2/0.2.1
 * (foxthefox) debug messages with v5/v6 prefix; v6 colorset->colormode
 
@@ -59,5 +59,5 @@ version 5 also to be used for v4 lamps
 * (foxthefox) node-milight-promise 0.0.9
 * (foxthefox) jqui widget RGBW lamp
 
-###0.0.1
+### 0.0.1
 * (foxthefox) initial setup
