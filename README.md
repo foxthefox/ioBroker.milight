@@ -23,13 +23,17 @@ in admin page
 * delaybetweenPackages -> ms delay between UDP packages (100ms for v5)
 * repeatPackage -> number of repetitions (1 for v5)
 * version of the milight protocol v5 or v6 -> sets automatically the corresponding port
+* setting full brightness when changed to white mode 
 
-* the type of bulbs in the zones
-+ basic = bridge ONLY for zone 1 and v6
-+ RGBWW = full color bulb with white LED and color temperature adjustment (increase color temp means cooler coloring), ONLY in v6
-+ RGB = pure color bulb without white ONLY for zone 1
-+ RGBW = color bulb with white LED
-+ White = pure white bulb with color temperature adjustment (increase color temp means cooler coloring)
+## type of bulbs in the zones:
+in admin page
+* basic = bridge ONLY for zone 1 and v6
+* RGBWW = full color bulb with white LED and color temperature adjustment (increase color temp means cooler coloring), ONLY in v6
+* RGB = pure color bulb without white ONLY for zone 1
+* RGBW = color bulb with white LED
+* White = pure white bulb with color temperature adjustment (increase color temp means cooler coloring)
+
+The Zone0 or ZoneAll can be used to give commands to all 4 zones, the adapter is configured in v6 with base/bridge commands and in v5 with rgbw commands. 
 
 
 ## States in Version 6
