@@ -1,8 +1,12 @@
 {
     "common": {
         "name":                 "milight",
-        "version":              "0.2.2",
+        "version":              "0.3.0",
         "news": {
+             "0.3.0": {
+                "en": 				"added white, rgb bulb, corrections",
+                "de": 				"neue Lampen weiß, rgb, Korrekturen"
+            },
             "0.2.2": {
                 "en": 				"debug messages",
                 "de": 				"debug Meldungen"
@@ -49,7 +53,7 @@
         "commandRepeat":  "1",
         "ip":       "",
         "port":     "5987",
-        "zone1":    "basic",
+        "zone1":    "RGBW",
         "zone2":    "RGBW",
         "zone3":    "RGBW",
         "zone4":    "RGBW",
