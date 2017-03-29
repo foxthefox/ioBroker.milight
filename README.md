@@ -23,7 +23,14 @@ in admin page
 * delaybetweenPackages -> ms delay between UDP packages (100ms for v5)
 * repeatPackage -> number of repetitions (1 for v5)
 * version of the milight protocol v5 or v6 -> sets automatically the corresponding port
+
 * the type of bulbs in the zones
++ basic = bridge ONLY for zone 1 and v6
++ RGBWW = full color bulb with white LED and color temperature adjustment (increase color temp means cooler coloring), ONLY in v6
++ RGB = pure color bulb without white ONLY for zone 1
++ RGBW = color bulb with white LED
++ White = pure white bulb with color temperature adjustment (increase color temp means cooler coloring)
+
 
 ## States in Version 6
 
@@ -55,31 +62,33 @@ in admin page
 |            colorTempUp as button            |                                  |    colorTempUp (zone), native  |                                |                                       |       colorTempUp (zone), function     |
 |           colorTempDown as button           |                                  |  colorTempDown (zone),  native |                                |                                       |      colorTempDown (zone), function    |
 
-## States in v5/v4
+## States in Version 5/ Version 4
 
-|                available state                |           RGB           |            White            |                   RGBW                   |
-|:---------------------------------------------:|:-----------------------:|:---------------------------:|:----------------------------------------:|
-|                ON/OFF as switch               |  state(zone), function  |    state(zone), function    |           state(zone), function          |
-|                  ON as button                 |     on(zone), native    |       on(zone), native      |             on(zone), native             |
-|                 OFF as button                 |    off(zone), native    |      off(zone), native      |             off(zone), native            |
-|           colorMode as boolean state          |                         |                             | colorMode (0=nightMode, 1=color(hue=55)) |
-|               maxWhite as button              |                         |   maxBright(zone), native   |                                          |
-|              whiteMode as button              |                         |                             |          whiteMode(zone), native         |
-|              nightMode as button              |                         |                             |          nightMode(zone), native         |
-|           color as hue value (0-255)          |                         |                             |                hue, native               |
-|  rgb as combined value (#000000 -   #FFFFFF)  |                         |                             |                rgb, native               |
-|             colorTempUp as button             |                         |        warmer, native       |                                          |
-|            colorTempDown as button            |                         |        cooler, native       |                                          |
-|          brightness as value (0-100)          |                         |                             |            brightness, native            |
-| brightness   as value (0-100), extended range |                         |     brightness2, native     |                                          |
-|            effectModeNext as button           |                         |                             |          effectModeNext, native          |
-|             modeSpeedUp as button             |  effectSpeedUp, native  |  effectModeSpeedUp, native  |                                          |
-|            modeSpeedDown as button            | effectSpeedDown, native | effectModeSpeedDown, native |                                          |
-|             brightnessUp as button            |   brightnessUp, native  |     brightnessUp, native    |                                          |
-|            brightnessDown as button           |  brightnessDown, native |    brightnessDown, native   |                                          |
-|             modeSpeedUp as button             |     speedUp, native     |                             |                                          |
-|            modeSpeedDown as button            |    speedDown, native    |                             |                                          |
+|                available state                |           RGB           |          White          |                   RGBW                   |
+|:---------------------------------------------:|:-----------------------:|:-----------------------:|:----------------------------------------:|
+|                ON/OFF as switch               |  state(zone), function  |  state(zone), function  |           state(zone), function          |
+|                  ON as button                 |     on(zone), native    |     on(zone), native    |             on(zone), native             |
+|                 OFF as button                 |    off(zone), native    |    off(zone), native    |             off(zone), native            |
+|           colorMode as boolean state          |                         |                         | colorMode (0=nightMode, 1=color(hue=55)) |
+|               maxWhite as button              |                         | maxBright(zone), native |                                          |
+|              whiteMode as button              |                         |                         |          whiteMode(zone), native         |
+|              nightMode as button              |                         |                         |          nightMode(zone), native         |
+|           color as hue value (0-255)          |                         |                         |                hue, native               |
+|  rgb as combined value (#000000 -   #FFFFFF)  |                         |                         |                rgb, native               |
+|             colorTempUp as button             |                         |      warmer, native     |                                          |
+|            colorTempDown as button            |                         |      cooler, native     |                                          |
+|          brightness as value (0-100)          |                         |                         |            brightness, native            |
+| brightness   as value (0-100), extended range |                         |   brightness2, native   |                                          |
+|            effectModeNext as button           |                         |                         |          effectModeNext, native          |
+|               speedUp as button               |     speedUp, native     |                         |           effectSpeedUp, native          |
+|              speedDown as button              |    speedDown, native    |                         |          effectSpeedDown, native         |
+|             brightnessUp as button            |   brightnessUp, native  |   brightnessUp, native  |                                          |
+|            brightnessDown as button           |  brightnessDown, native |  brightnessDown, native |                                          |
+|            effectModeNext as button           |  effectSpeedUp, native  |                         |                                          |
+|            effectModePrev as button           | effectSpeedDown, native |                         |                                          |
 
+
+effectSpeedUp/Down has different meaning (for rgb changes the mode, for rgbw it changes the speed)! 
 
 ## Configuration:
 in admin page of adapter
@@ -93,7 +102,7 @@ version 5 also to be used for v4 lamps
 
 
 ## Changelog:
-### upcomming version
+### upcomming version 0.3.0
 * (foxthefox) cleanup of states
 * (foxthefox) added white/rgb lamp
 * (foxthefox) correction of mismatch RGBW/RGBWW in v6
