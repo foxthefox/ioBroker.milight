@@ -73,7 +73,7 @@ The Zone0 or ZoneAll can be used to give commands to all 4 zones, the adapter is
 |                ON/OFF as switch               |  state(zone), function  |  state(zone), function  |           state(zone), function          |
 |                  ON as button                 |     on(zone), native    |     on(zone), native    |             on(zone), native             |
 |                 OFF as button                 |    off(zone), native    |    off(zone), native    |             off(zone), native            |
-|           colorMode as boolean state          |                         |                         | colorMode (0=nightMode, 1=color(hue=55)) |
+|           colorMode as boolean state          |                         |                         | colorMode (0/hs=whiteMode, 1/ct=color(hue=55)) |
 |               maxWhite as button              |                         | maxBright(zone), native |                                          |
 |              whiteMode as button              |                         |                         |          whiteMode(zone), native         |
 |              nightMode as button              |                         |                         |          nightMode(zone), native         |
