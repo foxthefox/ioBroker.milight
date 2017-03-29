@@ -17,6 +17,7 @@ var nameStates = {
         RGBWW:  ['state', 'on', 'off', 'colorMode', 'whiteMode', 'nightMode', 'brightnessUp', 'brightnessDown', 'brightness', 'colorUp', 'colorDown', 'color', 'rgb', 'mode', 'modeSpeedUp', 'modeSpeedDown', 'link', 'unlink', 'saturationUp', 'saturationDown', 'saturation', 'colorTempUp', 'colorTempDown', 'colorTemp']
     },
     v5 :{
+	basic:  ['state', 'on', 'off', 'hue', 'rgb', 'brightness', 'brightness2', 'effectModeNext', 'effectSpeedUp', 'effectSpeedDown'],
         RGBO: ['state', 'on', 'off', 'brightnessUp', 'brightnessDown', 'speedUp', 'speedDown', 'effectSpeedUp', 'effectSpeedDown'],
         White: ['state', 'on', 'off', 'maxBright', 'brightnessUp', 'brightnessDown', 'warmer', 'cooler'],
         RGBW:  ['state', 'on', 'off', 'colorMode', 'hue', 'rgb', 'whiteMode', 'nightMode', 'brightness', 'brightness2', 'effectModeNext', 'effectSpeedUp', 'effectSpeedDown']
@@ -378,7 +379,7 @@ function main() {
     if (adapter.config.version === '6') {
         zones[0] = light.baseCtlFactory();
     } else {
-        zones[0] = commands.rgb;
+        zones[0] = commands.rgbw;
     }
     for (var z = 1; z <= 4; z++) {
         var type = adapter.config['zone' + z];
