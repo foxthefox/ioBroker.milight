@@ -55,10 +55,30 @@ in admin page
 |            colorTempUp as button            |                                  |    colorTempUp (zone), native  |                                |                                       |       colorTempUp (zone), function     |
 |           colorTempDown as button           |                                  |  colorTempDown (zone),  native |                                |                                       |      colorTempDown (zone), function    |
 
-## Variables v5
-* hue -> the color value of lamp 0...255
-* brightness(2) -> 0...100%
-* rgb -> 000000...FFFFFF
+## States in v5/v4
+
+|                available state                |           RGB           |            White            |                   RGBW                   |
+|:---------------------------------------------:|:-----------------------:|:---------------------------:|:----------------------------------------:|
+|                ON/OFF as switch               |  state(zone), function  |    state(zone), function    |           state(zone), function          |
+|                  ON as button                 |     on(zone), native    |       on(zone), native      |             on(zone), native             |
+|                 OFF as button                 |    off(zone), native    |      off(zone), native      |             off(zone), native            |
+|           colorMode as boolean state          |                         |                             | colorMode (0=nightMode, 1=color(hue=55)) |
+|               maxWhite as button              |                         |   maxBright(zone), native   |                                          |
+|              whiteMode as button              |                         |                             |          whiteMode(zone), native         |
+|              nightMode as button              |                         |                             |          nightMode(zone), native         |
+|           color as hue value (0-255)          |                         |                             |                hue, native               |
+|  rgb as combined value (#000000 -   #FFFFFF)  |                         |                             |                rgb, native               |
+|             colorTempUp as button             |                         |        warmer, native       |                                          |
+|            colorTempDown as button            |                         |        cooler, native       |                                          |
+|          brightness as value (0-100)          |                         |                             |            brightness, native            |
+| brightness   as value (0-100), extended range |                         |     brightness2, native     |                                          |
+|            effectModeNext as button           |                         |                             |          effectModeNext, native          |
+|             modeSpeedUp as button             |  effectSpeedUp, native  |  effectModeSpeedUp, native  |                                          |
+|            modeSpeedDown as button            | effectSpeedDown, native | effectModeSpeedDown, native |                                          |
+|             brightnessUp as button            |   brightnessUp, native  |     brightnessUp, native    |                                          |
+|            brightnessDown as button           |  brightnessDown, native |    brightnessDown, native   |                                          |
+|             modeSpeedUp as button             |     speedUp, native     |                             |                                          |
+|            modeSpeedDown as button            |    speedDown, native    |                             |                                          |
 
 
 ## Configuration:
@@ -73,6 +93,11 @@ version 5 also to be used for v4 lamps
 
 
 ## Changelog:
+### upcomming version
+* (foxthefox) cleanup of states
+* (foxthefox) added white/rgb lamp
+* (foxthefox) correction of mismatch RGBW/RGBWW in v6
+
 ### 0.2.2/0.2.1
 * (foxthefox) debug messages with v5/v6 prefix; v6 colorset->colormode
 
