@@ -11,12 +11,14 @@ var commands;
 var nameStates = {
     v6 :{
         basic: ['state', 'on', 'off', 'whiteMode', 'brightnessUp', 'brightnessDown', 'brightness', 'colorUp', 'colorDown', 'color', 'rgb', 'mode'],
-        RGBWW: ['state', 'on', 'off', 'colorMode', 'whiteMode', 'nightMode', 'brightnessUp', 'brightnessDown', 'brightness', 'colorUp', 'colorDown', 'color', 'rgb', 'mode', 'modeSpeedUp', 'modeSpeedDown', 'link', 'unlink'],
-        RGBW:  ['state', 'on', 'off', 'colorMode', 'whiteMode', 'nightMode', 'brightnessUp', 'brightnessDown', 'brightness', 'colorUp', 'colorDown', 'color', 'rgb', 'mode', 'modeSpeedUp', 'modeSpeedDown', 'link', 'unlink', 'saturationUp', 'saturationDown', 'saturation', 'colorTempUp', 'colorTempDown', 'colorTemp']
+        White: ['state', 'on', 'off', 'maxBright', 'brightnessUp', 'nightMode', 'brightnessDown', 'warmer', 'cooler'],
+        RGB: ['state', 'on', 'off', 'brightnessUp', 'brightnessDown', 'colorUp', 'colorDown', 'color', 'rgb','modeSpeedUp', 'modeSpeedDown', 'effectModeNext', 'effectModePrev'],
+	RGBW: ['state', 'on', 'off', 'colorMode', 'whiteMode', 'nightMode', 'brightnessUp', 'brightnessDown', 'brightness', 'colorUp', 'colorDown', 'color', 'rgb', 'mode', 'modeSpeedUp', 'modeSpeedDown', 'link', 'unlink'],
+        RGBWW:  ['state', 'on', 'off', 'colorMode', 'whiteMode', 'nightMode', 'brightnessUp', 'brightnessDown', 'brightness', 'colorUp', 'colorDown', 'color', 'rgb', 'mode', 'modeSpeedUp', 'modeSpeedDown', 'link', 'unlink', 'saturationUp', 'saturationDown', 'saturation', 'colorTempUp', 'colorTempDown', 'colorTemp']
     },
     v5 :{
-        basic: ['state', 'on', 'off', 'brightnessUp', 'brightnessDown', 'speedUp', 'speedDown', 'effectSpeedUp', 'effectSpeedDown'],
-        RGBWW: ['state', 'on', 'off', 'allOn', 'allOff', 'maxBright', 'brightnessUp', 'brightnessDown', 'warmer', 'cooler'],
+        RGB: ['state', 'on', 'off', 'brightnessUp', 'brightnessDown', 'speedUp', 'speedDown', 'effectSpeedUp', 'effectSpeedDown'],
+        White: ['state', 'on', 'off', 'allOn', 'allOff', 'maxBright', 'brightnessUp', 'brightnessDown', 'warmer', 'cooler'],
         RGBW:  ['state', 'on', 'off', 'colorMode', 'allOn', 'allOff', 'hue', 'rgb', 'whiteMode', 'nightMode', 'brightness', 'brightness2', 'effectModeNext', 'effectSpeedUp', 'effectSpeedDown']
     }
 
@@ -386,6 +388,12 @@ function main() {
                 if (type === 'basic') {
                     zones[z] = light.baseCtlFactory();
                 } else
+		if (type === 'White')  {
+                    zones[z] = light.zoneCtlWhiteFactory(z);
+                } else
+                if (type === 'RGB')  {
+                    zones[z] = light.zoneCtlRGBFactory(z);
+                } else
                 if (type === 'RGBW')  {
                     zones[z] = light.zoneCtlRGBWFactory(z);
                 } else
@@ -393,13 +401,13 @@ function main() {
                     zones[z] = light.zoneCtlRGBWWFactory(z);
                 }
             } else {
-                if (type === 'basic') {
+                if (type === 'RGB') {
                     zones[z] = commands.rgb;
                 } else
                 if (type === 'RGBW')  {
                     zones[z] = commands.rgbw;
                 } else
-                if (type === 'RGBWW') {
+                if (type === 'White') {
                     zones[z] = commands.white;
                 }
             }
