@@ -18,8 +18,8 @@ var nameStates = {
     },
     v5 :{
         RGB: ['state', 'on', 'off', 'brightnessUp', 'brightnessDown', 'speedUp', 'speedDown', 'effectSpeedUp', 'effectSpeedDown'],
-        White: ['state', 'on', 'off', 'allOn', 'allOff', 'maxBright', 'brightnessUp', 'brightnessDown', 'warmer', 'cooler'],
-        RGBW:  ['state', 'on', 'off', 'colorMode', 'allOn', 'allOff', 'hue', 'rgb', 'whiteMode', 'nightMode', 'brightness', 'brightness2', 'effectModeNext', 'effectSpeedUp', 'effectSpeedDown']
+        White: ['state', 'on', 'off', 'maxBright', 'brightnessUp', 'brightnessDown', 'warmer', 'cooler'],
+        RGBW:  ['state', 'on', 'off', 'colorMode', 'hue', 'rgb', 'whiteMode', 'nightMode', 'brightness', 'brightness2', 'effectModeNext', 'effectSpeedUp', 'effectSpeedDown']
     }
 
 };
