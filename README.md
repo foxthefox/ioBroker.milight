@@ -1,6 +1,5 @@
 ![Logo](admin/easybulb_logo.png)
 # ioBroker.milight
-=================
 [![NPM version](http://img.shields.io/npm/v/iobroker.milight.svg)](https://www.npmjs.com/package/iobroker.milight)
 [![Downloads](https://img.shields.io/npm/dm/iobroker.milight.svg)](https://www.npmjs.com/package/iobroker.milight)
 [![Build Status](https://travis-ci.org/foxthefox/ioBroker.milight.svg?branch=master)](https://travis-ci.org/foxthefox/ioBroker.milight)
@@ -17,7 +16,7 @@ from npm
 actual version from github
 * npm install https://github.com/foxthefox/ioBroker.milight/tarball/master --production
 
-## Settings:
+## common Settings:
 in admin page
 * IP-Adress-> IP of bridge
 * Port -> port of bridge
@@ -25,6 +24,36 @@ in admin page
 * repeatPackage -> number of repetitions (1 for v5)
 * version of the milight protocol v5 or v6 -> sets automatically the corresponding port
 * the type of bulbs in the zones
+
+## Sates in Version 6
+
+|                             available state |          basic/bridge          |                        White | RGB                          | RGBW                                | RGBWW                               |
+|--------------------------------------------:|:------------------------------:|-----------------------------:|------------------------------|-------------------------------------|-------------------------------------|
+| ON/OFF as switch                            |     state(zone1), function     |        state(zone), function | state(zone1), function       | state(zone), function               | state(zone), function               |
+| ON as button                                |        on(zone1), native       |             on(zone), native | on(zone1), native            | on(zone), native                    | on(zone), native                    |
+| OFF as button                               |       off(zone1), native       |            off(zone), native | off(zone1), native           | off(zone), native                   | off(zone), native                   |
+| colorMode as boolean state                  |                                |                              |                              | colorMode(0=nightMode, 1=whiteMode) | colorMode(0=nightMode, 1=whiteMode) |
+| maxWhite as button                          |                                | maxBright(zone), native      |                              |                                     |                                     |
+| whiteMode as button                         | whiteMode(zone1), native       |                              |                              | whiteMode(zone), native             | whiteMode(zone), native             |
+| nightMode as button                         |                                | nightMode(zone), native      |                              | nightMode(zone), native             | nightMode(zone), native             |
+| brightness as value (0-100)                 | brightness(zone), native       |                              |                              | brightness(zone), native            | brightness(zone), native            |
+| color as 3 hex values                       | color(zone), native            |                              | color(zone), native          | color(zone), native                 | color(zone), native                 |
+| rgb as combined value (#000000 -   #FFFFFF) | rgb(zone), native              |                              | rgb(zone), native            | rgb(zone), native                   | rgb(zone), native                   |
+| mode as value                               | mode(zone), native             |                              |                              | mode(zone), native                  | mode(zone), native                  |
+| modeSpeedUp as button                       |                                | modeSpeedUp(zone), native    |                              | modeSpeedUp(zone), native           | modeSpeedUp(zone), native           |
+| modeSpeedDown as button                     |                                | modeSpeedDown(zone), native  |                              | modeSpeedDown(zone), native         | modeSpeedDown(zone), native         |
+| link as button                              |                                |                              |                              | link(zone), native                  | link(zone), native                  |
+| unlink as button                            |                                |                              |                              | unlink(zone), native                | unlink(zone), native                |
+| saturation as value (0-100)                 |                                |                              |                              |                                     | saturation(zone), native            |
+| colorTemp as value (0-100)                  |                                |                              |                              |                                     | colorTemp(zone), native             |
+| brightnessUp as button                      | brightnessUp(zone), function   | brightnessUp(zone), native   | brightnessUp(zone), native   | brightnessUp(zone), function        | brightnessUp(zone), function        |
+| brightnessDown as button                    | brightnessDown(zone), function | brightnessDown(zone), native | brightnessDown(zone), native | brightnessDown(zone), function      | brightnessDown(zone), function      |
+| colorUp as button                           | colorUp(zone), function        |                              |                              | colorUp(zone), function             | colorUp(zone), function             |
+| color Down as button                        | color Down(zone), function     |                              | color Down(zone), function   | color Down(zone), function          |                                     |
+| saturationUp as button                      |                                |                              |                              |                                     | saturationUp(zone), function        |
+| saturationDown as button                    |                                |                              |                              |                                     | saturationDown(zone), function      |
+| colorTempUp as button                       |                                | colorTempUp(zone), native    |                              |                                     | colorTempUp(zone), function         |
+| colorTempDown as button                     |                                | colorTempDown(zone), native  |                              |                                     | colorTempDown(zone), function       |
 
 ## Variables v5
 * hue -> the color value of lamp 0...255
