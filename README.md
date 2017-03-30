@@ -31,7 +31,7 @@ in admin page
 * RGBWW = full color bulb with white LED and color temperature adjustment (increase color temp means cooler coloring), ONLY in v6
 * RGB = pure color bulb without white ONLY for zone 1
 * RGBW = color bulb with white LED
-* White = pure white bulb with color temperature adjustment (increase color temp means cooler coloring)
+* White = WW/CW white bulb with color temperature adjustment (increase color temp means cooler coloring)
 
 The Zone0 or ZoneAll can be used to give commands to all 4 zones, the adapter is configured in v6 with base/bridge commands and in v5 with rgbw commands. 
 
@@ -47,7 +47,7 @@ The Zone0 or ZoneAll can be used to give commands to all 4 zones, the adapter is
 |              maxWhite as button             |                                  |     maxBright(zone), native    |                                |                                       |                                        |
 |             whiteMode as button             |     whiteMode(zone1), native     |                                |                                |        whiteMode(zone), native        |         whiteMode(zone), native        |
 |             nightMode as button             |                                  |     nightMode(zone), native    |                                |        nightMode(zone), native        |         nightMode(zone), native        |
-|         brightness as value (0-100)         |     brightness(zone), native     |                                |                                |        brightness(zone),  native      |        brightness(zone),  native       |
+|         brightness as value (0-100%)         |     brightness(zone), native     |                                |                                |        brightness(zone),  native      |        brightness(zone),  native       |
 |            color as 3 hex values            |        color(zone),  native      |                                |       color(zone),  native     |          color(zone),  native         |           color(zone),  native         |
 | rgb as combined value (#000000 -   #FFFFFF) |         rgb(zone),  native       |                                |        rgb(zone),  native      |           rgb(zone),  native          |            rgb(zone),  native          |
 |                mode as value                |        mode(zone),  native       |                                |                                |           mode(zone),  native         |           mode(zone),  native          |
@@ -55,8 +55,8 @@ The Zone0 or ZoneAll can be used to give commands to all 4 zones, the adapter is
 |           modeSpeedDown as button           |                                  |  modeSpeedDown (zone),  native |                                |      modeSpeedDown(zone),  native     |       modeSpeedDown(zone),  native     |
 |                link as button               |                                  |                                |                                |           link(zone),  native         |           link(zone),  native          |
 |               unlink as button              |                                  |                                |                                |          unlink(zone),  native        |          unlink(zone),  native         |
-|         saturation as value (0-100)         |                                  |                                |                                |                                       |        Saturation (zone),  native      |
-|          colorTemp as value (0-100)         |                                  |                                |                                |                                       |         colorTemp (zone), native       |
+|         saturation as value (0-100%)         |                                  |                                |                                |                                       |        Saturation (zone),  native      |
+|          colorTemp as value (0-100 equals to 2700K to 6500K)         |                                  |                                |                                |                                       |         colorTemp (zone), native       |
 |            brightnessUp as button           |   brightnessUp (zone), function  |   brightnessUp (zone), native  |   brightnessUp (zone), native  |      brightnessUp (zone), function    |      brightnessUp (zone), function     |
 |           brightnessDown as button          |  brightnessDown (zone), function |  brightnessDown (zone), native |  brightnessDown (zone), native |     brightnessDown (zone), function   |     brightnessDown (zone), function    |
 |              colorUp as button              |      colorUp(zone), function     |                                |                                |        colorUp(zone),  function       |         colorUp(zone),  function       |
@@ -81,8 +81,8 @@ The Zone0 or ZoneAll can be used to give commands to all 4 zones, the adapter is
 |  rgb as combined value (#000000 -   #FFFFFF)  |                         |                         |                rgb, native               |
 |             colorTempUp as button             |                         |      warmer, native     |                                          |
 |            colorTempDown as button            |                         |      cooler, native     |                                          |
-|          brightness as value (0-100)          |                         |                         |            brightness, native            |
-| brightness   as value (0-100), extended range |                         |   brightness2, native   |                                          |
+|          brightness as value (0-100%)          |                         |                         |            brightness, native            |
+| brightness   as value (0-100%), extended range |                         |   brightness2, native   |                                          |
 |            effectModeNext as button           |                         |                         |          effectModeNext, native          |
 |               speedUp as button               |     speedUp, native     |                         |           effectSpeedUp, native          |
 |              speedDown as button              |    speedDown, native    |                         |          effectSpeedDown, native         |
@@ -103,6 +103,7 @@ version 5 also to be used for v4 lamps
 
 ## known issues:
 * color bar in widget to be corrected
+* v5 rgb color accepted, but always blue
 
 
 ## Changelog:
@@ -110,6 +111,7 @@ version 5 also to be used for v4 lamps
 * (foxthefox) cleanup of states
 * (foxthefox) added white/rgb lamp
 * (foxthefox) correction of mismatch RGBW/RGBWW in v6
+* (foxthefox) v6 brightness only 0-0x64(100)
 
 ### 0.2.2/0.2.1
 * (foxthefox) debug messages with v5/v6 prefix; v6 colorset->colormode
