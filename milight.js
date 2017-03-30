@@ -230,7 +230,7 @@ adapter.on('stateChange', function (id, state) {
                 }
             } else 
             if (dp === 'brightness2' || dp === 'brightness') {       //now 2 variants of brightness can be used in v5
-                    var val;
+                    var val = state.val;
                     if (state.val < 0)   val = 0;
                     if (state.val > 100) val = 100;
                     adapter.log.debug('V5 brightness Send to zone ' + zone + ' "' + dp + '": ' + val);
@@ -250,7 +250,7 @@ adapter.on('stateChange', function (id, state) {
                     }
             } else
             if (dp === 'hue') {
-                    var val;
+                    var val = state.val;
                     if (state.val < 0)   val = 0;
                     if (state.val > 255) val = 255;
                     adapter.log.debug('V5 Send to zone ' + zone + ' "' + dp + '": ' + val);
@@ -272,24 +272,24 @@ adapter.on('stateChange', function (id, state) {
                 });                   
             } else        
             if (dp === 'on'){
-                    adapter.log.debug('Vr Send to zone ' + zone + 'on');
+                    adapter.log.debug('V5 Send to zone ' + zone + ' on');
                     if (adapter.config.v5onFullBright === 'true' || adapter.config.v5onFullBright === true || adapter.config.v5onFullBright === 'on' || adapter.config.v5onFullBright === 'ON' || adapter.config.v5onFullBright === 1){
                         light.sendCommands(zones[zone].on(zone), zones[zone].brightness(100), zones[zone].whiteMode(zone)).then(function () {
-                            adapter.setForeignState(id, true, true);
+                            adapter.setForeignState(id, false, true); //tastendruck rückgängig machen
                         }, function (err) {
                             adapter.log.error('Cannot control: ' + err);
                         });
                     }
                     else {
                         light.sendCommands(zones[zone].on(zone)).then(function () {
-                            adapter.setForeignState(id, true, true);
+                            adapter.setForeignState(id, false, true); //tastendruck rückgängig machen
                         }, function (err) {
                             adapter.log.error('Cannot control: ' + err);
                         });
                     }                  
             } else            
             if (dp === 'off'){
-                    adapter.log.debug('V5 Send to zone ' + zone + 'on');
+                    adapter.log.debug('V5 Send to zone ' + zone + ' off');
                     light.sendCommands(zones[zone].off(zone)).then(function () {
                         adapter.setForeignState(id, false, true); //tastendruck rückgängig machen
                     }, function (err) {
@@ -298,9 +298,9 @@ adapter.on('stateChange', function (id, state) {
                                   
             } else
             if (dp === 'nightMode' || dp === 'whiteMode' ){
-                    adapter.log.debug('V5 Send to zone ' + zone + 'Mode on');
+                    adapter.log.debug('V5 Send to zone ' + zone + ' Mode on');
                     light.sendCommands(zones[zone].on(zone), zones[zone][dp](zone)).then(function () {
-                        adapter.setForeignState(id, false, true); //tastendruck rückgängig machen
+                        adapter.setForeignState(id, true, true); //status behalten?
                     }, function (err) {
                         adapter.log.error('Cannot control: ' + err);
                     });
