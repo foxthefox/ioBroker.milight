@@ -163,9 +163,9 @@ adapter.on('stateChange', function (id, state) {
                         val = splitColor(state.val);
                         adapter.log.debug('Send to zone ' + zone + ' "' + dp + '": ' + JSON.stringify(val));
                     } else if (dp === 'brightnessSet') {
-                        val = Math.round(parseFloat(state.val) / 100) * 255;
+                        val = Math.round(parseFloat(state.val)); //from 0x00 to 0x64
                         if (val < 0)   val = 0;
-                        if (val > 255) val = 255;
+                        if (val > 100) val = 100;
                         adapter.log.debug('V6 Send to zone ' + zone + ' "' + dp + '": ' + val);
                     } else {
                         val = parseInt(state.val, 10);
