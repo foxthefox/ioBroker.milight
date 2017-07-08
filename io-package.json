@@ -1,8 +1,12 @@
 {
     "common": {
         "name":                 "milight",
-        "version":              "0.3.1",
+        "version":              "0.3.2",
         "news": {
+            "0.3.2": {
+                "en": 				"added widget for CW/WW V4",
+                "de": 				"neues widget für CW/WW V4"
+            },
             "0.3.1": {
                 "en": 				"added checking of method before call",
                 "de": 				"neue Prüfung der Methode vor dem Aufruf"
