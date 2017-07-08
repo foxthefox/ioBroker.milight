@@ -86,21 +86,42 @@ vis.binds.milightui = {
         }
     },
     milightColormode: function (el, oid) {
-            var $hue = $(el).parent().find('.hue-mode-hue');
-            if (vis.states.attr(oid + '.val') === 'ct') {
+        var $hue = $(el).parent().find('.hue-mode-hue');
+        if (vis.states.attr(oid + '.val') === 'ct' || vis.states.attr(oid + '.val') == 0 ) {
+            $hue.hide();
+        } else {
+            $hue.show();
+        }
+
+        vis.states.bind(oid + '.val', function (e, newVal, oldVal) {
+            if (newVal === 'ct') {
                 $hue.hide();
             } else {
                 $hue.show();
             }
-
-            vis.states.bind(oid + '.val', function (e, newVal, oldVal) {
-                if (newVal === 'ct') {
-                    $hue.hide();
-                } else {
-                    $hue.show();
-                }
-            });
+        });
+    },
+    milightRGBWWColormode: function (el, oid) {
+        var $hue = $(el).parent().find('.hue-mode-hue');
+        var $ct  = $(el).parent().find('.hue-mode-ct');
+        if (vis.states.attr(oid + '.val') == 0) {
+            $hue.hide();
+            $ct.show();
+        } else {
+            $ct.hide();
+            $hue.show();
         }
-    };
+
+        vis.states.bind(oid + '.val', function (e, newVal, oldVal) {
+            if (newVal == 0 ) {
+                $hue.hide();
+                $ct.show();
+            } else {
+                $ct.hide();
+                $hue.show();
+            }
+        });
+    }
+};
 
 vis.binds.milightui.showVersion();
