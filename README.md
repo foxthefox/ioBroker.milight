@@ -82,7 +82,7 @@ The Zone0 or ZoneAll can be used to give commands to all 4 zones, the adapter is
 |             colorTempUp as button             |                         |      warmer, native     |                                          |
 |            colorTempDown as button            |                         |      cooler, native     |                                          |
 |          brightness as value (0-100%)          |                         |                         |            brightness, native            |
-| brightness   as value (0-100%), extended range |                         |   brightness2, native   |                                          |
+| brightness   as value (0-100%), extended range |                         |                        |                                          |
 |            effectModeNext as button           |                         |                         |          effectModeNext, native          |
 |               speedUp as button               |     speedUp, native     |                         |           effectSpeedUp, native          |
 |              speedDown as button              |    speedDown, native    |                         |          effectSpeedDown, native         |
