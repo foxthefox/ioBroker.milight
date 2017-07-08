@@ -1,8 +1,12 @@
 {
     "common": {
         "name":                 "milight",
-        "version":              "0.3.0",
+        "version":              "0.3.1",
         "news": {
+            "0.3.1": {
+                "en": 				"added checking of method before call",
+                "de": 				"neue Prüfung der Methode vor dem Aufruf"
+            },
              "0.3.0": {
                 "en": 				"added white, rgb bulb, corrections",
                 "de": 				"neue Lampen weiß, rgb, Korrekturen"
