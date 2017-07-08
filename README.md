@@ -101,7 +101,7 @@ in admin page of adapter
 version 5 also to be used for v4 lamps
 
 ## TODO:
-* widget matching the further adapter objects(e.g. v6)
+* ??
 
 ## known issues:
 * color bar in widget to be corrected
@@ -110,6 +110,8 @@ version 5 also to be used for v4 lamps
 
 ## Changelog:
 ### 0.3.2
+* (foxthefox) new RGBWW V6 widget
+* (foxthefox) update for effects and correctios in RGBW V6 widget
 * (foxthefox) added CW/WW widget V4 and V6
 * (foxthefox) added disco button in RGBW V4
 
