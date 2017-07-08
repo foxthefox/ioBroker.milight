@@ -110,7 +110,7 @@ version 5 also to be used for v4 lamps
 
 ## Changelog:
 ### 0.3.2
-* (foxthefox) added CW/WW widget V4
+* (foxthefox) added CW/WW widget V4 and V6
 * (foxthefox) added disco button in RGBW V4
 
 ### 0.3.1
