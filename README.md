@@ -109,7 +109,10 @@ version 5 also to be used for v4 lamps
 
 
 ## Changelog:
-### upcomming version 0.3.0
+
+### 0.3.1
+* (bluefox) added checking of methods before calling them
+### 0.3.0
 * (foxthefox) cleanup of states
 * (foxthefox) added white/rgb lamp
 * (foxthefox) correction of mismatch RGBW/RGBWW in v6
