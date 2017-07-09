@@ -88,8 +88,8 @@ The Zone0 or ZoneAll can be used to give commands to all 4 zones, the adapter is
 |            effectModeNext as button           |                         |                         |          effectModeNext, native          |
 |               speedUp as button               |     speedUp, native     |                         |           effectSpeedUp, native          |
 |              speedDown as button              |    speedDown, native    |                         |          effectSpeedDown, native         |
-|             brightnessUp as button            |   brightnessUp, native  |   brightnessUp, native  |                                          |
-|            brightnessDown as button           |  brightnessDown, native |  brightnessDown, native |                                          |
+|             brightUp as button            |   brightUp, native  |   brightUp, native  |                                          |
+|            brightDown as button           |  brightDown, native |  brightDown, native |                                          |
 |            effectModeNext as button           |  effectSpeedUp, native  |                         |                                          |
 |            effectModePrev as button           | effectSpeedDown, native |                         |                                          |
 
@@ -110,6 +110,8 @@ version 5 also to be used for v4 lamps
 
 ## Changelog:
 ### 0.3.2
+* (foxthefox) V5 uses brightUp/brightDown instead brightnessUp/brightnessDown
+* (foxthefox) corrections in V5 for white Commands (cooler/warmer/maxBright)
 * (foxthefox) new RGBWW V6 widget
 * (foxthefox) update for effects and correctios in RGBW V6 widget
 * (foxthefox) added CW/WW widget V4 and V6
