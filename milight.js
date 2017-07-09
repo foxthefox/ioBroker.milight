@@ -333,7 +333,7 @@ adapter.on('stateChange', function (id, state) {
                     adapter.log.error('Cannot control: ' + err);
                 });
             } else
-            if ( dp === 'maxBright' || dp === 'brightnessUp' || dp === 'brightnessDown' || dp === 'speedUp' || dp === 'speedDown' || dp === 'effectSpeedUp' || dp === 'effectSpeedDown' || dp ==='effectModeNext') {
+            if ( dp === 'maxBright' || dp === 'brightnessUp' || dp === 'brightnessDown' || dp === 'speedUp' || dp === 'speedDown' || dp === 'effectSpeedUp' || dp === 'effectSpeedDown' || dp ==='effectModeNext' || dp ==='cooler'|| dp ==='warmer') {
                 adapter.log.debug('V5 Send to zone ' + zone + ' "' + dp + '": ' + state.val);
                 if (!checkMethod(zones[zone], 'on') || !checkMethod(zones[zone], dp)) return;
                 light.sendCommands(zones[zone].on(zone), zones[zone][dp]()).then(function () {
