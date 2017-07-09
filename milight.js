@@ -18,8 +18,8 @@ var nameStates = {
     },
     v5 :{
         basic:  ['state', 'on', 'off', 'hue', 'rgb', 'whiteMode', 'brightness', 'brightness2', 'effectModeNext', 'effectSpeedUp', 'effectSpeedDown'],
-        RGBO:   ['state', 'on', 'off', 'brightnessUp', 'brightnessDown', 'speedUp', 'speedDown', 'effectSpeedUp', 'effectSpeedDown'],
-        White:  ['state', 'on', 'off', 'maxBright', 'brightnessUp', 'brightnessDown', 'warmer', 'cooler'],
+        RGBO:   ['state', 'on', 'off', 'brightUp', 'brightDown', 'speedUp', 'speedDown', 'effectSpeedUp', 'effectSpeedDown'],
+        White:  ['state', 'on', 'off', 'maxBright', 'brightUp', 'brightDown', 'warmer', 'cooler'],
         RGBW:   ['state', 'on', 'off', 'colorMode', 'hue', 'rgb', 'whiteMode', 'nightMode', 'brightness', 'brightness2', 'effectModeNext', 'effectSpeedUp', 'effectSpeedDown']
     }
 };
@@ -333,7 +333,7 @@ adapter.on('stateChange', function (id, state) {
                     adapter.log.error('Cannot control: ' + err);
                 });
             } else
-            if ( dp === 'maxBright' || dp === 'brightnessUp' || dp === 'brightnessDown' || dp === 'speedUp' || dp === 'speedDown' || dp === 'effectSpeedUp' || dp === 'effectSpeedDown' || dp ==='effectModeNext' || dp ==='cooler'|| dp ==='warmer') {
+            if ( dp === 'maxBright' || dp === 'brightUp' || dp === 'brightDown' || dp === 'speedUp' || dp === 'speedDown' || dp === 'effectSpeedUp' || dp === 'effectSpeedDown' || dp ==='effectModeNext' || dp ==='cooler'|| dp ==='warmer') {
                 adapter.log.debug('V5 Send to zone ' + zone + ' "' + dp + '": ' + state.val);
                 if (!checkMethod(zones[zone], 'on') || !checkMethod(zones[zone], dp)) return;
                 light.sendCommands(zones[zone].on(zone), zones[zone][dp]()).then(function () {
