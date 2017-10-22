@@ -40,7 +40,8 @@
             }
         },
         "authors": [
-            "foxthefox <foxthefox@wysiwis.net>"
+            "foxthefox <foxthefox@wysiwis.net>",
+            "bluefox <dogafox@gmail.com>"
         ],
         "title":                "milight adapter",
         "desc":                 "ioBroker milight Adapter",
