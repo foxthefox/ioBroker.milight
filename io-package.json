@@ -39,6 +39,9 @@
                 "ru": 				"Первая версия"
             }
         },
+        "authors": [
+            "foxthefox <foxthefox@wysiwis.net>"
+        ],
         "title":                "milight adapter",
         "desc":                 "ioBroker milight Adapter",
         "platform":             "Javascript/Node.js",
