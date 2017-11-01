@@ -292,11 +292,11 @@ adapter.on('stateChange', function (id, state) {
             } else
             if (dp === 'colorRGB'){
                 var val;
-                dp = 'rgb255';
+                dp = 'rgb';
                 val = splitColor(state.val);
                 adapter.log.debug('V5 Send to zone ' + zone + ' "' + dp + '": ' + val);
-                if (!checkMethod(zones[zone], 'on') || !checkMethod(zones[zone], 'colorRGB')) return;
-                light.sendCommands(zones[zone].on(zone), zones[zone].colorRGB(val)).then(function () {
+                if (!checkMethod(zones[zone], 'on') || !checkMethod(zones[zone], 'rgb255')) return;
+                light.sendCommands(zones[zone].on(zone), zones[zone].rgb255(val)).then(function () {
                     adapter.setForeignState(id, state.val, true);
                 }, function (err) {
                     adapter.log.error('Cannot control: ' + err);
