@@ -106,9 +106,15 @@ version 5 also to be used for v4 lamps
 ## known issues:
 * color bar in widget to be corrected
 * v5 rgb color accepted, but always blue
+* v6 color slider in widget not compatible to datapoint
 
 
 ## Changelog:
+### 0.3.3
+* (foxthefox) setting of state after usage of command OFF/ON
+* (foxthefox) v6 widget for RGBW; RGBWW mode switch night/weiß instead weiß/farbe
+* (foxthefox) v6 widget for RGBW, RGBWW speedup/down correction, no hide of color temp vs. color when switching night/weiß
+
 ### 0.3.2
 * (foxthefox) V5 uses brightUp/brightDown instead brightnessUp/brightnessDown
 * (foxthefox) corrections in V5 for white Commands (cooler/warmer/maxBright)
