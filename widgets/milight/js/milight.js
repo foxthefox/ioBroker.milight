@@ -1,6 +1,6 @@
 /*
     ioBroker.milight Widget-Set
-    version: "0.0.2"
+    version: "0.0.3"
     Copyright foxthefox 
     adapted from iobroker.vis-jqui, jqui-mfd
 
@@ -15,17 +15,22 @@
 if (vis.editMode) {
     $.extend(systemDictionary, {
         "oid-level":        {"en": "brightness",    "de": "Helligkeit"},
-        "oid-colormode":    {"en": "mode",          "de": "Modus"},
-        "oid-color":        {"en": "color",         "de": "Farbe"},
-        "oid-disco":        {"en": "disco mode",    "de": "Disco"},
+        "oid-colormode":    {"en": "mode switch",   "de": "Modus Schalter"},
+        "oid-color":        {"en": "color value",    "de": "Farbewert"},
+        "oid-disco":        {"en": "disco mode",    "de": "Disco mode"},
         "oid-speedup":      {"en": "speed up",      "de": "speed up"},
-        "oid-speeddown":    {"en": "speed down",    "de": "speed down"}
+        "oid-speeddown":    {"en": "speed down",    "de": "speed down"},
+        "oid-discospeeddown": {"en": "speed down", "de": "speed down"},
+        "oid-discospeedup": {"en": "speed up",      "de": "speed up"},
+        "oid-ctemp": {"en": "white color temp", "de": "weiß Farbtemperatur"},
+        "oid-saturation": {"en": "color saturation", "de": "Farbsättigung"},
+        "oid-mode": {"en": "Effect Mode switch", "de": "Effect Modus Schalter"},
     });
 }
 
 vis.binds.milightui = {
 
-    version: "0.0.2",
+    version: "0.0.3",
 
     showVersion: function() {
 
