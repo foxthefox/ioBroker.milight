@@ -11,7 +11,11 @@
  <style type="text/css">
  .hue-slider-hue.ui-slider {
      background-image: url(widgets/jqui/img/hue.png);
-     background-size: 100%;
+     background-size: 0%;
+ }
+ .hue-slider-ct.ui-slider {
+    background-image: url(widgets/jqui/img/hue.png);
+    background-size: 0%;
  }
 
 </style>
@@ -155,7 +159,7 @@
         <br/>
 
         <div class="hue-mode-hue">
-            <div class="sliderJQUI hue-slider-hue" style="width:90%" id="<%= this.data.attr('wid') %>_hue_hue_slider" data-oid="<%= this.data.attr('oid-color') %>"  <%= (el) -> vis.binds.jqueryui.slider(el, {min:0,max:255,step:1}) %> />
+            <div class="sliderJQUI hue-slider-hue" style="width:90%" id="<%= this.data.attr('wid') %>_hue_hue_slider" data-oid="<%= this.data.attr('oid-color') %>"  <%= (el) -> vis.binds.milightui.hueslider(el, {min:0,max:255,step:1}) %> />
         </div>
         <br/>
         
@@ -395,7 +399,7 @@
         Helligkeit
         <div class="sliderJQUI" style="width:90%" id="<%= this.data.attr('wid') %>_slider" data-oid="<%= this.data.attr('oid-level') %>"  <%= (el) -> vis.binds.jqueryui.slider(el, {min:1,max:100,step:1}) %> />
         <br/>
-        <div class="sliderJQUI hue-slider-ct" style="width:90%" id="<%= this.data.attr('wid') %>_hue_ct_slider" data-oid="<%= this.data.attr('oid-ctemp') %>"  <%= (el) -> vis.binds.jqueryui.slider(el, {min:2700,max:6500,step:100}) %> />
+        <div class="sliderJQUI hue-slider-ct" style="width:90%" id="<%= this.data.attr('wid') %>_hue_ct_slider" data-oid="<%= this.data.attr('oid-ctemp') %>"  <%= (el) -> vis.binds.milightui.ctslider(el, {min:2700,max:6500,step:100}) %> />
         <br/>
         <div class="sliderJQUI hue-slider-hue" style="width:90%" id="<%= this.data.attr('wid') %>_hue_hue_slider" data-oid="<%= this.data.attr('oid-color') %>"  <%= (el) -> vis.binds.jqueryui.slider(el, {min:0,max:255,step:1}) %> />
         <br/>
