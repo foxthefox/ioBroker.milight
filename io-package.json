@@ -1,8 +1,12 @@
 {
     "common": {
         "name":                 "milight",
-        "version":              "0.3.2",
+        "version":              "0.3.3",
         "news": {
+            "0.3.3": {
+                "en": 				"state after OFF/ON, v6 widget improvement",
+                "de": 				"Nachführung state nach OFF/ON, v6 widget Verbesserung"
+            },
             "0.3.2": {
                 "en": 				"added widget for CW/WW V4",
                 "de": 				"neues widget für CW/WW V4"
