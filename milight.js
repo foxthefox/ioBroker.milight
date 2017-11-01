@@ -158,6 +158,7 @@ adapter.on('stateChange', function (id, state) {
                         zones[zone].command('on', function (err) {
                             if (!err) {
                                 adapter.setForeignState(id, true, true);
+                                // zusätzlich Nachführung von state
                             } else {
                                 adapter.log.error('V6 Cannot control: ' + err);
                             }
@@ -167,6 +168,7 @@ adapter.on('stateChange', function (id, state) {
                         zones[zone].command('off', function (err) {
                             if (!err) {
                                 adapter.setForeignState(id, false, true);
+                                // zusätzlich Nachführung von state
                             } else {
                                 adapter.log.error('V6 Cannot control: ' + err);
                             }
@@ -228,6 +230,7 @@ adapter.on('stateChange', function (id, state) {
                         if (!checkMethod(zones[zone], 'on') || !checkMethod(zones[zone], 'brightness')) return;
                         light.sendCommands(zones[zone].on(zone), zones[zone].brightness(100), zones[zone].whiteMode(zone)).then(function () {
                             adapter.setForeignState(id, true, true);
+                            // zusätzlich Nachführung von state
                         }, function (err) {
                             adapter.log.error('Cannot control: ' + err);
                         });
@@ -236,6 +239,7 @@ adapter.on('stateChange', function (id, state) {
                         if (!checkMethod(zones[zone], 'on')) return;
                         light.sendCommands(zones[zone].on(zone)).then(function () {
                             adapter.setForeignState(id, true, true);
+                            // zusätzlich Nachführung von state
                         }, function (err) {
                             adapter.log.error('Cannot control: ' + err);
                         });
@@ -245,6 +249,7 @@ adapter.on('stateChange', function (id, state) {
                     if (!checkMethod(zones[zone], 'off')) return;
                     light.sendCommands(zones[zone].off(zone)).then(function () {
                         adapter.setForeignState(id, false, true);
+                        // zusätzlich Nachführung von state
                     }, function (err) {
                         adapter.log.error('Cannot control: ' + err);
                     });
