@@ -190,6 +190,12 @@ adapter.on('stateChange', function (id, state) {
                     zones[zone].command(dp, val, function (err) {
                         if (!err) {
                             adapter.setForeignState(id, state.val, true);
+                            if (dp === 'on'){
+                                adapter.setForeignState(id.replace('.on','.state'), true, true); //Nachführung von state
+                            }
+                            if (dp === 'off'){
+                                adapter.setForeignState(id.replace('.off','.state'), false, true); //Nachführung von state
+                            } 
                         } else {
                             adapter.log.error('V6 Cannot control: ' + err);
                         }
