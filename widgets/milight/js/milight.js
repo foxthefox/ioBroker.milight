@@ -113,7 +113,7 @@ if (vis.editMode) {
     $.extend(systemDictionary, {
         "oid-level":        {"en": "brightness",    "de": "Helligkeit"},
         "oid-colormode":    {"en": "mode switch",   "de": "Modus Schalter"},
-        "oid-color":        {"en": "color value",    "de": "Farbewert"},
+        "oid-color":        {"en": "color value hue",    "de": "Farbewert HUE"},
         "oid-disco":        {"en": "disco mode",    "de": "Disco mode"},
         "oid-speedup":      {"en": "speed up",      "de": "speed up"},
         "oid-speeddown":    {"en": "speed down",    "de": "speed down"},
@@ -263,7 +263,7 @@ vis.binds.milightui = {
         var settings = $.extend({
             range: false,
             min: 0,
-            max: 360,
+            max: 100,
             step: 1,
             value: parseFloat(vis.states.attr(oid + '.val')),
             slide: function (e, ui) {
@@ -280,7 +280,7 @@ vis.binds.milightui = {
 
         if (isNaN(settings.value)) settings.value = 0;
         if (isNaN(settings.min))   settings.min = 0;
-        if (isNaN(settings.max))   settings.max = 360;
+        if (isNaN(settings.max))   settings.max = 100;
         if (isNaN(settings.step))  settings.step = (settings.max - settings.min) / 100;
 
         settings.min = parseFloat(settings.min);
