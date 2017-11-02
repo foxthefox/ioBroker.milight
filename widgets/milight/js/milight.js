@@ -255,7 +255,7 @@ vis.binds.milightui = {
             }
         });
     },
-    hueslider1: function (el, options) {
+    rgbslider: function (el, options) {
         var $this = $(el);
         var oid = $this.attr('data-oid');
         var oid_val = 0;
