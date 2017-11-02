@@ -243,7 +243,7 @@ adapter.on('stateChange', function (id, state) {
                     zones[zone].command('colorRGB', val, function (err) {
                         if (!err) {
                             adapter.setForeignState(id, state.val, true);
-                            adapter.setForeignState(id.replace('.hue','.rgb'), colorhex, true); //Nachführung von rgb
+                            // adapter.setForeignState(id.replace('.hue','.rgb'), colorhex, true); //Nachführung von rgb
                         } else {
                             adapter.log.error('V6 Cannot control: ' + err);
                         }
@@ -318,7 +318,7 @@ adapter.on('stateChange', function (id, state) {
                             }
                             if (dp === 'colorRGB'){
                                 var h = rgbToHsv(val[0],val[1],val[2]);
-                                adapter.setForeignState(id.replace('.rgb','.hue'), h[0], true); //Nachführung von hue
+                                // adapter.setForeignState(id.replace('.rgb','.hue'), h[0], true); //Nachführung von hue
                             }
                         } else {
                             adapter.log.error('V6 Cannot control: ' + err);
@@ -338,7 +338,6 @@ adapter.on('stateChange', function (id, state) {
                     if (!checkMethod(zones[zone], 'on') || !checkMethod(zones[zone], 'hue')) return;
                     light.sendCommands(zones[zone].on(zone), zones[zone].hue(55)).then(function () {
                         adapter.setForeignState(id, state.val, true);
-                        adapter.setForeignState(id.replace('.colorMode','.hue'), 55, true); //Nachführung auf hue = 55
                     }, function (err) {
                         adapter.log.error('Cannot control: ' + err);
                     });
@@ -412,7 +411,7 @@ adapter.on('stateChange', function (id, state) {
                 if (!checkMethod(zones[zone], 'on') || !checkMethod(zones[zone], 'hue')) return;
                 light.sendCommands(zones[zone].on(zone), zones[zone].hue(val)).then(function () {
                     adapter.setForeignState(id, val, true);
-                    adapter.setForeignState(id.replace('.hue','.rgb'), colorhex, true); //Nachführung von rgb
+                    // adapter.setForeignState(id.replace('.hue','.rgb'), colorhex, true); //Nachführung von rgb
                 }, function (err) {
                     adapter.log.error('Cannot control: ' + err);
                 });
@@ -425,8 +424,8 @@ adapter.on('stateChange', function (id, state) {
                 if (!checkMethod(zones[zone], 'on') || !checkMethod(zones[zone], 'rgb255')) return;
                 light.sendCommands(zones[zone].on(zone), zones[zone].rgb255(state.val)).then(function () {
                     adapter.setForeignState(id, state.val, true);
-                    var h = rgbToHsv(val[0],val[1],val[2]);
-                    adapter.setForeignState(id.replace('.rgb','.hue'), h[0], true); //Nachführung von hue
+                    // var h = rgbToHsv(val[0],val[1],val[2]);
+                    // adapter.setForeignState(id.replace('.rgb','.hue'), h[0], true); //Nachführung von hue
                 }, function (err) {
                     adapter.log.error('Cannot control: ' + err);
                 });
