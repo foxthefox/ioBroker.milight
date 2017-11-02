@@ -216,7 +216,7 @@ adapter.on('stateChange', function (id, state) {
             if (dp === 'brightness') dp = 'brightnessSet';
             if (zones[zone]) {
                 if (dp === 'hue'){
-                    colorhex = hsvToRgb(state.val);
+                    colorhex = hsvToRgb(state.val,1,1);
                     val = splitColor(colorhex);
                     adapter.log.debug('Send to zone ' + zone + ' "' + dp + '": ' + JSON.stringify(val) + " (which is "+colorhex+"out of hue"+state.val+ ")");
                     zones[zone].command('colorRGB', val, function (err) {
@@ -288,9 +288,11 @@ adapter.on('stateChange', function (id, state) {
                         if (!err) {
                             adapter.setForeignState(id, state.val, true);
                             if (dp === 'on'){
+                                adapter.setForeignState(id, false, true); //Taste auf 0 setzen
                                 adapter.setForeignState(id.replace('.on','.state'), true, true); //Nachführung von state
                             }
                             if (dp === 'off'){
+                                adapter.setForeignState(id, false, true); //Taste auf 0 setzen
                                 adapter.setForeignState(id.replace('.off','.state'), false, true); //Nachführung von state
                             } 
                         } else {
@@ -380,7 +382,7 @@ adapter.on('stateChange', function (id, state) {
                 var val = state.val;
                 if (state.val < 0)   val = 0;
                 if (state.val > 255) val = 255;
-                var colorhex = hsvToRgb(val);
+                var colorhex = hsvToRgb(val,1,1);
                 adapter.log.debug('V5 Send to zone ' + zone + ' "' + dp + '": ' + val);
                 if (!checkMethod(zones[zone], 'on') || !checkMethod(zones[zone], 'hue')) return;
                 light.sendCommands(zones[zone].on(zone), zones[zone].hue(val)).then(function () {
