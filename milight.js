@@ -13,8 +13,8 @@ var nameStates = {
         basic:  ['state', 'on', 'off', 'whiteMode', 'brightnessUp', 'brightnessDown', 'brightness', 'colorUp', 'colorDown', 'color', 'rgb', 'mode'],
         White:  ['state', 'on', 'off', 'maxBright', 'brightnessUp', 'nightMode', 'brightnessDown', 'warmer', 'cooler'],
         RGBO:   ['state', 'on', 'off', 'brightnessUp', 'brightnessDown', 'colorUp', 'colorDown', 'color', 'rgb','modeSpeedUp', 'modeSpeedDown', 'effectModeNext', 'effectModePrev'],
-        RGBW:   ['state', 'on', 'off', 'colorMode', 'whiteMode', 'nightMode', 'brightnessUp', 'brightnessDown', 'brightness', 'colorUp', 'colorDown', 'color', 'rgb', 'mode', 'modeSpeedUp', 'modeSpeedDown', 'link', 'unlink'],
-        RGBWW:  ['state', 'on', 'off', 'colorMode', 'whiteMode', 'nightMode', 'brightnessUp', 'brightnessDown', 'brightness', 'colorUp', 'colorDown', 'color', 'rgb', 'mode', 'modeSpeedUp', 'modeSpeedDown', 'link', 'unlink', 'saturationUp', 'saturationDown', 'saturation', 'colorTempUp', 'colorTempDown', 'colorTemp']
+        RGBW:   ['state', 'on', 'off', 'colorMode', 'whiteMode', 'nightMode', 'brightnessUp', 'brightnessDown', 'brightness', 'colorUp', 'colorDown', 'color', 'rgb', 'hue', 'mode', 'modeSpeedUp', 'modeSpeedDown', 'link', 'unlink'],
+        RGBWW:  ['state', 'on', 'off', 'colorMode', 'whiteMode', 'nightMode', 'brightnessUp', 'brightnessDown', 'brightness', 'colorUp', 'colorDown', 'color', 'rgb', 'hue', 'mode', 'modeSpeedUp', 'modeSpeedDown', 'link', 'unlink', 'saturationUp', 'saturationDown', 'saturation', 'colorTempUp', 'colorTempDown', 'colorTemp']
     },
     v5 :{
         basic:  ['state', 'on', 'off', 'hue', 'rgb', 'whiteMode', 'brightness', 'brightness2', 'effectModeNext', 'effectSpeedUp', 'effectSpeedDown'],
@@ -23,6 +23,91 @@ var nameStates = {
         RGBW:   ['state', 'on', 'off', 'colorMode', 'hue', 'rgb', 'whiteMode', 'nightMode', 'brightness', 'brightness2', 'effectModeNext', 'effectSpeedUp', 'effectSpeedDown']
     }
 };
+
+function rgbToHex(value) {
+    var tmp = value.split(',');
+    var r = tmp[0];
+    var g = tmp[1];
+    var b = tmp[2];
+    var hex = b | (g << 8) | (r << 16);
+    return '#' + (0x1000000 + hex).toString(16).slice(1)
+}
+function hsvToRgb(h, s, v) {
+    /**
+     * HSV to RGB color conversion
+     *
+     * H runs from 0 to 360 degrees
+     * S and V run from 0 to 100
+     * 
+     * Ported from the excellent java algorithm by Eugene Vishnevsky at:
+     * http://www.cs.rit.edu/~ncs/color/t_convert.html
+     */
+    var r, g, b;
+    var i;
+    var f, p, q, t;
+
+    // Make sure our arguments stay in-range
+    h = Math.max(0, Math.min(360, h));
+    s = Math.max(0, Math.min(100, s));
+    v = Math.max(0, Math.min(100, v));
+
+    // We accept saturation and value arguments from 0 to 100 
+    s /= 100;
+    v /= 100;
+
+    if (s == 0) {
+        // Achromatic (grey)
+        r = g = b = v;
+        return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
+    }
+
+    h /= 60; // sector 0 to 5
+    i = Math.floor(h);
+    f = h - i; // factorial part of h
+    p = v * (1 - s);
+    q = v * (1 - s * f);
+    t = v * (1 - s * (1 - f));
+
+    switch (i) {
+        case 0:
+            r = v;
+            g = t;
+            b = p;
+            break;
+
+        case 1:
+            r = q;
+            g = v;
+            b = p;
+            break;
+
+        case 2:
+            r = p;
+            g = v;
+            b = t;
+            break;
+
+        case 3:
+            r = p;
+            g = q;
+            b = v;
+            break;
+
+        case 4:
+            r = t;
+            g = p;
+            b = v;
+            break;
+
+        default:
+            // case 5:
+            r = v;
+            g = p;
+            b = q;
+    }
+    var hex = b | (g << 8) | (r << 16);
+    return '#' + (0x1000000 + hex).toString(16).slice(1)
+}
 
 var adapter       = utils.adapter({
     name: 'milight',
@@ -130,7 +215,19 @@ adapter.on('stateChange', function (id, state) {
         if (adapter.config.version === '6') {
             if (dp === 'brightness') dp = 'brightnessSet';
             if (zones[zone]) {
-
+                if (dp === 'hue'){
+                    colorhex = hsvToRgb(state.val);
+                    val = splitColor(colorhex);
+                    adapter.log.debug('Send to zone ' + zone + ' "' + dp + '": ' + JSON.stringify(val) + " (which is "+colorhex+"out of hue"+state.val+ ")");
+                    zones[zone].command('colorRGB', val, function (err) {
+                        if (!err) {
+                            adapter.setForeignState(id, state.val, true);
+                            adapter.setForeignState(id.replace('.hue','.rgb'), colorhex, true); //Nachführung von rgb
+                        } else {
+                            adapter.log.error('V6 Cannot control: ' + err);
+                        }
+                    });
+                } else 
                 if (dp === 'colorMode') {
                     if (state.val === 'true' || state.val === true || state.val === 1 || state.val === 'on' || state.val === 'ON') {
                         adapter.log.debug('Send to zone ' + zone + ' whiteMode');
@@ -214,6 +311,7 @@ adapter.on('stateChange', function (id, state) {
                     if (!checkMethod(zones[zone], 'on') || !checkMethod(zones[zone], 'hue')) return;
                     light.sendCommands(zones[zone].on(zone), zones[zone].hue(55)).then(function () {
                         adapter.setForeignState(id, state.val, true);
+                        adapter.setForeignState(id.replace('.colorMode','.hue'), 55, true); //Nachführung auf hue = 55
                     }, function (err) {
                         adapter.log.error('Cannot control: ' + err);
                     });
@@ -282,10 +380,12 @@ adapter.on('stateChange', function (id, state) {
                 var val = state.val;
                 if (state.val < 0)   val = 0;
                 if (state.val > 255) val = 255;
+                var colorhex = hsvToRgb(val);
                 adapter.log.debug('V5 Send to zone ' + zone + ' "' + dp + '": ' + val);
                 if (!checkMethod(zones[zone], 'on') || !checkMethod(zones[zone], 'hue')) return;
                 light.sendCommands(zones[zone].on(zone), zones[zone].hue(val)).then(function () {
                     adapter.setForeignState(id, val, true);
+                    adapter.setForeignState(id.replace('.hue','.rgb'), colorhex, true); //Nachführung von rgb
                 }, function (err) {
                     adapter.log.error('Cannot control: ' + err);
                 });
