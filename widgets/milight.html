@@ -310,7 +310,7 @@
         <div class="sliderJQUI" style="width:90%" id="<%= this.data.attr('wid') %>_slider" data-oid="<%= this.data.attr('oid-level') %>"  <%= (el) -> vis.binds.jqueryui.slider(el, {min:1,max:100,step:1}) %> />
         <br/>
         <br/>
-        <div class="sliderJQUI hue-slider-hue1" style="width:90%" id="<%= this.data.attr('wid') %>_hue_hue_slider" data-oid="<%= this.data.attr('oid-color') %>"  <%= (el) -> vis.binds.jqueryui.slider(el, {min:0,max:100,step:1}) %> />
+        <div class="sliderJQUI hue-slider-hue1" style="width:90%" id="<%= this.data.attr('wid') %>_hue_hue_slider" data-oid="<%= this.data.attr('oid-color') %>"  <%= (el) -> vis.binds.milightui.hueslider1(el, {min:0,max:360,step:1}) %> />
         <br/>
         <select style="width:40px" id="<%= this.data.attr('wid') %>_multiselect" data-no-style="<%= this.data.attr('no_style') %>" data-oid="<%= this.data.attr('oid-mode') %>" data-view="<%= this.view %>" <%= (el) -> setTimeout(function (el_) { vis.binds.jqueryui.multiselect(el_, {height: (data.height || 220)}, data.open)}, 250, el); %> >
         <%
@@ -401,7 +401,7 @@
         <br/>
         <div class="sliderJQUI hue-slider-ct1" style="width:90%" id="<%= this.data.attr('wid') %>_hue_ct_slider" data-oid="<%= this.data.attr('oid-ctemp') %>"  <%= (el) -> vis.binds.milightui.ctslider(el, {min:2700,max:6500,step:100}) %> />
         <br/>
-        <div class="sliderJQUI hue-slider-hue1" style="width:90%" id="<%= this.data.attr('wid') %>_hue_hue_slider" data-oid="<%= this.data.attr('oid-color') %>"  <%= (el) -> vis.binds.jqueryui.slider(el, {min:0,max:255,step:1}) %> />
+        <div class="sliderJQUI hue-slider-hue1" style="width:90%" id="<%= this.data.attr('wid') %>_hue_hue_slider" data-oid="<%= this.data.attr('oid-color') %>"  <%= (el) -> vis.binds.milightui.hueslider1(el, {min:0,max:360,step:1}) %> />
         <br/>
         Sättigung
         <div class="sliderJQUI hue-slider-sat" style="width:90%" id="<%= this.data.attr('wid') %>_hue_sat_slider" data-oid="<%= this.data.attr('oid-saturation') %>"  <%= (el) -> vis.binds.jqueryui.slider(el, {min:0,max:100,step:1}) %> />
