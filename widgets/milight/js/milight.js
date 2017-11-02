@@ -255,6 +255,62 @@ vis.binds.milightui = {
             }
         });
     },
+    hueslider2: function (el, options) {
+        var $this = $(el);
+        var oid = $this.attr('data-oid');
+        var oid_val = 0;
+        var wid = $this.attr("data-oid-working");
+        var settings = $.extend({
+            range: false,
+            min: 0,
+            max: 360,
+            step: 1,
+            value: parseFloat(vis.states.attr(oid + '.val')),
+            slide: function (e, ui) {
+                // Slider -> Observable
+                vis.setValue(oid, ui.value); //.toFixed(6));
+                
+                var rgb = "255, 255, 255";
+                var v = ui.value;
+                rgb = hsvToRgb(v, 80, 100).join();
+                    $this.slider().css("background-color", "rgb("+ rgb +")");
+                
+            }
+        }, options);
+
+        if (isNaN(settings.value)) settings.value = 0;
+        if (isNaN(settings.min))   settings.min = 0;
+        if (isNaN(settings.max))   settings.max = 360;
+        if (isNaN(settings.step))  settings.step = (settings.max - settings.min) / 100;
+
+        settings.min = parseFloat(settings.min);
+        settings.max = parseFloat(settings.max);
+        settings.value = parseFloat(settings.value);
+
+        $this.slider(settings);
+        var rgb = "255, 255, 255";
+        var v = settings.value;
+            rgb = hsvToRgb(v, 80, 100).join();
+            $this.slider().css("background-color", "rgb(" + rgb + ")");
+
+        vis.states.bind(oid + '.val', function (e, newVal, oldVal) {
+            //console.log("slider newVal=" +JSON.stringify(newVal));
+            // If device not in working state
+            if (!vis.states.attr(wid + '.val')) {
+                
+                oid_val = parseFloat(newVal);
+                
+                var rgb = "255, 255, 255";
+                var v = oid_val;
+                    rgb = hsvToRgb(v, 80, 100).join();
+                    $this.slider().css("background-color", "rgb(" + rgb + ")");
+
+                if ($this.slider('instance')) {
+                    $this.slider('value', oid_val);
+                }
+            }
+        });
+    },
     ctslider: function (el, options) {
         var $this = $(el);
         var oid = $this.attr('data-oid');
