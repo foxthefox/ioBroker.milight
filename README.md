@@ -67,7 +67,7 @@ The Zone0 or ZoneAll can be used to give commands to all 4 zones, the adapter is
 |           saturationDown as button          |                                  |                                |                                |                                       |     saturationDown (zone), function    |
 |            colorTempUp as button            |                                  |    colorTempUp (zone), native  |                                |                                       |       colorTempUp (zone), function     |
 |           colorTempDown as button           |                                  |  colorTempDown (zone),  native |                                |                                       |      colorTempDown (zone), function    |
-|           hue as value (0-360)        |                                        |                                |                                |           hue (zone),  function          |      hue (zone), function    |
+|           hue as value (0-360)        |                                        |                                |                                |           hue (zone),  function        |      hue (zone), function    |
 
 ## States in Version 5/ Version 4
 
