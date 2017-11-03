@@ -269,12 +269,10 @@ vis.binds.milightui = {
             slide: function (e, ui) {
                 // Slider -> Observable
                 vis.setValue(oid, ui.value); //.toFixed(6));
-                
                 var rgb = "255, 255, 255";
-                var v = ui.value;
-                rgb = hsvToRgb(v, 80, 100).join();
-                    $this.slider().css("background-color", "rgb("+ rgb +")");
-                
+                rgb = hsvToRgb(ui.value, 80, 100).join();
+                $this.slider().css("background-color", "rgb(" + rgb + ")");
+            }
         }, options);
 
         if (isNaN(settings.value)) settings.value = 0;
@@ -288,9 +286,8 @@ vis.binds.milightui = {
 
         $this.slider(settings);
         var rgb = "255, 255, 255";
-        var v = settings.value;
-            rgb = hsvToRgb(v, 80, 100).join();
-            $this.slider().css("background-color", "rgb(" + rgb + ")");
+        rgb = hsvToRgb(settings.value, 80, 100).join();
+        $this.slider().css("background-color", "rgb(" + rgb + ")");
 
         vis.states.bind(oid + '.val', function (e, newVal, oldVal) {
             //console.log("slider newVal=" +JSON.stringify(newVal));
@@ -300,9 +297,8 @@ vis.binds.milightui = {
                 oid_val = parseFloat(newVal);
                 
                 var rgb = "255, 255, 255";
-                var v = oid_val;
-                    rgb = hsvToRgb(v, 80, 100).join();
-                    $this.slider().css("background-color", "rgb(" + rgb + ")");
+                rgb = hsvToRgb(oid_val, 80, 100).join();
+                $this.slider().css("background-color", "rgb(" + rgb + ")");
 
                 if ($this.slider('instance')) {
                     $this.slider('value', oid_val);
