@@ -275,7 +275,6 @@ vis.binds.milightui = {
                 rgb = hsvToRgb(v, 80, 100).join();
                     $this.slider().css("background-color", "rgb("+ rgb +")");
                 
-            }
         }, options);
 
         if (isNaN(settings.value)) settings.value = 0;
