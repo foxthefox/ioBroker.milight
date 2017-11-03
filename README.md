@@ -106,7 +106,7 @@ version 5 also to be used for v4 lamps
 
 ## known issues:
 * v5 rgb color accepted, but always blue
-* v6 color slider in widget not compatible to datapoint
+* v6 color slider in widget for hue only 0-255
 
 
 ## Changelog:
