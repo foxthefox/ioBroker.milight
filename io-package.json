@@ -53,7 +53,7 @@
         "mode":                 "daemon",
         "license": 	   	        "MIT",
         "keywords":		        ["milight", "easybulb", "rgb", "limitlessLED"],
-        "type":			        "hardware",
+        "type":			        "lighting",
         "enabled":              true,
         "messagebox":           true,
         "icon":                 "easybulb_logo.png",
