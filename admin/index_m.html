@@ -1,0 +1,183 @@
+<html>
+
+<!-- these 4 files always have to be included -->
+<link rel="stylesheet" type="text/css" href="../../lib/css/themes/jquery-ui/redmond/jquery-ui.min.css"/>
+<script type="text/javascript" src="../../lib/js/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="../../socket.io/socket.io.js"></script>
+<script type="text/javascript" src="../../lib/js/jquery-ui-1.10.3.full.min.js"></script>
+
+<!-- these two file always have to be included -->
+<link rel="stylesheet" type="text/css" href="../../css/adapter.css"/>
+<script type="text/javascript" src="../../js/translate.js"></script>
+<script type="text/javascript" src="../../js/adapter-settings.js"></script>
+
+
+<!-- you have to define 2 functions in the global scope: -->
+<script type="text/javascript">
+
+    var devices = {};
+    // the function loadSettings has to exist ...
+    function load(settings, onChange) {
+        if (!settings.version) settings.version = '6';
+        if (settings.milight_ip) {
+            settings.ip = settings.ip || settings.milight_ip;
+            delete settings.milight_ip;
+        }
+        if (settings.milight_port) {
+            settings.port = settings.port || settings.milight_port;
+            delete settings.milight_port;
+        }
+	if (settings.v5onFullBright === undefined) settings.v5onFullBright = false;
+	    
+        // example: select elements with id=key and class=value and insert value
+        for (var key in settings) {
+            if (!settings.hasOwnProperty(key)) continue;
+            var $value = $('#' + key + '.value');
+            if ($value.attr('type') === 'checkbox') {
+                $value.prop('checked', settings[key]).change(function () {
+					onChange();
+				});
+            } else {
+                $value.val(settings[key]).change(function () {
+					onChange();
+				}).keyup(function () {
+					$(this).trigger('change');
+				});
+            }
+        }
+        getIsAdapterAlive(function (isAlive) {
+            if (isAlive || common.enabled) {
+                $('#discover').click(function () {
+                    sendTo(null, 'browse', null, function (list) {
+                        var text = list && list.length ? '<option value="">' + _('Select one') + '</option>' : '<option value="">' + _('Nothing found') + '</option>';
+                        devices = {};
+                        for (var j = 0; j < list.length; j++) {
+                            devices[list[j].ip] = list[j].type[1];
+                            text += '<option value="' + list[j].ip + '">' + list[j].ip + (list[j].version ? '(' + list[j].type + ')': '') + '</option>';
+                        }
+                        $('#found').html(text).show();
+                    });
+                }).button('enable');
+            }
+        });
+        $('#discover').button({
+            text: false,
+            icons: {
+                primary: 'ui-icon-refresh'
+            }
+        }).css({width: 22, height: 18}).button('disable');
+        $('#found').change(function () {
+            var val = $(this).val();
+            if (val) {
+                $('#ip').val(val);
+                if (devices[val]) $('#version').val(devices[val]).trigger('change');
+            }
+        });
+        $('#version').change(function () {
+            if ($(this).val() === '5') {
+                $('#port').val(8899);
+            } else {
+                $('#port').val(5987);
+            }
+        });
+        // Signal to admin, that no changes yet
+        onChange(false);
+    }
+    // ... and the function save has to exist.
+    // you have to make sure the callback is called with the settings object as first param!
+    function save(callback) {
+        // example: select elements with class=value and build settings object
+        var obj = {};
+        $('.value').each(function () {
+            var $this = $(this);
+            if ($this.attr('type') == 'checkbox') {
+                obj[$this.attr('id')] = $this.prop('checked');
+            } else {		
+            	obj[$this.attr('id')] = $this.val();
+	    }
+        });
+        callback(obj);
+    }
+</script>
+
+<!-- you have to put your config page in a div with id adapter-container -->
+<div id="adapter-container">
+
+    <table><tr>
+        <td><img src="easybulb_logo.png"/></td>
+        <td><h3 class="translate">MiLight adapter settings</h3></td>
+    </tr></table>
+    
+    <table>
+        <tr>
+            <td><label class="translate" for="ip">MiLight IP</label></td>
+            <td><input type="text" id="ip" class="value"/></td>
+            <td><button id="discover"></button> <select style="display: none" id="found">
+            </select></td>
+        </tr>
+        <tr>
+            <td><label class="translate" for="version">Version</label></td>
+            <td colspan="2"><select id="version" class="value">
+                <option value="5">5</option>
+                <option value="6">6</option>
+            </select>
+            </td>
+        </tr>
+        <tr>
+            <td><label class="translate" for="port">MiLight Port</label></td>
+            <td colspan="2"><input type="text" id="port" class="value"/></td>
+	</tr>
+	<tr>
+            <td><label class="translate" for="delayBetweenCommands">delay between commands</label></td>
+            <td colspan="2"><input type="text" id="delayBetweenCommands" class="value"/></td>
+        </tr>
+        <tr>
+            <td><label class="translate" for="commandRepeat">Command repeat</label></td>
+            <td colspan="2"><input type="text" id="commandRepeat" class="value"/></td>
+        </tr>
+        <tr>
+            <td><label class="translate" for="zone1">Zone 1</label></td>
+            <td colspan="2"><select id="zone1" class="value">
+                <option value="" class="translate">none</option>
+		<option value="basic" class="translate">base</option>
+                <option value="White" class="translate">White</option>
+                <option value="RGBO" class="translate">RGB</option>
+                <option value="RGBW" class="translate">RGBW</option>
+                <option value="RGBWW" class="translate">RGBWW/Dimmer</option>
+            </select></td>
+        </tr>
+        <tr>
+            <td><label class="translate" for="zone2">Zone 2</label></td>
+            <td colspan="2"><select id="zone2" class="value">
+                <option value="" class="translate">none</option>
+                <option value="White" class="translate">White</option>
+                <option value="RGBW" class="translate">RGBW</option>
+                <option value="RGBWW" class="translate">RGBWW/Dimmer</option>
+            </select></td>
+        </tr>
+        <tr>
+            <td><label class="translate" for="zone3">Zone 3</label></td>
+            <td colspan="2"><select id="zone3" class="value">
+                <option value="" class="translate">none</option>
+                <option value="White" class="translate">White</option>
+                <option value="RGBW" class="translate">RGBW</option>
+                <option value="RGBWW" class="translate">RGBWW/Dimmer</option>
+            </select></td>
+        </tr>
+        <tr>
+            <td><label class="translate" for="zone4">Zone 4</label></td>
+            <td colspan="2"><select id="zone4" class="value">
+                <option value="" class="translate">none</option>
+                <option value="White" class="translate">White</option>
+                <option value="RGBW" class="translate">RGBW</option>
+                <option value="RGBWW" class="translate">RGBWW/Dimmer</option>
+            </select></td>
+        </tr>
+	<tr><td><label class="translate" for="v5onFullBright">v5 On Full Brightness and white</label></td>
+            <td><input class="value" id="v5onFullBright" type="checkbox"/></td>
+        </tr>
+    </table>
+
+</div>
+
+</html>
