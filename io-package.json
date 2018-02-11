@@ -1,8 +1,19 @@
 {
     "common": {
         "name":                 "milight",
-        "version":              "0.3.3",
+        "version":              "0.3.4",
         "news": {
+            "0.3.4": {
+                "en": "adminv3 implementation",
+                "de": "adminv3-Implementierung",
+                "ru": "реализация adminv3",
+                "pt": "implementação administrativa",
+                "nl": "adminv3-implementatie",
+                "fr": "implémentation d'adminv3",
+                "it": "implementazione adminv3",
+                "es": "Implementación de adminv3",
+                "pl": "Implementacja administrv3"
+              },
             "0.3.3": {
                 "en": 				"state after OFF/ON, v6 widget improvement",
                 "de": 				"Nachführung state nach OFF/ON, v6 widget Verbesserung"
