@@ -109,6 +109,9 @@ version 5 also to be used for v4 lamps
 
 
 ## Changelog:
+### 0.3.4
+* (foxthefox) adminv3 added
+
 ### 0.3.3
 * (foxthefox) setting of state after usage of command OFF/ON
 * (foxthefox) v6 widget for RGBW; RGBWW mode switch night/weiß instead weiß/farbe
