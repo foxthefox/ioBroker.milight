@@ -1,15 +1,15 @@
 <html>
 
-<!-- these 4 files always have to be included -->
-<link rel="stylesheet" type="text/css" href="../../lib/css/themes/jquery-ui/redmond/jquery-ui.min.css"/>
-<script type="text/javascript" src="../../lib/js/jquery-1.11.1.min.js"></script>
-<script type="text/javascript" src="../../socket.io/socket.io.js"></script>
-<script type="text/javascript" src="../../lib/js/jquery-ui-1.10.3.full.min.js"></script>
-
-<!-- these two file always have to be included -->
 <link rel="stylesheet" type="text/css" href="../../css/adapter.css"/>
+<link rel="stylesheet" type="text/css" href="../../lib/css/materialize.css">
+
+<script type="text/javascript" src="../../lib/js/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="../../socket.io/socket.io.js"></script>
+
 <script type="text/javascript" src="../../js/translate.js"></script>
+<script type="text/javascript" src="../../lib/js/materialize.js"></script>
 <script type="text/javascript" src="../../js/adapter-settings.js"></script>
+<script type="text/javascript" src="words.js"></script>
 
 
 <!-- you have to define 2 functions in the global scope: -->
@@ -60,12 +60,7 @@
                 }).button('enable');
             }
         });
-        $('#discover').button({
-            text: false,
-            icons: {
-                primary: 'ui-icon-refresh'
-            }
-        }).css({width: 22, height: 18}).button('disable');
+        $('#discover');
         $('#found').change(function () {
             var val = $(this).val();
             if (val) {
@@ -82,6 +77,7 @@
         });
         // Signal to admin, that no changes yet
         onChange(false);
+        M.updateTextFields();
     }
     // ... and the function save has to exist.
     // you have to make sure the callback is called with the settings object as first param!
@@ -99,85 +95,141 @@
         callback(obj);
     }
 </script>
-
+    <style>
+        .sub-title {
+            margin-top: 2rem!important;
+            padding: 0.5rem;
+            background: #64b5f6;
+            color: white;
+        }
+    </style>
+</head>
+<body>
 <!-- you have to put your config page in a div with id adapter-container -->
-<div class="m adapter-container">
 
-    <table><tr>
-        <td><img src="easybulb_logo.png"/></td>
-        <td><h3 class="translate">MiLight adapter settings</h3></td>
-    </tr></table>
-    
-    <table>
-        <tr>
-            <td><label class="translate" for="ip">MiLight IP</label></td>
-            <td><input type="text" id="ip" class="value"/></td>
-            <td><button id="discover"></button> <select style="display: none" id="found">
-            </select></td>
-        </tr>
-        <tr>
-            <td><label class="translate" for="version">Version</label></td>
-            <td colspan="2"><select id="version" class="value">
-                <option value="5">5</option>
-                <option value="6">6</option>
-            </select>
-            </td>
-        </tr>
-        <tr>
-            <td><label class="translate" for="port">MiLight Port</label></td>
-            <td colspan="2"><input type="text" id="port" class="value"/></td>
-	</tr>
-	<tr>
-            <td><label class="translate" for="delayBetweenCommands">delay between commands</label></td>
-            <td colspan="2"><input type="text" id="delayBetweenCommands" class="value"/></td>
-        </tr>
-        <tr>
-            <td><label class="translate" for="commandRepeat">Command repeat</label></td>
-            <td colspan="2"><input type="text" id="commandRepeat" class="value"/></td>
-        </tr>
-        <tr>
-            <td><label class="translate" for="zone1">Zone 1</label></td>
-            <td colspan="2"><select id="zone1" class="value">
-                <option value="" class="translate">none</option>
-		<option value="basic" class="translate">base</option>
-                <option value="White" class="translate">White</option>
-                <option value="RGBO" class="translate">RGB</option>
-                <option value="RGBW" class="translate">RGBW</option>
-                <option value="RGBWW" class="translate">RGBWW/Dimmer</option>
-            </select></td>
-        </tr>
-        <tr>
-            <td><label class="translate" for="zone2">Zone 2</label></td>
-            <td colspan="2"><select id="zone2" class="value">
-                <option value="" class="translate">none</option>
-                <option value="White" class="translate">White</option>
-                <option value="RGBW" class="translate">RGBW</option>
-                <option value="RGBWW" class="translate">RGBWW/Dimmer</option>
-            </select></td>
-        </tr>
-        <tr>
-            <td><label class="translate" for="zone3">Zone 3</label></td>
-            <td colspan="2"><select id="zone3" class="value">
-                <option value="" class="translate">none</option>
-                <option value="White" class="translate">White</option>
-                <option value="RGBW" class="translate">RGBW</option>
-                <option value="RGBWW" class="translate">RGBWW/Dimmer</option>
-            </select></td>
-        </tr>
-        <tr>
-            <td><label class="translate" for="zone4">Zone 4</label></td>
-            <td colspan="2"><select id="zone4" class="value">
-                <option value="" class="translate">none</option>
-                <option value="White" class="translate">White</option>
-                <option value="RGBW" class="translate">RGBW</option>
-                <option value="RGBWW" class="translate">RGBWW/Dimmer</option>
-            </select></td>
-        </tr>
-	<tr><td><label class="translate" for="v5onFullBright">v5 On Full Brightness and white</label></td>
-            <td><input class="value" id="v5onFullBright" type="checkbox"/></td>
-        </tr>
-    </table>
+<div class="m adapter-container">
+    <div class="section">
+        <div class="row">
+            <div class="col s12">
+                <img src="easybulb_logo.png" style="height:7em; width: 10em;" class="logo">
+            </div>
+        </div>
+    </div>
+    <div class="section">
+        <div class="row">
+            <div class="col s12">
+                <h6 class="translate sub-title">milight box configuration</h6>
+            </div>            
+        </div>
+        <div class="row">
+            <div class="col s6">
+                    <input class="value" id="ip"/><label for="ip" class="translate">MiLight IP</label> 
+            </div>
+            <div class="col s3">
+                <a id="discover" class="btn"><span class="translate">Try/search</span></a>
+            </div>
+            <div class="col s3">
+                    <select class="value" id="found">
+                    </select>
+                    <label for="found" class="translate">found</label>
+            </div>
+        </div>
+    </div>
+    <div class="section">
+        <div class="row">
+            <div class="col s12">
+                <h6 class="translate sub-title">milight box version/port </h6>
+            </div>            
+        </div>
+        <div class="row">
+            <div class="col s6">
+                    <select class="value" id="version">
+                        <option value="5" >5</option>
+                        <option value="6" >6</option>
+                    </select>
+                    <label for="version" class="translate">Version</label>
+            </div>
+            <div class="col s6">
+                <input class="value" id="port"/><label for="port" class="translate">MiLight Port</label>   
+            </div>
+        </div>
+    </div>    
+    <div class="section">
+        <div class="row">
+            <div class="col s12">
+                <h6 class="translate sub-title">lamp configuration</h6>
+            </div>            
+        </div>
+        <div class="row">
+            <div class="col s6">
+                <select class="value" id="zone1">
+                    <option value="" class="translate">none</option>
+                    <option value="White" class="translate">White</option>
+                    <option value="RGBW" class="translate">RGBW</option>
+                    <option value="RGBWW" class="translate">RGBWW/Dimmer</option>
+                </select>
+                <label for="zone1" class="translate">Zone 1</label> 
+            </div>
+            <div class="col s6">
+                    <select class="value" id="zone2">
+                        <option value="" class="translate">none</option>
+                        <option value="White" class="translate">White</option>
+                        <option value="RGBW" class="translate">RGBW</option>
+                        <option value="RGBWW" class="translate">RGBWW/Dimmer</option>
+                    </select>
+                    <label for="zone2" class="translate">Zone2</label>    
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s6">
+                <select class="value" id="zone3">
+                    <option value="" class="translate">none</option>
+                    <option value="White" class="translate">White</option>
+                    <option value="RGBW" class="translate">RGBW</option>
+                    <option value="RGBWW" class="translate">RGBWW/Dimmer</option>
+                </select>
+                <label for="zone3" class="translate">Zone 3</label> 
+            </div>
+            <div class="col s6">
+                    <select class="value" id="zone4">
+                        <option value="" class="translate">none</option>
+                        <option value="White" class="translate">White</option>
+                        <option value="RGBW" class="translate">RGBW</option>
+                        <option value="RGBWW" class="translate">RGBWW/Dimmer</option>
+                    </select>
+                    <label for="zone4" class="translate">Zone 4</label>    
+            </div>
+        </div>
+    </div>
+    <div class="section">
+        <div class="row">
+            <div class="col s12">
+                <h6 class="translate sub-title">milight box special v5</h6>
+            </div>            
+        </div>
+        <div class="row">
+            <div class="col s6">
+                <input class="value" id="delayBetweenCommands"/><label for="delayBetweenCommands" class="translate">delay between commands</label>
+            </div>
+            <div class="col s6">
+                <input class="value" id="commandRepeat"/><label for="commandRepeat" class="translate">Command repeat</label>   
+            </div>
+        </div>
+    </div>
+    <div class="section">
+        <div class="row">
+            <div class="col s12">
+                <h6 class="translate sub-title">fullbrightness</h6>
+            </div>            
+        </div>
+        <div class="row">
+            <div class="col s12">
+                <input class="value" id="v5onFullBright" type="checkbox"/><span class="translate">v5 On Full Brightness and white</span>
+                <!-- Important: span must come directly after checkbox input (only by checkbox the span will be used!) -->
+            </div>
+        </div>
+    </div>
 
 </div>
-
+</body>
 </html>
