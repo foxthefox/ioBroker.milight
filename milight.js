@@ -11,7 +11,7 @@ var commands;
 var nameStates = {
     v6 :{
         basic:  ['state', 'on', 'off', 'whiteMode', 'brightnessUp', 'brightnessDown', 'brightness', 'colorUp', 'colorDown', 'color', 'rgb', 'mode'],
-        White:  ['state', 'on', 'off', 'maxBright', 'brightnessUp', 'nightMode', 'brightnessDown', 'warmer', 'cooler'],
+        White:  ['state', 'on', 'off', 'maxBright', 'brightnessUp', 'nightMode', 'brightnessDown', 'warmer', 'cooler', 'nightModeSwitch'],
         RGBO:   ['state', 'on', 'off', 'brightnessUp', 'brightnessDown', 'colorUp', 'colorDown', 'color', 'rgb','modeSpeedUp', 'modeSpeedDown', 'effectModeNext', 'effectModePrev'],
         RGBW:   ['state', 'on', 'off', 'colorMode', 'whiteMode', 'nightMode', 'brightnessUp', 'brightnessDown', 'brightness', 'colorUp', 'colorDown', 'color', 'rgb', 'hue', 'mode', 'modeSpeedUp', 'modeSpeedDown', 'link', 'unlink'],
         RGBWW:  ['state', 'on', 'off', 'colorMode', 'whiteMode', 'nightMode', 'brightnessUp', 'brightnessDown', 'brightness', 'colorUp', 'colorDown', 'color', 'rgb', 'hue', 'mode', 'modeSpeedUp', 'modeSpeedDown', 'link', 'unlink', 'saturationUp', 'saturationDown', 'saturation', 'colorTempUp', 'colorTempDown', 'colorTemp']
@@ -290,6 +290,18 @@ adapter.on('stateChange', function (id, state) {
                             }
                         });
                     }
+                } else
+                if (dp === 'nightModeSwitch') {
+                    if (state.val === 'true' || state.val === true || state.val === 1 || state.val === 'on' || state.val === 'ON') {
+                        adapter.log.debug('Send to zone ' + zone + ' nightMode');
+                        zones[zone].command('nightMode', function (err) {
+                            if (!err) {
+                                adapter.setForeignState(id, false, true); //automatisches zurücksetzen für den nächsten Alexa Befehl
+                            } else {
+                                adapter.log.error('V6 Cannot control: ' + err);
+                            }
+                        });
+                    } 
                 } else
                 if (typeof zones[zone][dp] === 'function') {
                     var val;
