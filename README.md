@@ -109,6 +109,9 @@ version 5 also to be used for v4 lamps
 
 
 ## Changelog:
+### 0.3.5
+* (foxthefox) nightModeSwitch added on white bulbs for command from Alexa
+
 ### 0.3.4
 * (foxthefox) adminv3 added
 
