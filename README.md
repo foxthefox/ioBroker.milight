@@ -156,3 +156,9 @@ version 5 also to be used for v4 lamps
 
 ### 0.0.1
 * (foxthefox) initial setup
+
+## License
+
+The MIT License (MIT)
+
+Copyright (c) 2018 foxthefox <foxthefox@wysiwis.net>
