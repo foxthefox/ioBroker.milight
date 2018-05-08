@@ -69,7 +69,18 @@
             "foxthefox <foxthefox@wysiwis.net>",
             "bluefox <dogafox@gmail.com>"
         ],
-        "title":                "milight adapter",
+        "title":                "milight",
+          "titleLang": {
+            "en": "milight adapter",
+            "de": "Milight Adapter",
+            "ru": "переходник",
+            "pt": "adaptador milight",
+            "nl": "milight adapter",
+            "fr": "milight adaptateur",
+            "it": "adattatore di milight",
+            "es": "adaptador Milight",
+            "pl": "adapter milowy"
+          },
         "desc":                 "ioBroker milight Adapter",
         "platform":             "Javascript/Node.js",
         "mode":                 "daemon",
