@@ -434,8 +434,9 @@ adapter.on('stateChange', function (id, state) {
                 val = splitColor(state.val);
                 adapter.log.debug('V5 Send to zone ' + zone + ' "' + dp + '": ' + val);
                 if (!checkMethod(zones[zone], 'on') || !checkMethod(zones[zone], 'rgb255')) return;
-                light.sendCommands(zones[zone].on(zone), zones[zone].rgb255(state.val)).then(function () {
-                    adapter.setForeignState(id, state.val, true);
+                var rbgAsHue = zones[zone].rgb255(val[0], val[1], val[2])
+                light.sendCommands(zones[zone].on(zone), rbgAsHue).then(function () {
+                    // adapter.setForeignState(id, state.val, true); // causes infinite loop but it doesn't matter as we either set it, or not
                     // var h = rgbToHsv(val[0],val[1],val[2]);
                     // adapter.setForeignState(id.replace('.rgb','.hue'), h[0], true); //Nachführung von hue
                 }, function (err) {
