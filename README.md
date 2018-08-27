@@ -105,11 +105,12 @@ version 5 also to be used for v4 lamps
 * ??
 
 ## known issues:
-* v5 rgb color accepted, but always blue
+* ??
 
 
 ## Changelog:
 ### 0.3.5
+* (mrinc)     fix for the v5 color setting (was always blue)
 * (foxthefox) nightModeSwitch added on white bulbs for command from Alexa
 
 ### 0.3.4
