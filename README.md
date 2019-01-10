@@ -109,6 +109,9 @@ version 5 also to be used for v4 lamps
 
 
 ## Changelog:
+### 0.3.6
+* (foxthefox) node-milight-promise 0.3.1 (former version 0.2.32)
+
 ### 0.3.5
 * (mrinc)     fix for the v5 color setting (was always blue)
 * (foxthefox) nightModeSwitch added on white bulbs for command from Alexa
