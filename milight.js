@@ -2,7 +2,7 @@
 /*jslint node: true */
 'use strict';
 
-var utils         = require(__dirname + '/lib/utils'); // Get common adapter utils
+var utils         = require('@iobroker/adapter-core'); // Get common adapter utils
 var stateCommands = require(__dirname + '/lib/commands');
 var light         = null;
 var zones         = [];
@@ -130,45 +130,349 @@ function hsvToRgb(h, s, v) {
         return '#' + (0x1000000 + hex).toString(16).slice(1);
 }
 
-var adapter       = utils.adapter({
-    name: 'milight',
-    unload: function (cb) {
-        if (light) {
-            light.close();
-            light = null;
+let adapter;
+function startAdapter(options) {
+     options = options || {};
+     Object.assign(options, {
+        name: 'milight',
+        unload: function (cb) {
+            if (light) {
+                light.close();
+                light = null;
+            }
+            if (typeof cb === 'function') cb();
+        },
+        message: function (obj) {
+            var wait = false;
+            if (obj) {
+                switch (obj.command) {
+                    case 'browse':
+                        var discoverBridges = require('node-milight-promise').discoverBridges;
+                        adapter.log.info('Discover bridges...');
+                        discoverBridges({
+                            type: 'all'
+                        }).then(function (results) {
+                            adapter.log.info('Discover bridges: ' + JSON.stringify(results));
+                            if (obj.callback) adapter.sendTo(obj.from, obj.command, results, obj.callback);
+                        });
+                        wait = true;
+                        break;
+        
+                    default:
+                        adapter.log.warn('Unknown command: ' + obj.command);
+                        break;
+                }
+            }
+        
+            if (!wait && obj.callback) {
+                adapter.sendTo(obj.from, obj.command, obj.message, obj.callback);
+            }
+        
+            return true;
+        },
+        stateChange: function (id, state) {
+            if (state && !state.ack && light) {
+                var tmp = id.split('.');
+                var dp = tmp.pop();
+                var strZone = tmp.slice(2).join('.'); //ZoneX
+                var zone;
+                switch (strZone) {
+                    case 'zone1':
+                        zone = 1;
+                        break;
+                    case 'zone2':
+                        zone = 2;
+                        break;
+                    case 'zone3':
+                        zone = 3;
+                        break;
+                    case 'zone4':
+                        zone = 4;
+                        break;
+                    case 'zoneAll':
+                    default:
+                        zone = 0;
+                        break;
+                }
+        
+                if (dp === 'rgb')        dp = 'colorRGB';
+                if (dp === 'color')      dp = 'colorMode'; //colorSet nowhere else used
+                if (dp === 'saturation') dp = 'saturationSet';
+                if (dp === 'colorTemp')  dp = 'colorTempSet';
+        
+                if (adapter.config.version === '6') {
+                    if (dp === 'brightness') dp = 'brightnessSet';
+                    if (zones[zone]) {
+                        if (dp === 'hue'){
+                            var colorhex = hsvToRgb(state.val,80,100);
+                            var val = splitColor(colorhex);
+                            adapter.log.debug('Send to zone ' + zone + ' "' + dp + '": ' + JSON.stringify(val) + " (which is "+colorhex+" out of hue"+state.val+ ")");
+                            zones[zone].command('colorRGB', val, function (err) {
+                                if (!err) {
+                                    adapter.setForeignState(id, state.val, true);
+                                    // adapter.setForeignState(id.replace('.hue','.rgb'), colorhex, true); //Nachführung von rgb
+                                } else {
+                                    adapter.log.error('V6 Cannot control: ' + err);
+                                }
+                            });
+                        } else 
+                        if (dp === 'colorMode') {
+                            if (state.val === 'true' || state.val === true || state.val === 1 || state.val === 'on' || state.val === 'ON') {
+                                adapter.log.debug('Send to zone ' + zone + ' whiteMode');
+                                zones[zone].command('whiteMode', function (err) {
+                                    if (!err) {
+                                        adapter.setForeignState(id, true, true);
+                                    } else {
+                                        adapter.log.error('V6 Cannot control: ' + err);
+                                    }
+                                });
+                            } else {
+                                adapter.log.debug('Send to zone ' + zone + ' nightMode');
+                                zones[zone].command('nightMode', function (err) {
+                                    if (!err) {
+                                        adapter.setForeignState(id, false, true);
+                                    } else {
+                                        adapter.log.error('V6 Cannot control: ' + err);
+                                    }
+                                });
+                            }
+                        } else
+                        if (dp === 'state') {
+                            if (state.val === 'true' || state.val === true || state.val === 1 || state.val === 'on' || state.val === 'ON') {
+                                adapter.log.debug('Send to zone ' + zone + ' ON');
+                                zones[zone].command('on', function (err) {
+                                    if (!err) {
+                                        adapter.setForeignState(id, true, true);
+                                    } else {
+                                        adapter.log.error('V6 Cannot control: ' + err);
+                                    }
+                                });
+                            } else {
+                                adapter.log.debug('Send to zone ' + zone + ' OFF');
+                                zones[zone].command('off', function (err) {
+                                    if (!err) {
+                                        adapter.setForeignState(id, false, true);
+                                    } else {
+                                        adapter.log.error('V6 Cannot control: ' + err);
+                                    }
+                                });
+                            }
+                        } else
+                        if (dp === 'nightModeSwitch') {
+                            if (state.val === 'true' || state.val === true || state.val === 1 || state.val === 'on' || state.val === 'ON') {
+                                adapter.log.debug('Send to zone ' + zone + ' nightMode');
+                                zones[zone].command('nightMode', function (err) {
+                                    if (!err) {
+                                        adapter.setForeignState(id, false, true); //automatisches zurücksetzen für den nächsten Alexa Befehl
+                                    } else {
+                                        adapter.log.error('V6 Cannot control: ' + err);
+                                    }
+                                });
+                            } 
+                        } else
+                        if (typeof zones[zone][dp] === 'function') {
+                            var val;
+                            if (dp === 'colorRGB') {
+                                val = splitColor(state.val);
+                                adapter.log.debug('Send to zone ' + zone + ' "' + dp + '": ' + JSON.stringify(val));
+                            } else if (dp === 'brightnessSet') {
+                                val = Math.round(parseFloat(state.val)); //from 0x00 to 0x64
+                                if (val < 0)   val = 0;
+                                if (val > 100) val = 100;
+                                adapter.log.debug('V6 Send to zone ' + zone + ' "' + dp + '": ' + val);
+                            } else {
+                                val = parseInt(state.val, 10);
+                                adapter.log.debug('V6 Send to zone ' + zone + ' "' + dp + '": ' + val);
+                            }
+                            zones[zone].command(dp, val, function (err) {
+                                if (!err) {
+                                    adapter.setForeignState(id, state.val, true);
+                                    if (dp === 'on'){
+                                        adapter.setForeignState(id, false, true); //Taste auf 0 setzen
+                                        adapter.setForeignState(id.replace('.on','.state'), true, true); //Nachführung von state
+                                    }
+                                    if (dp === 'off'){
+                                        adapter.setForeignState(id, false, true); //Taste auf 0 setzen
+                                        adapter.setForeignState(id.replace('.off','.state'), false, true); //Nachführung von state
+                                    }
+                                    if (dp === 'colorRGB'){
+                                        var h = rgbToHsv(val[0],val[1],val[2]);
+                                        // adapter.setForeignState(id.replace('.rgb','.hue'), h[0], true); //Nachführung von hue
+                                    }
+                                } else {
+                                    adapter.log.error('V6 Cannot control: ' + err);
+                                }
+                            });
+                        } else {
+                            adapter.log.error('V6 Unknown command: ' + dp);
+                        }
+                    } else {
+                        adapter.log.error('V6 Zone is disabled');
+                    }
+                } else {
+                    // version 5
+                    if (dp === 'colorMode') {
+                        if (state.val === 'hs' || state.val === 'true' || state.val === true || state.val === 1 || state.val === 'on' || state.val === 'ON') {
+                            adapter.log.debug('V5 Send to zone ' + zone + ' color Mode with hue=55');
+                            if (!checkMethod(zones[zone], 'on') || !checkMethod(zones[zone], 'hue')) return;
+                            light.sendCommands(zones[zone].on(zone), zones[zone].hue(55)).then(function () {
+                                adapter.setForeignState(id, state.val, true);
+                            }, function (err) {
+                                adapter.log.error('Cannot control: ' + err);
+                            });
+                        } else {
+                            adapter.log.debug('V5 Send to zone ' + zone + ' white Mode via colorMode');
+                            if (!checkMethod(zones[zone], 'on') || !checkMethod(zones[zone], 'whiteMode')) return;
+                            light.sendCommands(zones[zone].on(zone), zones[zone].whiteMode(zone)).then(function () {
+                                adapter.setForeignState(id, state.val, true);
+                            }, function (err) {
+                                adapter.log.error('Cannot control: ' + err);
+                            });
+                        }
+                    } else
+                    if (dp === 'state') {
+                        if (state.val === 'true' || state.val === true || state.val === 1 || state.val === 'on' || state.val === 'ON') {
+                            adapter.log.debug('V5 Send to zone ' + zone + ' ON');
+                            if (adapter.config.v5onFullBright === 'true' || adapter.config.v5onFullBright === true || adapter.config.v5onFullBright === 'on' || adapter.config.v5onFullBright === 'ON' || adapter.config.v5onFullBright === 1){
+                                if (!checkMethod(zones[zone], 'on') || !checkMethod(zones[zone], 'brightness')) return;
+                                light.sendCommands(zones[zone].on(zone), zones[zone].brightness(100), zones[zone].whiteMode(zone)).then(function () {
+                                    adapter.setForeignState(id, true, true);
+                                }, function (err) {
+                                    adapter.log.error('Cannot control: ' + err);
+                                });
+                            }
+                            else {
+                                if (!checkMethod(zones[zone], 'on')) return;
+                                light.sendCommands(zones[zone].on(zone)).then(function () {
+                                    adapter.setForeignState(id, true, true);
+                                }, function (err) {
+                                    adapter.log.error('Cannot control: ' + err);
+                                });
+                            }
+                        } else {
+                            adapter.log.debug('V5 Send to zone ' + zone + ' OFF');
+                            if (!checkMethod(zones[zone], 'off')) return;
+                            light.sendCommands(zones[zone].off(zone)).then(function () {
+                                adapter.setForeignState(id, false, true);
+                            }, function (err) {
+                                adapter.log.error('Cannot control: ' + err);
+                            });
+                        }
+                    } else
+                    if (dp === 'brightness2' || dp === 'brightness') {       //now 2 variants of brightness can be used in v5
+                        var val = state.val;
+                        if (state.val < 0)   val = 0;
+                        if (state.val > 100) val = 100;
+                        adapter.log.debug('V5 brightness Send to zone ' + zone + ' "' + dp + '": ' + val);
+                        if (state.val !== 0)    { //if dim to 0% was chosen turn light off - error handling for iobroker.cloud combo with amazon alexa
+                            if (!checkMethod(zones[zone], 'on') || !checkMethod(zones[zone], dp)) return;
+                            light.sendCommands(zones[zone].on(zone), zones[zone][dp](val)).then(function () {
+                                adapter.setForeignState(id, state.val, true);
+                            }, function (err) {
+                                adapter.log.error('Cannot control: ' + err);
+                            });
+                        }
+                        else { // bei 0 wird ausgeschaltet
+                            if (!checkMethod(zones[zone], 'off')) return;
+                            light.sendCommands(zones[zone].off(zone)).then(function () {
+                                adapter.setForeignState(id, state.val, true);
+                            }, function (err) {
+                                adapter.log.error('Cannot control: ' + err);
+                            });
+                        }
+                    } else
+                    if (dp === 'hue') {
+                        var val = state.val;
+                        if (state.val < 0)   val = 0;
+                        if (state.val > 255) val = 255;
+                        var colorhex = hsvToRgb(val,80,100);
+                        adapter.log.debug('V5 Send to zone ' + zone + ' "' + dp + '": ' + val);
+                        if (!checkMethod(zones[zone], 'on') || !checkMethod(zones[zone], 'hue')) return;
+                        light.sendCommands(zones[zone].on(zone), zones[zone].hue(val)).then(function () {
+                            adapter.setForeignState(id, val, true);
+                            // adapter.setForeignState(id.replace('.hue','.rgb'), colorhex, true); //Nachführung von rgb
+                        }, function (err) {
+                            adapter.log.error('Cannot control: ' + err);
+                        });
+                    } else
+                    if (dp === 'colorRGB'){
+                        var val;
+                        dp = 'rgb';
+                        val = splitColor(state.val);
+                        adapter.log.debug('V5 Send to zone ' + zone + ' "' + dp + '": ' + val);
+                        if (!checkMethod(zones[zone], 'on') || !checkMethod(zones[zone], 'rgb255')) return;
+                        var rbgAsHue = zones[zone].rgb255(val[0], val[1], val[2])
+                        light.sendCommands(zones[zone].on(zone), rbgAsHue).then(function () {
+                            // adapter.setForeignState(id, state.val, true); // causes infinite loop but it doesn't matter as we either set it, or not
+                            // var h = rgbToHsv(val[0],val[1],val[2]);
+                            // adapter.setForeignState(id.replace('.rgb','.hue'), h[0], true); //Nachführung von hue
+                        }, function (err) {
+                            adapter.log.error('Cannot control: ' + err);
+                        });
+                    } else
+                    if (dp === 'on'){
+                        adapter.log.debug('V5 Send to zone ' + zone + ' on');
+                        if (adapter.config.v5onFullBright === 'true' || adapter.config.v5onFullBright === true || adapter.config.v5onFullBright === 'on' || adapter.config.v5onFullBright === 'ON' || adapter.config.v5onFullBright === 1){
+                            if (!checkMethod(zones[zone], 'on') || !checkMethod(zones[zone], 'brightness')) return;
+                            light.sendCommands(zones[zone].on(zone), zones[zone].brightness(100), zones[zone].whiteMode(zone)).then(function () {
+                                adapter.setForeignState(id, false, true); //tastendruck rückgängig machen
+                                adapter.setForeignState(id.replace('.on','.state'), true, true); //Nachführung von state
+                            }, function (err) {
+                                adapter.log.error('Cannot control: ' + err);
+                            });
+                        } else {
+                            if (!checkMethod(zones[zone], 'on')) return;
+                            light.sendCommands(zones[zone].on(zone)).then(function () {
+                                adapter.setForeignState(id, false, true); //tastendruck rückgängig machen
+                                adapter.setForeignState(id.replace('.on','.state'), true, true); //Nachführung von state
+                            }, function (err) {
+                                adapter.log.error('Cannot control: ' + err);
+                            });
+                        }
+                    } else
+                    if (dp === 'off'){
+                        adapter.log.debug('V5 Send to zone ' + zone + ' off');
+                        if (!checkMethod(zones[zone], 'off')) return;
+                        light.sendCommands(zones[zone].off(zone)).then(function () {
+                            adapter.setForeignState(id, false, true); //tastendruck rückgängig machen
+                            adapter.setForeignState(id.replace('off','state'), false, true); //Nachführung von state
+                        }, function (err) {
+                            adapter.log.error('Cannot control: ' + err);
+                        });
+        
+                    } else
+                    if (dp === 'nightMode' || dp === 'whiteMode' ){
+                        adapter.log.debug('V5 Send to zone ' + zone + ' Mode on');
+                        if (!checkMethod(zones[zone], 'on') || !checkMethod(zones[zone], dp)) return;
+                        light.sendCommands(zones[zone].on(zone), zones[zone][dp](zone)).then(function () {
+                            adapter.setForeignState(id, true, true); //status behalten?
+                        }, function (err) {
+                            adapter.log.error('Cannot control: ' + err);
+                        });
+                    } else
+                    if ( dp === 'maxBright' || dp === 'brightUp' || dp === 'brightDown' || dp === 'speedUp' || dp === 'speedDown' || dp === 'effectSpeedUp' || dp === 'effectSpeedDown' || dp ==='effectModeNext' || dp ==='cooler'|| dp ==='warmer') {
+                        adapter.log.debug('V5 Send to zone ' + zone + ' "' + dp + '": ' + state.val);
+                        if (!checkMethod(zones[zone], 'on') || !checkMethod(zones[zone], dp)) return;
+                        light.sendCommands(zones[zone].on(zone), zones[zone][dp]()).then(function () {
+                            adapter.setForeignState(id, false, true); //tastendruck rückgängig machen
+                        }, function (err) {
+                            adapter.log.error('Cannot control: ' + err);
+                        });
+                    } else {
+                        adapter.log.error('Unknown command: ' + dp);
+                    }
+                }
+            }
+        },
+        ready: function (){
+            main()
         }
-        if (typeof cb === 'function') cb();
-    }
-});
 
-adapter.on('message', function (obj) {
-    var wait = false;
-    if (obj) {
-        switch (obj.command) {
-            case 'browse':
-                var discoverBridges = require('node-milight-promise').discoverBridges;
-                adapter.log.info('Discover bridges...');
-                discoverBridges({
-                    type: 'all'
-                }).then(function (results) {
-                    adapter.log.info('Discover bridges: ' + JSON.stringify(results));
-                    if (obj.callback) adapter.sendTo(obj.from, obj.command, results, obj.callback);
-                });
-                wait = true;
-                break;
-
-            default:
-                adapter.log.warn('Unknown command: ' + obj.command);
-                break;
-        }
-    }
-
-    if (!wait && obj.callback) {
-        adapter.sendTo(obj.from, obj.command, obj.message, obj.callback);
-    }
-
-    return true;
-});
+     });
+     adapter = new utils.Adapter(options);
+     
+     return adapter;
+};
 
 function checkMethod(zone, funcName) {
     if (zone && typeof zone === 'object' && typeof zone[funcName] === 'function') {
@@ -202,303 +506,6 @@ function splitColor(rgb) {
         return [r, g, b];
     }
 }
-
-adapter.on('stateChange', function (id, state) {
-    if (state && !state.ack && light) {
-        var tmp = id.split('.');
-        var dp = tmp.pop();
-        var strZone = tmp.slice(2).join('.'); //ZoneX
-        var zone;
-        switch (strZone) {
-            case 'zone1':
-                zone = 1;
-                break;
-            case 'zone2':
-                zone = 2;
-                break;
-            case 'zone3':
-                zone = 3;
-                break;
-            case 'zone4':
-                zone = 4;
-                break;
-            case 'zoneAll':
-            default:
-                zone = 0;
-                break;
-        }
-
-        if (dp === 'rgb')        dp = 'colorRGB';
-        if (dp === 'color')      dp = 'colorMode'; //colorSet nowhere else used
-        if (dp === 'saturation') dp = 'saturationSet';
-        if (dp === 'colorTemp')  dp = 'colorTempSet';
-
-        if (adapter.config.version === '6') {
-            if (dp === 'brightness') dp = 'brightnessSet';
-            if (zones[zone]) {
-                if (dp === 'hue'){
-                    var colorhex = hsvToRgb(state.val,80,100);
-                    var val = splitColor(colorhex);
-                    adapter.log.debug('Send to zone ' + zone + ' "' + dp + '": ' + JSON.stringify(val) + " (which is "+colorhex+" out of hue"+state.val+ ")");
-                    zones[zone].command('colorRGB', val, function (err) {
-                        if (!err) {
-                            adapter.setForeignState(id, state.val, true);
-                            // adapter.setForeignState(id.replace('.hue','.rgb'), colorhex, true); //Nachführung von rgb
-                        } else {
-                            adapter.log.error('V6 Cannot control: ' + err);
-                        }
-                    });
-                } else 
-                if (dp === 'colorMode') {
-                    if (state.val === 'true' || state.val === true || state.val === 1 || state.val === 'on' || state.val === 'ON') {
-                        adapter.log.debug('Send to zone ' + zone + ' whiteMode');
-                        zones[zone].command('whiteMode', function (err) {
-                            if (!err) {
-                                adapter.setForeignState(id, true, true);
-                            } else {
-                                adapter.log.error('V6 Cannot control: ' + err);
-                            }
-                        });
-                    } else {
-                        adapter.log.debug('Send to zone ' + zone + ' nightMode');
-                        zones[zone].command('nightMode', function (err) {
-                            if (!err) {
-                                adapter.setForeignState(id, false, true);
-                            } else {
-                                adapter.log.error('V6 Cannot control: ' + err);
-                            }
-                        });
-                    }
-                } else
-                if (dp === 'state') {
-                    if (state.val === 'true' || state.val === true || state.val === 1 || state.val === 'on' || state.val === 'ON') {
-                        adapter.log.debug('Send to zone ' + zone + ' ON');
-                        zones[zone].command('on', function (err) {
-                            if (!err) {
-                                adapter.setForeignState(id, true, true);
-                            } else {
-                                adapter.log.error('V6 Cannot control: ' + err);
-                            }
-                        });
-                    } else {
-                        adapter.log.debug('Send to zone ' + zone + ' OFF');
-                        zones[zone].command('off', function (err) {
-                            if (!err) {
-                                adapter.setForeignState(id, false, true);
-                            } else {
-                                adapter.log.error('V6 Cannot control: ' + err);
-                            }
-                        });
-                    }
-                } else
-                if (dp === 'nightModeSwitch') {
-                    if (state.val === 'true' || state.val === true || state.val === 1 || state.val === 'on' || state.val === 'ON') {
-                        adapter.log.debug('Send to zone ' + zone + ' nightMode');
-                        zones[zone].command('nightMode', function (err) {
-                            if (!err) {
-                                adapter.setForeignState(id, false, true); //automatisches zurücksetzen für den nächsten Alexa Befehl
-                            } else {
-                                adapter.log.error('V6 Cannot control: ' + err);
-                            }
-                        });
-                    } 
-                } else
-                if (typeof zones[zone][dp] === 'function') {
-                    var val;
-                    if (dp === 'colorRGB') {
-                        val = splitColor(state.val);
-                        adapter.log.debug('Send to zone ' + zone + ' "' + dp + '": ' + JSON.stringify(val));
-                    } else if (dp === 'brightnessSet') {
-                        val = Math.round(parseFloat(state.val)); //from 0x00 to 0x64
-                        if (val < 0)   val = 0;
-                        if (val > 100) val = 100;
-                        adapter.log.debug('V6 Send to zone ' + zone + ' "' + dp + '": ' + val);
-                    } else {
-                        val = parseInt(state.val, 10);
-                        adapter.log.debug('V6 Send to zone ' + zone + ' "' + dp + '": ' + val);
-                    }
-                    zones[zone].command(dp, val, function (err) {
-                        if (!err) {
-                            adapter.setForeignState(id, state.val, true);
-                            if (dp === 'on'){
-                                adapter.setForeignState(id, false, true); //Taste auf 0 setzen
-                                adapter.setForeignState(id.replace('.on','.state'), true, true); //Nachführung von state
-                            }
-                            if (dp === 'off'){
-                                adapter.setForeignState(id, false, true); //Taste auf 0 setzen
-                                adapter.setForeignState(id.replace('.off','.state'), false, true); //Nachführung von state
-                            }
-                            if (dp === 'colorRGB'){
-                                var h = rgbToHsv(val[0],val[1],val[2]);
-                                // adapter.setForeignState(id.replace('.rgb','.hue'), h[0], true); //Nachführung von hue
-                            }
-                        } else {
-                            adapter.log.error('V6 Cannot control: ' + err);
-                        }
-                    });
-                } else {
-                    adapter.log.error('V6 Unknown command: ' + dp);
-                }
-            } else {
-                adapter.log.error('V6 Zone is disabled');
-            }
-        } else {
-            // version 5
-            if (dp === 'colorMode') {
-                if (state.val === 'hs' || state.val === 'true' || state.val === true || state.val === 1 || state.val === 'on' || state.val === 'ON') {
-                    adapter.log.debug('V5 Send to zone ' + zone + ' color Mode with hue=55');
-                    if (!checkMethod(zones[zone], 'on') || !checkMethod(zones[zone], 'hue')) return;
-                    light.sendCommands(zones[zone].on(zone), zones[zone].hue(55)).then(function () {
-                        adapter.setForeignState(id, state.val, true);
-                    }, function (err) {
-                        adapter.log.error('Cannot control: ' + err);
-                    });
-                } else {
-                    adapter.log.debug('V5 Send to zone ' + zone + ' white Mode via colorMode');
-                    if (!checkMethod(zones[zone], 'on') || !checkMethod(zones[zone], 'whiteMode')) return;
-                    light.sendCommands(zones[zone].on(zone), zones[zone].whiteMode(zone)).then(function () {
-                        adapter.setForeignState(id, state.val, true);
-                    }, function (err) {
-                        adapter.log.error('Cannot control: ' + err);
-                    });
-                }
-            } else
-            if (dp === 'state') {
-                if (state.val === 'true' || state.val === true || state.val === 1 || state.val === 'on' || state.val === 'ON') {
-                    adapter.log.debug('V5 Send to zone ' + zone + ' ON');
-                    if (adapter.config.v5onFullBright === 'true' || adapter.config.v5onFullBright === true || adapter.config.v5onFullBright === 'on' || adapter.config.v5onFullBright === 'ON' || adapter.config.v5onFullBright === 1){
-                        if (!checkMethod(zones[zone], 'on') || !checkMethod(zones[zone], 'brightness')) return;
-                        light.sendCommands(zones[zone].on(zone), zones[zone].brightness(100), zones[zone].whiteMode(zone)).then(function () {
-                            adapter.setForeignState(id, true, true);
-                        }, function (err) {
-                            adapter.log.error('Cannot control: ' + err);
-                        });
-                    }
-                    else {
-                        if (!checkMethod(zones[zone], 'on')) return;
-                        light.sendCommands(zones[zone].on(zone)).then(function () {
-                            adapter.setForeignState(id, true, true);
-                        }, function (err) {
-                            adapter.log.error('Cannot control: ' + err);
-                        });
-                    }
-                } else {
-                    adapter.log.debug('V5 Send to zone ' + zone + ' OFF');
-                    if (!checkMethod(zones[zone], 'off')) return;
-                    light.sendCommands(zones[zone].off(zone)).then(function () {
-                        adapter.setForeignState(id, false, true);
-                    }, function (err) {
-                        adapter.log.error('Cannot control: ' + err);
-                    });
-                }
-            } else
-            if (dp === 'brightness2' || dp === 'brightness') {       //now 2 variants of brightness can be used in v5
-                var val = state.val;
-                if (state.val < 0)   val = 0;
-                if (state.val > 100) val = 100;
-                adapter.log.debug('V5 brightness Send to zone ' + zone + ' "' + dp + '": ' + val);
-                if (state.val !== 0)    { //if dim to 0% was chosen turn light off - error handling for iobroker.cloud combo with amazon alexa
-                    if (!checkMethod(zones[zone], 'on') || !checkMethod(zones[zone], dp)) return;
-                    light.sendCommands(zones[zone].on(zone), zones[zone][dp](val)).then(function () {
-                        adapter.setForeignState(id, state.val, true);
-                    }, function (err) {
-                        adapter.log.error('Cannot control: ' + err);
-                    });
-                }
-                else { // bei 0 wird ausgeschaltet
-                    if (!checkMethod(zones[zone], 'off')) return;
-                    light.sendCommands(zones[zone].off(zone)).then(function () {
-                        adapter.setForeignState(id, state.val, true);
-                    }, function (err) {
-                        adapter.log.error('Cannot control: ' + err);
-                    });
-                }
-            } else
-            if (dp === 'hue') {
-                var val = state.val;
-                if (state.val < 0)   val = 0;
-                if (state.val > 255) val = 255;
-                var colorhex = hsvToRgb(val,80,100);
-                adapter.log.debug('V5 Send to zone ' + zone + ' "' + dp + '": ' + val);
-                if (!checkMethod(zones[zone], 'on') || !checkMethod(zones[zone], 'hue')) return;
-                light.sendCommands(zones[zone].on(zone), zones[zone].hue(val)).then(function () {
-                    adapter.setForeignState(id, val, true);
-                    // adapter.setForeignState(id.replace('.hue','.rgb'), colorhex, true); //Nachführung von rgb
-                }, function (err) {
-                    adapter.log.error('Cannot control: ' + err);
-                });
-            } else
-            if (dp === 'colorRGB'){
-                var val;
-                dp = 'rgb';
-                val = splitColor(state.val);
-                adapter.log.debug('V5 Send to zone ' + zone + ' "' + dp + '": ' + val);
-                if (!checkMethod(zones[zone], 'on') || !checkMethod(zones[zone], 'rgb255')) return;
-                var rbgAsHue = zones[zone].rgb255(val[0], val[1], val[2])
-                light.sendCommands(zones[zone].on(zone), rbgAsHue).then(function () {
-                    // adapter.setForeignState(id, state.val, true); // causes infinite loop but it doesn't matter as we either set it, or not
-                    // var h = rgbToHsv(val[0],val[1],val[2]);
-                    // adapter.setForeignState(id.replace('.rgb','.hue'), h[0], true); //Nachführung von hue
-                }, function (err) {
-                    adapter.log.error('Cannot control: ' + err);
-                });
-            } else
-            if (dp === 'on'){
-                adapter.log.debug('V5 Send to zone ' + zone + ' on');
-                if (adapter.config.v5onFullBright === 'true' || adapter.config.v5onFullBright === true || adapter.config.v5onFullBright === 'on' || adapter.config.v5onFullBright === 'ON' || adapter.config.v5onFullBright === 1){
-                    if (!checkMethod(zones[zone], 'on') || !checkMethod(zones[zone], 'brightness')) return;
-                    light.sendCommands(zones[zone].on(zone), zones[zone].brightness(100), zones[zone].whiteMode(zone)).then(function () {
-                        adapter.setForeignState(id, false, true); //tastendruck rückgängig machen
-                        adapter.setForeignState(id.replace('.on','.state'), true, true); //Nachführung von state
-                    }, function (err) {
-                        adapter.log.error('Cannot control: ' + err);
-                    });
-                } else {
-                    if (!checkMethod(zones[zone], 'on')) return;
-                    light.sendCommands(zones[zone].on(zone)).then(function () {
-                        adapter.setForeignState(id, false, true); //tastendruck rückgängig machen
-                        adapter.setForeignState(id.replace('.on','.state'), true, true); //Nachführung von state
-                    }, function (err) {
-                        adapter.log.error('Cannot control: ' + err);
-                    });
-                }
-            } else
-            if (dp === 'off'){
-                adapter.log.debug('V5 Send to zone ' + zone + ' off');
-                if (!checkMethod(zones[zone], 'off')) return;
-                light.sendCommands(zones[zone].off(zone)).then(function () {
-                    adapter.setForeignState(id, false, true); //tastendruck rückgängig machen
-                    adapter.setForeignState(id.replace('off','state'), false, true); //Nachführung von state
-                }, function (err) {
-                    adapter.log.error('Cannot control: ' + err);
-                });
-
-            } else
-            if (dp === 'nightMode' || dp === 'whiteMode' ){
-                adapter.log.debug('V5 Send to zone ' + zone + ' Mode on');
-                if (!checkMethod(zones[zone], 'on') || !checkMethod(zones[zone], dp)) return;
-                light.sendCommands(zones[zone].on(zone), zones[zone][dp](zone)).then(function () {
-                    adapter.setForeignState(id, true, true); //status behalten?
-                }, function (err) {
-                    adapter.log.error('Cannot control: ' + err);
-                });
-            } else
-            if ( dp === 'maxBright' || dp === 'brightUp' || dp === 'brightDown' || dp === 'speedUp' || dp === 'speedDown' || dp === 'effectSpeedUp' || dp === 'effectSpeedDown' || dp ==='effectModeNext' || dp ==='cooler'|| dp ==='warmer') {
-                adapter.log.debug('V5 Send to zone ' + zone + ' "' + dp + '": ' + state.val);
-                if (!checkMethod(zones[zone], 'on') || !checkMethod(zones[zone], dp)) return;
-                light.sendCommands(zones[zone].on(zone), zones[zone][dp]()).then(function () {
-                    adapter.setForeignState(id, false, true); //tastendruck rückgängig machen
-                }, function (err) {
-                    adapter.log.error('Cannot control: ' + err);
-                });
-            } else {
-                adapter.log.error('Unknown command: ' + dp);
-            }
-        }
-    }
-});
-
-adapter.on('ready', main);
 
 function mergeObject(obj, cb) {
     adapter.getForeignObject(obj._id, function (err, _obj) {
@@ -548,8 +555,6 @@ function mergeObjects(objs, cb) {
         setTimeout(mergeObjects, 0, objs, cb);
     });
 }
-
-
 
 function main() {
     adapter.config.commandRepeat = parseInt(adapter.config.commandRepeat, 10) || 2;
@@ -667,4 +672,12 @@ function main() {
     mergeObjects(objs, function () {
         adapter.subscribeStates('*');
     });
+}
+
+// If started as allInOne/compact mode => return function to create instance
+if (module && module.parent) {
+    module.exports = startAdapter;
+} else {
+    // or start the instance directly
+    startAdapter();
 }
