@@ -1,8 +1,19 @@
 {
     "common": {
         "name":                 "milight",
-        "version":              "0.3.6",
+        "version":              "0.4.0",
         "news": {
+             "0.4.0":{
+                "en": "change tp compact mode",
+                "de": "Wechseln Sie in den Kompaktmodus",
+                "ru": "перейти в компактный режим",
+                "pt": "mudar para o modo compacto",
+                "nl": "verander naar compacte modus",
+                "fr": "passer en mode compact",
+                "it": "passare alla modalità compatta",
+                "es": "cambiar al modo compacto",
+                "pl": "przejdź do trybu kompaktowego"
+              },
              "0.3.6":{
                 "en": "update to newest library ",
                 "de": "Update auf die neueste Bibliothek",
@@ -101,6 +112,7 @@
         "enabled":              true,
         "messagebox":           true,
         "materialize":          true,
+        "compact":              true,
         "icon":                 "easybulb_logo.png",
         "extIcon":          	"https://raw.githubusercontent.com/foxthefox/ioBroker.milight/master/admin/easybulb_logo.png",
         "readme":           	"https://github.com/foxthefox/ioBroker.milight/blob/master/README.md",
