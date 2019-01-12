@@ -109,6 +109,8 @@ version 5 also to be used for v4 lamps
 
 
 ## Changelog:
+### 0.4.0
+* compact mode
 ### 0.3.6
 * (foxthefox) node-milight-promise 0.3.1 (former version 0.2.32)
 
