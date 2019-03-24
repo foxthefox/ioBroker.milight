@@ -103,7 +103,18 @@
             "es": "adaptador Milight",
             "pl": "adapter milowy"
           },
-        "desc":                 "ioBroker milight Adapter",
+        "desc": {
+            "en": "milight lamp adaptor",
+            "de": "milight lampenadapter",
+            "ru": "адаптер для лампы",
+            "pt": "adaptador de lâmpada milight",
+            "nl": "licht lamp adapter",
+            "fr": "adaptateur de lampe milight",
+            "it": "adattatore della lampada del milight",
+            "es": "adaptador de lámpara milight",
+            "pl": "adapter lampy Milight",
+            "zh-cn": "milight灯适配器"
+          },
         "platform":             "Javascript/Node.js",
         "mode":                 "daemon",
         "license": 	   	        "MIT",
