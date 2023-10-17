@@ -93,15 +93,15 @@
         ],
         "title":                "milight",
           "titleLang": {
-            "en": "milight adapter",
-            "de": "Milight Adapter",
+            "en": "milight",
+            "de": "Milight",
             "ru": "переходник",
-            "pt": "adaptador milight",
-            "nl": "milight adapter",
-            "fr": "milight adaptateur",
-            "it": "adattatore di milight",
-            "es": "adaptador Milight",
-            "pl": "adapter milowy"
+            "pt": "milight",
+            "nl": "milight",
+            "fr": "milight",
+            "it": "milight",
+            "es": "Milight",
+            "pl": "milowy"
           },
         "desc": {
             "en": "milight lamp adaptor",
