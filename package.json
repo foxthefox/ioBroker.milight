@@ -28,6 +28,9 @@
     "type": "git",
     "url": "https://github.com/foxthefox/ioBroker.milight"
   },
+  "engines": {
+    "node": ">= 16"
+  },
   "dependencies": {
     "node-milight-promise": "^0.3.1",
     "@iobroker/adapter-core": "^3.0.4"
