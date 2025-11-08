@@ -117,7 +117,10 @@
           },
         "platform":             "Javascript/Node.js",
         "mode":                 "daemon",
-        "license": 	   	        "MIT",
+        "licenseInformation": {
+            "type": "free",
+            "license": "MIT"
+        },
         "keywords":		        ["milight", "easybulb", "rgb", "limitlessLED"],
         "type":			        "lighting",
         "enabled":              true,
