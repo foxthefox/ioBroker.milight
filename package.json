@@ -1,10 +1,10 @@
 {
   "name": "iobroker.milight",
-  "version": "0.4.0",
+  "version": "1.0.0",
   "description": "ioBroker milight Adapter",
   "author": {
     "name": "foxthefox",
-    "email": ""
+    "email": "foxthefox@wysiwis.net"
   },
   "contributors": [
     {
@@ -29,44 +29,29 @@
     "url": "https://github.com/foxthefox/ioBroker.milight"
   },
   "engines": {
-    "node": ">= 16"
+    "node": ">= 20"
   },
   "dependencies": {
     "node-milight-promise": "^0.3.1",
     "@iobroker/adapter-core": "^3.3.2"
   },
   "devDependencies": {
-    "@alcalzone/release-script": "^5.0.0",
-    "@alcalzone/release-script-plugin-iobroker": "^4.0.0",
-    "@alcalzone/release-script-plugin-license": "^4.0.0",
-    "@alcalzone/release-script-plugin-manual-review": "^4.0.0",
-    "@iobroker/adapter-dev": "^1.4.0",
+    "@alcalzone/release-script": "^5.1.1",
+    "@alcalzone/release-script-plugin-iobroker": "^5.1.2",
+    "@alcalzone/release-script-plugin-license": "^5.1.1",
+    "@alcalzone/release-script-plugin-manual-review": "^5.1.1",
+    "@iobroker/adapter-dev": "^1.5.0",
+    "@iobroker/eslint-config": "^2.2.0",
     "@iobroker/testing": "^5.2.2",
-    "@tsconfig/node14": "^14.1.8",
-    "@types/chai": "^4.3.11",
-    "@types/chai-as-promised": "^7.1.8",
-    "@types/mocha": "^10.0.10",
-    "@types/node": "^25.3.5",
+    "@types/node": "^25.5.0",
     "@types/proxyquire": "^1.3.31",
-    "@types/sinon": "^17.0.4",
-    "@types/sinon-chai": "^3.2.12",
-    "chai": "^4.5.0",
-    "chai-as-promised": "^7.1.2",
-    "eslint": "^9.39.2",
-    "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-prettier": "^5.5.5",
-    "gulp": "^5.0.1",
-    "mocha": "^11.7.5",
-    "prettier": "^3.8.1",
     "proxyquire": "^2.1.3",
-    "sinon": "^21.0.0",
-    "sinon-chai": "^3.7.0",
     "typescript": "~5.9.3"
   },
   "bugs": {
     "url": "https://github.com/foxthefox/ioBroker.milight/issues"
   },
-  "main": "milight.js",
+  "main": "main.js",
   "scripts": {
     "test:js": "mocha --config test/mocharc.custom.json \"{!(node_modules|test)/**/*.test.js,*.test.js,test/**/test!(PackageFiles|Startup).js}\"",
     "test:package": "mocha test/package --exit",

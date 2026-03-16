@@ -1,8 +1,11 @@
 {
     "common": {
         "name":                 "milight",
-        "version":              "0.4.0",
+        "version":              "1.0.0",
         "news": {
+            "1.0.0":{
+                "en": "refactoring"
+              },
              "0.4.0":{
                 "en": "change tp compact mode",
                 "de": "Wechseln Sie in den Kompaktmodus",
@@ -46,46 +49,7 @@
                 "it": "implementazione adminv3",
                 "es": "Implementación de adminv3",
                 "pl": "Implementacja administrv3"
-              },
-            "0.3.3": {
-                "en": 				"state after OFF/ON, v6 widget improvement",
-                "de": 				"Nachführung state nach OFF/ON, v6 widget Verbesserung"
-            },
-            "0.3.2": {
-                "en": 				"added widget for CW/WW V4",
-                "de": 				"neues widget für CW/WW V4"
-            },
-            "0.3.1": {
-                "en": 				"added checking of method before call",
-                "de": 				"neue Prüfung der Methode vor dem Aufruf"
-            },
-             "0.3.0": {
-                "en": 				"added white, rgb bulb, corrections",
-                "de": 				"neue Lampen weiß, rgb, Korrekturen"
-            },
-            "0.2.2": {
-                "en": 				"debug messages",
-                "de": 				"debug Meldungen"
-            },
-            "0.2.1": {
-                "en": 				"debug messages",
-                "de": 				"debug Meldungen"
-            },
-            "0.2.0": {
-                "en": 				"discovery for v6",
-                "de": 				"Autoerkennung für v6",
-                "ru": 				"Автопоиск устройств для v6"
-            },
-            "0.1.1": {
-                "en": 				"updated version for v5 testing",
-                "de": 				"neue Version für v5 Tests",
-                "ru": 				"новая версия для v5 тестов"
-            },
-            "0.1.0": {
-                "en": 				"Inital version",
-                "de": 				"Erste Version",
-                "ru": 				"Первая версия"
-            }
+              }
         },
         "authors": [
             "foxthefox <foxthefox@wysiwis.net>",
