@@ -29,7 +29,7 @@
     "url": "https://github.com/foxthefox/ioBroker.milight"
   },
   "engines": {
-    "node": ">= 16"
+    "node": ">= 20"
   },
   "dependencies": {
     "node-milight-promise": "^0.3.1",
