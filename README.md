@@ -102,6 +102,7 @@ version 5 also to be used for v4 lamps
 ## Changelog
 
 ### **WORK IN PROGRESS**
+- (copilot) Adapter requires node.js >= 22 now
 - (iobroker-bot) Adapter requires node.js >= 20 now.:
 ### 0.4.0
 * compact mode
