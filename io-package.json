@@ -1,176 +1,184 @@
 {
-    "common": {
-        "name":                 "milight",
-        "version":              "0.4.0",
-        "news": {
-             "0.4.0":{
-                "en": "change tp compact mode",
-                "de": "Wechseln Sie in den Kompaktmodus",
-                "ru": "перейти в компактный режим",
-                "pt": "mudar para o modo compacto",
-                "nl": "verander naar compacte modus",
-                "fr": "passer en mode compact",
-                "it": "passare alla modalità compatta",
-                "es": "cambiar al modo compacto",
-                "pl": "przejdź do trybu kompaktowego"
-              },
-             "0.3.6":{
-                "en": "update to newest library ",
-                "de": "Update auf die neueste Bibliothek",
-                "ru": "обновить до новейшей библиотеки",
-                "pt": "atualizar para a mais nova biblioteca",
-                "nl": "update naar de nieuwste bibliotheek",
-                "fr": "mise à jour vers la plus récente bibliothèque",
-                "it": "aggiornare alla libreria più recente",
-                "es": "actualizar a la biblioteca más nueva",
-                "pl": "zaktualizuj do najnowszej biblioteki"
-              },
-            "0.3.5":{
-                "en": "nightModeSwitch added",
-                "de": "nightModeSwitch hinzugefügt",
-                "ru": "Добавлена ​​функция nightModeSwitch",
-                "pt": "nightModeSwitch adicionado",
-                "nl": "nightModeSwitch toegevoegd",
-                "fr": "nightModeSwitch ajouté",
-                "it": "nightModeSwitch aggiunto",
-                "es": "nightModeSwitch agregado",
-                "pl": "Dodano opcję nightModeSwitch"
-              },
-            "0.3.4": {
-                "en": "adminv3 implementation",
-                "de": "adminv3-Implementierung",
-                "ru": "реализация adminv3",
-                "pt": "implementação administrativa",
-                "nl": "adminv3-implementatie",
-                "fr": "implémentation d'adminv3",
-                "it": "implementazione adminv3",
-                "es": "Implementación de adminv3",
-                "pl": "Implementacja administrv3"
-              },
-            "0.3.3": {
-                "en": 				"state after OFF/ON, v6 widget improvement",
-                "de": 				"Nachführung state nach OFF/ON, v6 widget Verbesserung"
-            },
-            "0.3.2": {
-                "en": 				"added widget for CW/WW V4",
-                "de": 				"neues widget für CW/WW V4"
-            },
-            "0.3.1": {
-                "en": 				"added checking of method before call",
-                "de": 				"neue Prüfung der Methode vor dem Aufruf"
-            },
-             "0.3.0": {
-                "en": 				"added white, rgb bulb, corrections",
-                "de": 				"neue Lampen weiß, rgb, Korrekturen"
-            },
-            "0.2.2": {
-                "en": 				"debug messages",
-                "de": 				"debug Meldungen"
-            },
-            "0.2.1": {
-                "en": 				"debug messages",
-                "de": 				"debug Meldungen"
-            },
-            "0.2.0": {
-                "en": 				"discovery for v6",
-                "de": 				"Autoerkennung für v6",
-                "ru": 				"Автопоиск устройств для v6"
-            },
-            "0.1.1": {
-                "en": 				"updated version for v5 testing",
-                "de": 				"neue Version für v5 Tests",
-                "ru": 				"новая версия для v5 тестов"
-            },
-            "0.1.0": {
-                "en": 				"Inital version",
-                "de": 				"Erste Version",
-                "ru": 				"Первая версия"
-            }
-        },
-        "authors": [
-            "foxthefox <foxthefox@wysiwis.net>",
-            "bluefox <dogafox@gmail.com>"
-        ],
-          "titleLang": {
-            "en": "milight",
-            "de": "Milight",
-            "ru": "переходник",
-            "pt": "milight",
-            "nl": "milight",
-            "fr": "milight",
-            "it": "milight",
-            "es": "Milight",
-            "pl": "milowy"
-          },
-        "desc": {
-            "en": "milight lamp adaptor",
-            "de": "milight lampenadapter",
-            "ru": "адаптер для лампы",
-            "pt": "adaptador de lâmpada milight",
-            "nl": "licht lamp adapter",
-            "fr": "adaptateur de lampe milight",
-            "it": "adattatore della lampada del milight",
-            "es": "adaptador de lámpara milight",
-            "pl": "adapter lampy Milight",
-            "zh-cn": "milight灯适配器"
-          },
-        "platform":             "Javascript/Node.js",
-        "mode":                 "daemon",
-        "licenseInformation": {
-            "type": "free",
-            "license": "MIT"
-        },
-        "keywords":		        ["milight", "easybulb", "rgb", "limitlessLED"],
-        "type":			        "lighting",
-        "enabled":              true,
-        "messagebox":           true,
-        "materialize":          true,
-        "compact":              true,
-        "icon":                 "easybulb_logo.png",
-        "extIcon":          	"https://raw.githubusercontent.com/foxthefox/ioBroker.milight/master/admin/easybulb_logo.png",
-        "readme":           	"https://github.com/foxthefox/ioBroker.milight/blob/master/README.md",
-        "loglevel":		        "info",
-        "tier": 2,
-        "restartAdapters":      ["vis"]
-
+  "common": {
+    "name": "milight",
+    "version": "0.4.0",
+    "news": {
+      "0.4.0": {
+        "en": "change tp compact mode",
+        "de": "Wechseln Sie in den Kompaktmodus",
+        "ru": "перейти в компактный режим",
+        "pt": "mudar para o modo compacto",
+        "nl": "verander naar compacte modus",
+        "fr": "passer en mode compact",
+        "it": "passare alla modalità compatta",
+        "es": "cambiar al modo compacto",
+        "pl": "przejdź do trybu kompaktowego"
+      },
+      "0.3.6": {
+        "en": "update to newest library ",
+        "de": "Update auf die neueste Bibliothek",
+        "ru": "обновить до новейшей библиотеки",
+        "pt": "atualizar para a mais nova biblioteca",
+        "nl": "update naar de nieuwste bibliotheek",
+        "fr": "mise à jour vers la plus récente bibliothèque",
+        "it": "aggiornare alla libreria più recente",
+        "es": "actualizar a la biblioteca más nueva",
+        "pl": "zaktualizuj do najnowszej biblioteki"
+      },
+      "0.3.5": {
+        "en": "nightModeSwitch added",
+        "de": "nightModeSwitch hinzugefügt",
+        "ru": "Добавлена ​​функция nightModeSwitch",
+        "pt": "nightModeSwitch adicionado",
+        "nl": "nightModeSwitch toegevoegd",
+        "fr": "nightModeSwitch ajouté",
+        "it": "nightModeSwitch aggiunto",
+        "es": "nightModeSwitch agregado",
+        "pl": "Dodano opcję nightModeSwitch"
+      },
+      "0.3.4": {
+        "en": "adminv3 implementation",
+        "de": "adminv3-Implementierung",
+        "ru": "реализация adminv3",
+        "pt": "implementação administrativa",
+        "nl": "adminv3-implementatie",
+        "fr": "implémentation d'adminv3",
+        "it": "implementazione adminv3",
+        "es": "Implementación de adminv3",
+        "pl": "Implementacja administrv3"
+      },
+      "0.3.3": {
+        "en": "state after OFF/ON, v6 widget improvement",
+        "de": "Nachführung state nach OFF/ON, v6 widget Verbesserung"
+      },
+      "0.3.2": {
+        "en": "added widget for CW/WW V4",
+        "de": "neues widget für CW/WW V4"
+      },
+      "0.3.1": {
+        "en": "added checking of method before call",
+        "de": "neue Prüfung der Methode vor dem Aufruf"
+      },
+      "0.3.0": {
+        "en": "added white, rgb bulb, corrections",
+        "de": "neue Lampen weiß, rgb, Korrekturen"
+      },
+      "0.2.2": {
+        "en": "debug messages",
+        "de": "debug Meldungen"
+      },
+      "0.2.1": {
+        "en": "debug messages",
+        "de": "debug Meldungen"
+      },
+      "0.2.0": {
+        "en": "discovery for v6",
+        "de": "Autoerkennung für v6",
+        "ru": "Автопоиск устройств для v6"
+      },
+      "0.1.1": {
+        "en": "updated version for v5 testing",
+        "de": "neue Version für v5 Tests",
+        "ru": "новая версия для v5 тестов"
+      },
+      "0.1.0": {
+        "en": "Inital version",
+        "de": "Erste Version",
+        "ru": "Первая версия"
+      }
     },
-    "native": {
-        "version":  "6",
-        "delayBetweenCommands": "100",
-        "commandRepeat":  "1",
-        "ip":       "",
-        "port":     "5987",
-        "zone1":    "RGBW",
-        "zone2":    "RGBW",
-        "zone3":    "RGBW",
-        "zone4":    "RGBW",
-        "v5onFullBright": false
-    },
-    
-    "objects": [
-      
+    "authors": [
+      "foxthefox <foxthefox@wysiwis.net>",
+      "bluefox <dogafox@gmail.com>"
     ],
-    "instanceObjects": [
-        {
-            "_id":  "info",
-            "type": "channel",
-            "common": {
-                "name": "Information"
-            },
-            "native": {}
-        },
-        {
-            "_id":  "info.connection",
-            "type": "state",
-            "common": {
-                "role":  "indicator.connected",
-                "name":  "If connected to MiLight gateway",
-                "type":  "boolean",
-                "read":  true,
-                "write": false,
-                "def":   false
-            },
-            "native": {}
-        }
+    "titleLang": {
+      "en": "milight",
+      "de": "Milight",
+      "ru": "переходник",
+      "pt": "milight",
+      "nl": "milight",
+      "fr": "milight",
+      "it": "milight",
+      "es": "Milight",
+      "pl": "milowy"
+    },
+    "desc": {
+      "en": "milight lamp adaptor",
+      "de": "milight lampenadapter",
+      "ru": "адаптер для лампы",
+      "pt": "adaptador de lâmpada milight",
+      "nl": "licht lamp adapter",
+      "fr": "adaptateur de lampe milight",
+      "it": "adattatore della lampada del milight",
+      "es": "adaptador de lámpara milight",
+      "pl": "adapter lampy Milight",
+      "zh-cn": "milight灯适配器"
+    },
+    "platform": "Javascript/Node.js",
+    "mode": "daemon",
+    "licenseInformation": {
+      "type": "free",
+      "license": "MIT"
+    },
+    "keywords": [
+      "milight",
+      "easybulb",
+      "rgb",
+      "limitlessLED"
+    ],
+    "type": "lighting",
+    "enabled": true,
+    "messagebox": true,
+    "materialize": true,
+    "compact": true,
+    "icon": "easybulb_logo.png",
+    "extIcon": "https://raw.githubusercontent.com/foxthefox/ioBroker.milight/master/admin/easybulb_logo.png",
+    "readme": "https://github.com/foxthefox/ioBroker.milight/blob/master/README.md",
+    "loglevel": "info",
+    "tier": 2,
+    "restartAdapters": [
+      "vis"
+    ],
+    "dependencies": [
+      {
+        "js-controller": ">=6.0.11"
+      }
     ]
+  },
+  "native": {
+    "version": "6",
+    "delayBetweenCommands": "100",
+    "commandRepeat": "1",
+    "ip": "",
+    "port": "5987",
+    "zone1": "RGBW",
+    "zone2": "RGBW",
+    "zone3": "RGBW",
+    "zone4": "RGBW",
+    "v5onFullBright": false
+  },
+  "objects": [],
+  "instanceObjects": [
+    {
+      "_id": "info",
+      "type": "channel",
+      "common": {
+        "name": "Information"
+      },
+      "native": {}
+    },
+    {
+      "_id": "info.connection",
+      "type": "state",
+      "common": {
+        "role": "indicator.connected",
+        "name": "If connected to MiLight gateway",
+        "type": "boolean",
+        "read": true,
+        "write": false,
+        "def": false
+      },
+      "native": {}
+    }
+  ]
 }
